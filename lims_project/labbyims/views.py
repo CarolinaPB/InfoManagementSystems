@@ -8,9 +8,12 @@ from django.views import View
 def home(request):
     return render(request, 'labbyims/base.html')
 
+def no_login(request):
+    return render(request, 'labbyims/home.html')
+
 
 
 class search_results(View):
 
     def get(self, request, *args, **kwargs):
-        return render(request, 'labbyims/results.html')
+        return HttpResponse('LEROY JEKiNSSSSSSSS')
