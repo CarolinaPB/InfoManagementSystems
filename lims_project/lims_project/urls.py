@@ -18,5 +18,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('home/', include('labbyims.urls')),
+    #path('search_results/', include('search_results.urls')),
     path('admin/', admin.site.urls),
+
 ]
