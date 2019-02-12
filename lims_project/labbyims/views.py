@@ -6,14 +6,11 @@ from django.http import HttpResponse
 from django.views import View
 
 def home(request):
-    return render(request, 'labbyims/home_afterlogin.html')
-
-def no_login(request):
-    return render(request, 'labbyims/no_login.html')
+    return render(request, 'labbyims/base.html')
 
 
 
 class search_results(View):
 
     def get(self, request, *args, **kwargs):
-        return HttpResponse('LEROY JEKiNSSSSSSSS')
+        return render(request, 'labbyims/results.html')
