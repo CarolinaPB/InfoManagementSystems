@@ -13,4 +13,4 @@ def home(request):
 class search_results(View):
 
     def get(self, request, *args, **kwargs):
-        return HttpResponse('LEROY JEKiNSSSSSSSS')
+        return render(request, 'labbyims/results.html')
