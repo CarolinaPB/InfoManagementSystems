@@ -9,7 +9,7 @@ def home(request):
     return render(request, 'labbyims/base.html')
 
 def no_login(request):
-    return render(request, 'labbyims/home.html')
+    return render(request, 'labbyims/no_login.html')
 
 
 
