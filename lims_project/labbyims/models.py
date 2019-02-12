@@ -45,7 +45,7 @@ class Location(models.Model):
 class Product_Unit(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
-    reservation = models.ManyToManyField(Account, through='Reserve')
+    reservation = models.ManyToManyField(User, through='Reserve')
     name = models.CharField(max_length=255)
     url = models.CharField(max_length=255)
     is_inactive = models.BooleanField()
