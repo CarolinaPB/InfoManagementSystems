@@ -48,8 +48,8 @@ class Product_Unit(models.Model):
     url = models.CharField(max_length=255)
     is_inactive = models.BooleanField()
     del_date = models.DateField('delivery date')
-    open_date = models.DateField('date opened')
-    exp_date = models.DateField('expiration date')
+    open_date = models.DateField('date opened', null=True)
+    exp_date = models.DateField('expiration date', null=True)
     ret_date = models.DateField('retest date', null=True)
     purity = models.CharField('purity/percentage', max_length = 255, null=True)
     init_amount = models.DecimalField('initial amount', max_digits=10, decimal_places=4)
@@ -57,6 +57,7 @@ class Product_Unit(models.Model):
     company = models.CharField(max_length=255)
     cat_num = models.CharField(max_length=255)
     temperature = models.CharField(max_length=12)
+    m_units = models.CharField(max_length = 4)
     def __str__(self):
         return self.name
 
