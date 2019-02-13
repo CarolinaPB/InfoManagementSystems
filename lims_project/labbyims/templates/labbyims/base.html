@@ -9,24 +9,6 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/static/labbyims/main.css">
-<style>
-/* Create two unequal columns that float next to each other */
-/*.first-column {
-  float: left;
-  width: 80%;
-  padding: 10px;
-}
-.second-column {
-  float: right;
-  width: 20%;
-  padding: 10px;
-}*/
-.center-search {
-  margin: auto;
-  width: 60%;
-  padding: 10px;
-}
-</style>
 
     {% if title %}
         <title>Labby - {{ title }}</title>
@@ -54,9 +36,9 @@
                         value="{{search_term}}">
                         <button class="btn my-2 my-sm-0" type="submit">Search</button>
                     </form>
-                    <a class="nav-item nav-link" href="#">Add unit</a>
+                    <a class="nav-item nav-link" href="">Add unit</a>
                     <div class="dropdown">
-                        <button class="dropbtn">User</button>
+                        <button class="btn dropbtn my-2 my-sm-0">User</button>
                         <div class="dropdown-content">
                         <a href="#">My Reservations</a>
                         <a href="#">Expiration/re-test</a>
@@ -65,14 +47,14 @@
                         </div>
                     </div>
                     {% else %}
-                    <a class="nav-item nav-link" href="#">Login</a>
+                    <a class="nav-item nav-link" href="login">Login</a>
                     <a class="nav-item nav-link" href="#">Register</a>
                     {% endif %}
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container-fluid">
         {% if user.is_authenticated %}
             {% block content %}{% endblock %}
         {% endif %}
