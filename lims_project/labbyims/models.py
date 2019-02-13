@@ -1,16 +1,14 @@
 # Create your models here.
 
 from django.db import models
+from django.contrib.auth.models import User
 
 
-class User(models.Model):
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
-    email = models.EmailField(max_length=254, unique=True)
-    password = models.CharField(max_length=255)
+class Account(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     department = models.CharField(max_length=255, blank=True)
     def __str__(self):
-        return self.last_name
+        return User.username
 
 class Product(models.Model):
     cas = models.CharField('CAS number', max_length=12, unique=True)
