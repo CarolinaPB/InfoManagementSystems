@@ -9,7 +9,24 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/static/labbyims/main.css">
-
+<style>
+/* Create two unequal columns that float next to each other */
+/*.first-column {
+  float: left;
+  width: 80%;
+  padding: 10px;
+}
+.second-column {
+  float: right;
+  width: 20%;
+  padding: 10px;
+}*/
+.center-search {
+  margin: auto;
+  width: 60%;
+  padding: 10px;
+}
+</style>
 
     {% if title %}
         <title>Labby - {{ title }}</title>
@@ -20,7 +37,7 @@
 <body>
     <header class="site-header">
         <nav class="navbar navbar-expand navbar-dark bg-dark fixed-top">
-            <div class="container">
+            <div class="container-fluid">
                 <a class="navbar-brand mr-4" href="#">Labby</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
