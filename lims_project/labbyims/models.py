@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 class Account(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     department = models.CharField(max_length=255, blank = True)
+    def __str__(self):
+        return User.username
 
 class Product(models.Model):
     cas = models.CharField('CAS number', max_length=12, unique=True)
