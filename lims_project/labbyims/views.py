@@ -11,6 +11,11 @@ def home(request):
 def no_login(request):
     return render(request, 'labbyims/no_login.html')
 
+def add_product(request):
+	return render(request, 'labbyims/add_product.html')
+	
+def add_item(request):
+	return render(request, 'labbyims/add_item.html')
 
 class search_results(View):
 
