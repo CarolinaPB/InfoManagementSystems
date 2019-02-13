@@ -5,15 +5,20 @@ from django.http import HttpResponse
 
 from django.views import View
 
+from django.contrib.auth.decorators import login_required
+
+@login_required
 def home(request):
     return render(request, 'labbyims/home_afterlogin.html')
 
 def no_login(request):
     return render(request, 'labbyims/no_login.html')
 
+@login_required
 def add_product(request):
 	return render(request, 'labbyims/add_product.html')
-	
+
+@login_required
 def add_item(request):
 	return render(request, 'labbyims/add_item.html')
 
