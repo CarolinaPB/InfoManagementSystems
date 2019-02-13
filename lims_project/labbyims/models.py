@@ -4,9 +4,10 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+
 class Account(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    department = models.CharField(max_length=255, blank=True)
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    department = models.CharField(max_length=255, blank = True)
     def __str__(self):
         return User.username
 
@@ -43,10 +44,10 @@ class Location(models.Model):
 class Product_Unit(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
-    reservation = models.ManyToManyField(User, through='Reserve')
+    reservation = models.ManyToManyField(Account, through='Reserve')
     name = models.CharField(max_length=255)
     url = models.CharField(max_length=255)
-    is_inactive = models.BooleanField()
+    is_inactive = models.BooleanField('Archived', null = False)
     del_date = models.DateField('delivery date')
     open_date = models.DateField('date opened', null=True)
     exp_date = models.DateField('expiration date', null=True)
@@ -57,12 +58,11 @@ class Product_Unit(models.Model):
     company = models.CharField(max_length=255)
     cat_num = models.CharField(max_length=255)
     temperature = models.CharField(max_length=12)
-    m_units = models.CharField(max_length = 4)
     def __str__(self):
         return self.name
 
 class Reserve(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
     prod_un = models.ForeignKey(Product_Unit, on_delete=models.CASCADE)
     amount_res = models.DecimalField('amount to reserve', max_digits=10, decimal_places=4)
     date_res = models.DateField('date of reservation')
