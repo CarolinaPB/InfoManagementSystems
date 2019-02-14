@@ -52,11 +52,13 @@
                     {% endif %}
                 </div>
             </div>
-        </nav>
+        </nav> 
     </header>
     <div class="container-fluid">
         {% if user.is_authenticated %}
             {% block content %}{% endblock %}
+        {% else %}
+            {% block login %}{% endblock %}
         {% endif %}
     </div>
 
