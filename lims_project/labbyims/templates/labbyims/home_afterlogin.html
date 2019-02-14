@@ -5,7 +5,7 @@
     <br><br>
     <div class="row">
         <div class="first-column col-sm-9 col-lg-9">
-            <form  class="form-inline my-2 my-lg-1 center-search">
+            <form  class="form-inline my-2 my-lg-1 center-search" action="/home/" method="post">
               <input
                   class="form-control mr-sm-2"
                   type="search"
@@ -13,6 +13,12 @@
                   name='search'
                   value="{{search_term}}">
               <button class="btn my-2 my-sm-0" type="submit">Search</button>
+              <br>
+              <div>
+                  <br><br>
+              {% csrf_token %}
+              {{ form }}
+              </div>
             </form>
         </div>
             <div class="second-column col-sm-3 col-lg-3" style="background-color:#bbb;">
