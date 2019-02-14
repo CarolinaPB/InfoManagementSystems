@@ -76,8 +76,17 @@ footer {
    position: fixed;
    left: 0;
    bottom: 0;
+   height: 5%;
    width: 100%;
-   background-color: #525864;
+   background-color: #2e3138;
    color: white;
+   padding: 7px;
    text-align: center;
+}
+
+button {
+    border-radius: 8px;
+    background-color:#e7e7e7;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
 }

@@ -14,11 +14,11 @@
 		<P>Chemical name: <br> <input name="chem_name" size="48">
 		<P>CAS: <br> <input name="CAS">
 	</fieldset>
-	
+
 	<fieldset>
 		<legend>Delivery</legend>
 		<P>Delivery date: <br> <input name="delivery_date" type=date>
-		<P>Company: <br> 
+		<P>Company: <br>
 		<input name="company" list="company_list" size="36">
 		<datalist id="company_list">
 			<option value="Sigma-Aldrich">
@@ -28,7 +28,7 @@
 		</datalist>
 		<P>Catalog Number: <br> <input name="catalog_number">
 	</fieldset>
-	
+
 	<fieldset>
 		<legend>Chemical properties</legend>
 		<P>Full Name: <br> <input name="full_chem_name" size="48">
@@ -43,27 +43,27 @@
 			<option value="µg">µg</option>
 		</select>
 		<P>Purity (optional): <br> <input name="purity">
-		<P>Storage temperature: <br> <input type="number" name="temp_min" min="-80" max="40" value="20"> - 
+		<P>Storage temperature: <br> <input type="number" name="temp_min" min="-80" max="40" value="20"> -
 		<input type="number" name="temp_max" min="-80" max="40" value="20">°C
 		<P>Expiration date: <br> <input name="expiration_date" type=date>
 		<P>Retest date (optional): <br> <input name="retest_date" type=date>
-	</fieldset>	
-	
+	</fieldset>
+
 	<fieldset>
 		<legend>Location</legend>
-		<P>Please choose an available location: <br> 
+		<P>Please choose an available location: <br>
 		<select name="building">
 			<option value="Main building">Main building</option>
 			<option value="Research lab">Research lab</option>
-		</select> <br>		
+		</select> <br>
 		<select name="room">
 			<option value="001">001</option>
 			<option value="002">002</option>
 			<option value="131">131</option>
-		</select>	
-		</select>			
-	</fieldset>		
-	
+		</select>
+	</fieldset>
+
 <P><INPUT TYPE=SUBMIT value="Submit"> <INPUT TYPE=RESET value="Reset">
 </FORM>
+<br><br>
 {% endblock content %}
