@@ -10,6 +10,11 @@ from .forms import AdvancedSearch
 def home(request):
     if request.method == 'POST':
         form = AdvancedSearch(request.POST)
+        if form.is_valid():
+            search = form.cleaned_data["search"]
+            print(search)
+
+
         return HttpResponseRedirect('/home')
     else:
         form = AdvancedSearch(initial=request.GET)
