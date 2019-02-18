@@ -1,8 +1,5 @@
-# Create your models here.
-
 from django.db import models
 from django.contrib.auth.models import User
-
 
 
 class Account(models.Model):
@@ -45,21 +42,21 @@ class Product_Unit(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     reservation = models.ManyToManyField(Account, through='Reserve')
-    name = models.CharField(max_length=255)
-    url = models.CharField(max_length=255)
-    is_inactive = models.BooleanField('Archived', null = False)
+    description = models.CharField(max_length=255)
+    is_inactive = models.BooleanField('Archived', default = False)
     del_date = models.DateField('delivery date')
-    open_date = models.DateField('date opened', null=True)
-    exp_date = models.DateField('expiration date', null=True)
-    ret_date = models.DateField('retest date', null=True)
-    purity = models.CharField('purity/percentage', max_length = 255, null=True)
+    open_date = models.DateField('date opened', blank = True)
+    exp_date = models.DateField('expiration date', blank = True)
+    ret_date = models.DateField('retest date', blank = True)
+    purity = models.CharField('purity/percentage', max_length = 255, blank = True)
     init_amount = models.DecimalField('initial amount', max_digits=10, decimal_places=4)
     used_amount = models.DecimalField('amount used', max_digits=10, decimal_places=4, default=0)
     company = models.CharField(max_length=255)
-    cat_num = models.CharField(max_length=255)
+    cat_num = models.CharField('catalog number', max_length=255, blank = True)
     temperature = models.CharField(max_length=12)
+    m_unit = models.CharField('measuring units', max_length=4, blank = True)
     def __str__(self):
-        return self.name
+        return self.description
 
 class Reserve(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
