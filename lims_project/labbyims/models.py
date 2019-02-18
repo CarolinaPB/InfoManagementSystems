@@ -56,8 +56,9 @@ class Product_Unit(models.Model):
     init_amount = models.DecimalField('initial amount', max_digits=10, decimal_places=4)
     used_amount = models.DecimalField('amount used', max_digits=10, decimal_places=4, default=0)
     company = models.CharField(max_length=255)
-    cat_num = models.CharField(max_length=255)
+    cat_num = models.CharField('catalog number', max_length=255)
     temperature = models.CharField(max_length=12)
+    m_unit = models.CharField('measuring units', max_length=4, null=True)
     def __str__(self):
         return self.name
 
