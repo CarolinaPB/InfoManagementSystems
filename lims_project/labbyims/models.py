@@ -45,7 +45,7 @@ class Product_Unit(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     reservation = models.ManyToManyField(Account, through='Reserve')
-    name = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
     url = models.CharField(max_length=255)
     is_inactive = models.BooleanField('Archived', null = False)
     del_date = models.DateField('delivery date')
@@ -60,7 +60,7 @@ class Product_Unit(models.Model):
     temperature = models.CharField(max_length=12)
     m_unit = models.CharField('measuring units', max_length=4, null=True)
     def __str__(self):
-        return self.name
+        return self.description
 
 class Reserve(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
