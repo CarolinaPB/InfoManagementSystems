@@ -7,6 +7,7 @@ from django.forms.widgets import DateInput
 
 class AdvancedSearch(forms.Form):
     search = forms.CharField(widget=forms.TextInput(attrs={'class': 'col-md-12'}), label=False)
+    search.widget.attrs.update({'id': 'advanced_search'})
     CHOICES=[
              ('unit', 'Unit'),
              ('location','Location'),
@@ -16,6 +17,7 @@ class AdvancedSearch(forms.Form):
     advanced_search = forms.ChoiceField(choices=CHOICES, label=False)
     advanced_search.widget.attrs.update({'class': 'col-md-6'})
     advanced_search.widget.attrs.update({'name': 'advanced_search'})
+    advanced_search.widget.attrs.update({'id': 'advanced_search'})
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -53,3 +55,8 @@ class Product_UnitForm(forms.ModelForm):
             "exp_date":DateInput(attrs = {"type":"date"}),
             "ret_date":DateInput(attrs = {"type":"date"}),
         }
+
+class Product_Form(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = "__all__"
