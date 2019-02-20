@@ -60,3 +60,9 @@ class Product_Form(forms.ModelForm):
     class Meta:
         model = Product
         fields = "__all__"
+
+
+class Location_Form(forms.ModelForm):
+    class Meta:
+        model = Location
+        fields = "__all__"
