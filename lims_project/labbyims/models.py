@@ -43,7 +43,7 @@ class Product_Unit(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     reservation = models.ManyToManyField(Account, through='Reserve')
     description = models.CharField(max_length=255)
-    is_inactive = models.BooleanField('Archived', default = False)
+    #is_inactive = models.BooleanField('Archived', default = False)
     del_date = models.DateField('delivery date')
     open_date = models.DateField('date opened', blank = True)
     exp_date = models.DateField('expiration date', blank = True)

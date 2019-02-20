@@ -5,6 +5,8 @@ from django.http import HttpResponseRedirect
 from django.views import View
 from .forms import AdvancedSearch, BasicSearch, Product_UnitForm
 from .models import Product_Unit
+from .tables import Product_UnitTable
+from django_tables2 import RequestConfig
 
 def home(request):
     if request.method == 'POST':
@@ -34,10 +36,11 @@ def add_product(request):
 
 def add_item(request):
     if request.method == "POST":
-        form = Product_UnitForm(request.POST or None)
+        form = Product_UnitForm(request.POST)
         if form.is_valid():
             form.save(commit=True)
-            return render(request, 'labbyims/home_afterlogin.html')
+            return HttpResponseRedirect('/home')
+            #return render(request, 'labbyims/home_afterlogin.html')
         else:
             print(form.errors)
     else:
@@ -46,7 +49,7 @@ def add_item(request):
     context = {'form': form}
     return render(request, 'labbyims/add_item.html', context)
 
-class search_results(View):
-
-    def get(self, request, *args, **kwargs):
-        return render(request, 'labbyims/results.html')
+def search_results(request):
+    table = Product_UnitTable(Product_Unit.objects.all())
+    RequestConfig(request).configure(table)
+    return render(request, 'labbyims/results.html', {'table': table})
