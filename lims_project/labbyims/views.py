@@ -77,3 +77,6 @@ def add_location(request):
 
     context = {'form': form}
     return render(request, 'labbyims/add_location.html', context)
+
+def locations(request):
+    return render(request, 'labbyims/locations.html')
