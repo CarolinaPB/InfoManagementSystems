@@ -33,8 +33,7 @@
                         class="form-control mr-sm-2"
                         type="search"
                         placeholder="Search"
-                        name='search'
-                        value="{{search_term}}">
+                        name='search'>
                         <button class="btn my-2 my-sm-0" type="submit">Search</button>
                     </form>
                     <a class="nav-item nav-link" href="http://127.0.0.1:8000/add_item">Add item</a>
@@ -44,7 +43,7 @@
                         <a href="#">My Reservations</a>
                         <a href="#">Expiration/re-test</a>
                         <a href="http://127.0.0.1:8000/locations">Locations</a>
-                        <a href="#">Logout</a>
+                        <a href="{% url 'logout' %}">Logout</a>
                         </div>
                     </div>
                     {% else %}

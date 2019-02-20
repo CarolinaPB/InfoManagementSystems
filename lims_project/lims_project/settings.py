@@ -131,5 +131,6 @@ STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL = 'login'
+LOGOUT_REDIRECT_URL = '/home'
 
 #CRISPY_TEMPLATE_PACK = 'bootstrap3'
