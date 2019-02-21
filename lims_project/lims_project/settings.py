@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_tables2',
     'django_filters',
+
+
+
 ]
 
 MIDDLEWARE = [
@@ -58,7 +61,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates')
+
         ],
         'APP_DIRS': True,
         'OPTIONS': {
