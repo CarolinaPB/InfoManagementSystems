@@ -1,5 +1,5 @@
 import django_tables2 as tables
-from.models import Product_Unit
+from .models import Product_Unit
 
 class Product_UnitTable(tables.Table):
     class Meta:
