@@ -12,12 +12,17 @@ urlpatterns = [
     path('add_item/', views.add_item, name='add_item'),
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     path('search_results/', views.search_results, name='search_results'),
     path('add_location/', views.add_location, name='add_location'),
     path('locations/', views.locations, name='locations'),
 =======
 =======
 >>>>>>> parent of 5c0b928... Search option
+    path('search_results/', views.search_results, name='search_results')
+
+>>>>>>> parent of 5c0b928... Search option
+=======
     path('search_results/', views.search_results, name='search_results')
 
 >>>>>>> parent of 5c0b928... Search option

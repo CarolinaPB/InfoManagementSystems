@@ -55,9 +55,12 @@ def add_item(request):
         form = Product_UnitForm()
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     context = {'form': form}
     return render(request, 'labbyims/add_item.html', context)
 =======
+=======
+>>>>>>> parent of 5c0b928... Search option
 =======
 >>>>>>> parent of 5c0b928... Search option
 #class search_results(View):
@@ -65,6 +68,9 @@ def add_item(request):
 #    def get(self, request, *args, **kwargs):
 #        return render(request, 'labbyims/results.html')
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of 5c0b928... Search option
+=======
 >>>>>>> parent of 5c0b928... Search option
 =======
 >>>>>>> parent of 5c0b928... Search option
@@ -73,6 +79,7 @@ def search_results(request):
     table = Product_UnitTable(Product_Unit.objects.all())
     RequestConfig(request).configure(table)
     return render(request, 'labbyims/results.html', {'table': table})
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -93,6 +100,8 @@ def add_location(request):
 
 def locations(request):
     return render(request, 'labbyims/locations.html')
+=======
+>>>>>>> parent of 5c0b928... Search option
 =======
 >>>>>>> parent of 5c0b928... Search option
 =======
