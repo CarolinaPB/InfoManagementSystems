@@ -12,26 +12,16 @@
     <link rel="stylesheet" type="text/css" href="/static/labbyims/main.css">
 
     {% if title %}
-
         <title>Labbi - {{ title }}</title>
     {% else %}
         <title>Labbi</title>
-
     {% endif %}
 </head>
 <body>
     <header class="site-header">
         <nav class="navbar navbar-expand navbar-dark bg-dark fixed-top">
             <div class="container-fluid">
-                <a class="navbar-brand mr-4" href="#">Labby</a>
-
-
-                <a class="navbar-brand mr-4" href="#">Labby</a>
-
-                <a class="navbar-brand mr-4" href="#">Labby</a>
-
                 <a class="navbar-brand mr-4" href="/home/">Labbi</a>
-
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
@@ -43,18 +33,17 @@
                         class="form-control mr-sm-2"
                         type="search"
                         placeholder="Search"
-
-
                         name='description'>
                         <button class="btn my-2 my-sm-0" type="submit">Search</button>
                     </form>
                     <a class="nav-item nav-link" href="/add_product/">Add product</a>
-
+                    <a class="nav-item nav-link" href="/add_item/">Add item</a>
                     <div class="dropdown">
                         <button class="dropbtn my-2 my-sm-0">User<i class="fa fa-caret-down"></i></button>
                         <div class="dropdown-content">
                         <a href="#">My Reservations</a>
                         <a href="#">Expiration/re-test</a>
+                        <a href="/inventory/">Inventory</a>
                         <a href="/locations/">Locations</a>
                         <a href="{% url 'logout' %}">Logout</a>
                         </div>
