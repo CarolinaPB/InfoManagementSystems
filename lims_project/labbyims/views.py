@@ -7,6 +7,7 @@ from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form
 from .models import Product_Unit, Product
 from .tables import Product_UnitTable
 from django_tables2 import RequestConfig
+from .filters import ProductFilter
 
 def home(request):
     if request.method == 'POST':
@@ -14,15 +15,14 @@ def home(request):
         if form.is_valid():
             search_res = form.cleaned_data["search"]
             print(search_res)
-            print(Product.objects.search(search))
         else:
             print(form.errors)
 
-        return HttpResponseRedirect('/home')
+        return HttpResponseRedirect('/search/?description={}'.format(search_res))
 
     else:
         form = AdvancedSearch(initial=request.GET)
-    return render(request, 'labbyims/home_afterlogin.html',{'form':form})
+    return render(request, 'labbyims/home_afterlogin.html' ,{'form':form})
 
 def no_login(request):
     return render(request, 'labbyims/no_login.html')
@@ -78,3 +78,9 @@ def add_location(request):
 
 def locations(request):
     return render(request, 'labbyims/locations.html')
+
+
+def search(request):
+    product_list = Product_Unit.objects.all()
+    product_filter = ProductFilter(request.GET, queryset=product_list)
+    return render(request, "labbyims/product_list.html", {'filter': product_filter})
