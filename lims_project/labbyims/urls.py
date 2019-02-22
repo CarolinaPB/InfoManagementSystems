@@ -14,6 +14,6 @@ urlpatterns = [
     path('inventory/', views.inventory, name='inventory'),
     path('add_location/', views.add_location, name='add_location'),
     path('locations/', views.locations, name='locations'),
-    #path('search/', views.a_search, name='search'),
+    path('inventory/', views.search_results, name='search_results'),
     url (r'^search/$',views.search,name='search'),
 ]
