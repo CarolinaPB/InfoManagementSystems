@@ -1,0 +1,42 @@
+{% extends 'labbyims/base.html' %}
+
+{% block content %}
+
+<br><br><br><br><br>
+  <form method="get">
+    {{ filter.form.as_p }}
+    <button type="submit">Search</button>
+      <br><br><br>
+  </form>
+
+
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Location Name</th>
+            <th>Description</th>
+            <th>Is the location Restricted?</th>
+            <th>Room ID</th>
+
+
+      </tr>
+        </thead>
+          <tbody>
+  {% for Location in filter.qs %}
+
+            <tr>
+          <td>{{ Location.id }}</td>
+          <td>{{ Location.name }}</td>
+          <td>{{ Location.description }}</td>
+          <td>{{ Location.is_restricted }}</td>
+          <td>{{ Location.room_id }}</td>
+
+
+        </tr>
+  {% endfor %}
+
+              </tbody>
+  </table>
+
+{% endblock %}

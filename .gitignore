@@ -20,3 +20,4 @@ lims_project/labbyims/templates/labbyims/base.html
 lims_project/labbyims/urls.py
 lims_project/labbyims/views.py
 lims_project/lims_project/__pycache__/settings.cpython-37.pyc
+*.pyc
