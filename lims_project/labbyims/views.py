@@ -56,10 +56,10 @@ def add_item(request):
     context = {'form': form}
     return render(request, 'labbyims/add_item.html', context)
 
-def search_results(request):
+def inventory(request):
     table = Product_UnitTable(Product_Unit.objects.all())
     RequestConfig(request).configure(table)
-    return render(request, 'labbyims/results.html', {'table': table})
+    return render(request, 'labbyims/inventory.html', {'table': table})
 
 def add_location(request):
     if request.method == "POST":
