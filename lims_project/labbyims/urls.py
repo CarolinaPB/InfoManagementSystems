@@ -10,7 +10,12 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('add_product/', views.add_product, name='add_product'),
     path('add_item/', views.add_item, name='add_item'),
+<<<<<<< HEAD
     path('search_results/', views.search_results, name='search_results'),
     path('add_location/', views.add_location, name='add_location'),
     path('locations/', views.locations, name='locations'),
+=======
+    path('search_results/', views.search_results, name='search_results')
+
+>>>>>>> parent of 5c0b928... Search option
 ]
