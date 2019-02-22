@@ -23,44 +23,39 @@
     <header class="site-header">
         <nav class="navbar navbar-expand navbar-dark bg-dark fixed-top">
             <div class="container-fluid">
+                <a class="navbar-brand mr-4" href="#">Labby</a>
 
-                <a class="navbar-brand mr-4" href="http://127.0.0.1:8000/home/">Labbi</a>
-=======
+
                 <a class="navbar-brand mr-4" href="#">Labby</a>
->>>>>>> parent of 5c0b928... Search option
-=======
+
                 <a class="navbar-brand mr-4" href="#">Labby</a>
->>>>>>> parent of 5c0b928... Search option
-=======
-                <a class="navbar-brand mr-4" href="#">Labby</a>
->>>>>>> parent of 5c0b928... Search option
+
+                <a class="navbar-brand mr-4" href="/home/">Labbi</a>
+
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
                 <!-- Navbar Right Side -->
                 <div class="navbar-nav">
                     {% if user.is_authenticated %}
-                    <form class="form-inline my-2 my-lg-1">
+                    <form action='/search/' class="form-inline my-2 my-lg-1">
                         <input
                         class="form-control mr-sm-2"
                         type="search"
                         placeholder="Search"
 
-                        name='search'>
+
+                        name='description'>
                         <button class="btn my-2 my-sm-0" type="submit">Search</button>
                     </form>
-                    <a class="nav-item nav-link" href="http://127.0.0.1:8000/add_product">Add product</a>
+                    <a class="nav-item nav-link" href="/add_product/">Add product</a>
 
-=======
->>>>>>> parent of 5c0b928... Search option
-=======
->>>>>>> parent of 5c0b928... Search option
                     <div class="dropdown">
                         <button class="dropbtn my-2 my-sm-0">User<i class="fa fa-caret-down"></i></button>
                         <div class="dropdown-content">
                         <a href="#">My Reservations</a>
                         <a href="#">Expiration/re-test</a>
-                        <a href="http://127.0.0.1:8000/locations">Locations</a>
+                        <a href="/locations/">Locations</a>
                         <a href="{% url 'logout' %}">Logout</a>
                         </div>
                     </div>

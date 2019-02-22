@@ -6,7 +6,7 @@ from .models import Product_Unit, Product, Location
 from django.forms.widgets import DateInput
 
 class AdvancedSearch(forms.Form):
-    search = forms.CharField(widget=forms.TextInput(attrs={'class': 'col-md-12'}), label=False)
+    search = forms.CharField(widget=forms.TextInput(attrs={'class': 'col-md-12 searchfield'}), label=False)
     CHOICES=[
              ('unit', 'Unit'),
              ('location','Location'),
@@ -17,11 +17,15 @@ class AdvancedSearch(forms.Form):
     advanced_search.widget.attrs.update({'class': 'col-md-6'})
     advanced_search.widget.attrs.update({'name': 'advanced_search'})
     advanced_search.widget.attrs.update({'id': 'advanced_search'})
+    #search.widget.attrs.update({'action': '/search/'})
+    search.widget.attrs.update({'name': 'description'})
+    search.widget.attrs.update({'type': 'search'})
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.helper = FormHelper
-        self.helper.form_method = "post"
+        #self.helper.form_method = "post='/search/'"
 
         self.helper.layout = Layout(
             "search",

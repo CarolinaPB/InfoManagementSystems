@@ -17,7 +17,10 @@
                 <br>
                 <center >Search</center>
                 <br>
+                <form action="" method="POST">
+                {% csrf_token %}
                 {% crispy form form.helper %}
+                </form>
             </div>
 =======
 <div class="container-fluid">

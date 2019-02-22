@@ -6,6 +6,7 @@
 lims_project/.DS_Store
 lims_project/labbyims/.DS_Store
 *.pyc
+
 lims_project/labbyims/templates/labbyims/home_afterlogin.html
 lims_project/labbyims/templates/labbyims/base.html
 lims_project/labbyims/urls.py
