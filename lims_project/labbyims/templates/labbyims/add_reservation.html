@@ -1,0 +1,17 @@
+{% extends "labbyims/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<br><br><br><br><br>
+
+<TITLE>Reservations</TITLE>
+<H1>Reservations</H1>
+<br><br>
+<form method="POST", action="">
+    {% csrf_token %}
+    {{ form|crispy}}
+    <input type="submit" value="Submit">  <input type="reset" value="Reset">
+</form>
+
+
+{% endblock %}

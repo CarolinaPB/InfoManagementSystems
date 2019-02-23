@@ -3,8 +3,8 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 
 from django.views import View
-from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form
-from .models import Product_Unit, Product, Location, Room
+from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form, Room_Form, Reserve_Form
+from .models import Product_Unit, Product, Location, Room, Reserve
 from .tables import Product_UnitTable
 from django_tables2 import RequestConfig
 from .filters import ProductFilter, LocationFilter
@@ -89,3 +89,31 @@ def search_location(request):
 	    location_list = Location.objects.all()
 	    location_filter = LocationFilter(request.GET, queryset=location_list)
 	    return render(request, "labbyims/search_location.html", {'filter': location_filter})
+
+def add_room(request):
+    if request.method == "POST":
+        form = Room_Form(request.POST)
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponseRedirect('.')
+        else:
+            print(form.errors)
+    else:
+        form = Room_Form()
+
+    context = {'form': form}
+    return render(request, 'labbyims/add_room.html', context)
+
+def add_reservation(request):
+    if request.method == "POST":
+        form = Reserve_Form(request.POST)
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponseRedirect('.')
+        else:
+            print(form.errors)
+    else:
+        form = Reserve_Form()
+
+    context = {'form': form}
+    return render(request, 'labbyims/add_reservation.html', context)

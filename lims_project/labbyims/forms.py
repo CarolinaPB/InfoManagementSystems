@@ -2,7 +2,7 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from django.db import models
-from .models import Product_Unit, Product, Location
+from .models import Product_Unit, Product, Location, Room, Reserve
 from django.forms.widgets import DateInput
 
 class AdvancedSearch(forms.Form):
@@ -54,3 +54,13 @@ class Location_Form(forms.ModelForm):
     class Meta:
         model = Location
         fields = "__all__"
+
+class Room_Form(forms.ModelForm):
+    class Meta:
+        model = Room
+        fields="__all__"
+
+class Reserve_Form(forms.ModelForm):
+    class Meta:
+        model=Reserve
+        fields="__all__"

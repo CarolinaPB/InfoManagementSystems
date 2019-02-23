@@ -16,4 +16,6 @@ urlpatterns = [
     path('inventory/', views.search_results, name='search_results'),
     url (r'^search/$',views.search,name='search'),
     url (r'^search_location/$',views.search_location, name='search_location'),
+    path('add_room/', views.add_room, name='add_room'),
+    path('add_reservation/', views.add_reservation, name='add_reservation'),
 ]
