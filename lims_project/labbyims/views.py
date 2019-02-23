@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
+from django.db.models import F
 
 from django.views import View
 from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form
@@ -60,6 +61,8 @@ def add_item(request):
 
 def inventory(request):
 
+
+
     table = Product_UnitTable(Product_Unit.objects.all())
     RequestConfig(request).configure(table)
     return render(request, 'labbyims/inventory.html', {'table': table})
@@ -90,6 +93,7 @@ def locations(request):
 
 def search(request):
     product_list = Product_Unit.objects.all()
+    product_list_up = product_list.update(curr_amount=F('init_amount')-F('used_amount'))
     product_filter = ProductFilter(request.GET, queryset=product_list)
     return render(request, "labbyims/product_list.html", {'filter': product_filter})
 

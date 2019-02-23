@@ -8,7 +8,7 @@ class ProductFilter(django_filters.FilterSet):
         fields = ['description',]
 
 class LocationFilter(django_filters.FilterSet):
-    description = django_filters.CharFilter(lookup_expr='icontains')
+    name = django_filters.CharFilter(lookup_expr='icontains')
     class Meta:
         model = Location
             #model = Location, Room
