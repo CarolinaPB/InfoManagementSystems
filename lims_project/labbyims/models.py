@@ -1,15 +1,11 @@
 # Create your models here.
 
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 
-
-class Account(models.Model):
-    user = models.OneToOneField(User,on_delete=models.CASCADE)
+class User(AbstractUser):
     department = models.CharField(max_length=255, blank = True)
-    def __str__(self):
-        return User.username
 
 class Product(models.Model):
     cas = models.CharField('CAS number', max_length=12, unique=True)
@@ -44,10 +40,10 @@ class Location(models.Model):
 class Product_Unit(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
-    reservation = models.ManyToManyField(Account, through='Reserve')
+    reservation = models.ManyToManyField(User, through='Reserve')
     name = models.CharField(max_length=255)
     url = models.CharField(max_length=255)
-    is_inactive = models.BooleanField('Archived', null = False)
+    is_inactive = models.BooleanField('archived', null = False)
     del_date = models.DateField('delivery date')
     open_date = models.DateField('date opened', null=True)
     exp_date = models.DateField('expiration date', null=True)
@@ -58,11 +54,12 @@ class Product_Unit(models.Model):
     company = models.CharField(max_length=255)
     cat_num = models.CharField(max_length=255)
     temperature = models.CharField(max_length=12)
+    m_unit = models.CharField('measuring units', max_length=4, null=True)
     def __str__(self):
         return self.name
 
 class Reserve(models.Model):
-    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     prod_un = models.ForeignKey(Product_Unit, on_delete=models.CASCADE)
     amount_res = models.DecimalField('amount to reserve', max_digits=10, decimal_places=4)
     date_res = models.DateField('date of reservation')
