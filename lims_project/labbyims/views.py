@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.views import View
 from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form
 from .models import Product_Unit, Product, Location, Room
-from .tables import Product_UnitTable
+from .tables import Product_UnitTable, LocationTable
 from django_tables2 import RequestConfig
 from .filters import ProductFilter, LocationFilter
 
@@ -78,18 +78,22 @@ def add_location(request):
         form = Location_Form()
 
     context = {'form': form}
-    return render(request, 'labbyims/add_location.html', context)
+    return render(request, 'labbyims/add_location.html', context,)
 
 
 def locations(request):
-    return render(request, 'labbyims/locations.html')
+    table_1 = LocationTable(Location.objects.all())
+    RequestConfig(request).configure(table_1)
+    return render(request, 'labbyims/locations.html', {'table_1': table_1})
+
 
 
 def search(request):
     product_list = Product_Unit.objects.all()
     product_filter = ProductFilter(request.GET, queryset=product_list)
     return render(request, "labbyims/product_list.html", {'filter': product_filter})
-    
+
+
 
 def search_location(request):
     location_list = Location.objects.all()

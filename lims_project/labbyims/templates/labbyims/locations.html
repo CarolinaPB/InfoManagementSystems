@@ -1,6 +1,14 @@
 {% extends "labbyims/base.html" %}
+{% load render_table from django_tables2 %}
 {% block content %}
 <br><br><br><br><br><br>
 <p>this will show the available locations?????</p>
 <a href="http://127.0.0.1:8000/add_location">Add location</a>
+<main>
+<br><br>
+    <body>
+        {% render_table table_1 %}
+    </body>
+    <br><br>
+</main>
 {% endblock %}
