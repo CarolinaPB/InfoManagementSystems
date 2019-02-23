@@ -6,7 +6,7 @@ from django.db.models import F
 from django.views import View
 from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form
 from .models import Product_Unit, Product, Location, Room
-from .tables import Product_UnitTable, LocationTable
+from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable
 from django_tables2 import RequestConfig
 from .filters import ProductFilter, LocationFilter
 
@@ -60,9 +60,6 @@ def add_item(request):
     return render(request, 'labbyims/add_item.html', context)
 
 def inventory(request):
-
-
-
     table = Product_UnitTable(Product_Unit.objects.all())
     RequestConfig(request).configure(table)
     return render(request, 'labbyims/inventory.html', {'table': table})
@@ -89,7 +86,15 @@ def locations(request):
     RequestConfig(request).configure(table_1)
     return render(request, 'labbyims/locations.html', {'table_1': table_1})
 
-
+def expiring(request):
+    table_exp = Product_Unit_ExpTable(Product_Unit.objects.all())
+    RequestConfig(request).configure(table_exp)
+    return render(request, 'labbyims/expiring_retesting.html', {'table_exp': table_exp})
+    #product_list = Product_Unit.objects.all()
+    #filter_exp = product_list.objects.all().filter(product_list)
+    #order_exp = filter_exp.order_by(exp_date)
+    #RequestConfig(request).configure(table_exp)
+    #return render(request, 'labbyims/expiring.html', {'table_exp': table_exp})
 
 def search(request):
     product_list = Product_Unit.objects.all()

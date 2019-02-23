@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from decimal import Decimal
 
 
+
 class Account(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     department = models.CharField(max_length=255, blank = True)
