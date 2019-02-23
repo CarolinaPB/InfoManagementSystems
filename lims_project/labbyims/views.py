@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 
 from django.views import View
 from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form, Room_Form, Reserve_Form
-from .models import Product_Unit, Product, Location, Room, Reserve
+from .models import Product_Unit, Product, Location, Room, Reserve, User
 from .tables import Product_UnitTable
 from django_tables2 import RequestConfig
 from .filters import ProductFilter, LocationFilter
@@ -117,3 +117,6 @@ def add_reservation(request):
 
     context = {'form': form}
     return render(request, 'labbyims/add_reservation.html', context)
+
+def reservations(request):
+    return render(request, 'labbyims/reservations.html')

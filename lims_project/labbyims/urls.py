@@ -18,4 +18,5 @@ urlpatterns = [
     url (r'^search_location/$',views.search_location, name='search_location'),
     path('add_room/', views.add_room, name='add_room'),
     path('add_reservation/', views.add_reservation, name='add_reservation'),
+    path('reservations/', views.reservations, name='reservations'),
 ]
