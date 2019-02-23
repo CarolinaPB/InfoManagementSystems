@@ -63,4 +63,8 @@ class Room_Form(forms.ModelForm):
 class Reserve_Form(forms.ModelForm):
     class Meta:
         model=Reserve
-        fields="__all__"
+        widgets = {
+            "date_res":DateInput(attrs = {"type":"date"}),
+        }
+        #fields="__all__"
+        exclude = ['is_complete', "user"]

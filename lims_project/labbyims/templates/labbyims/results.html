@@ -5,16 +5,14 @@
 <br><br><br><br><br>
 <TITLE>Inventory</TITLE>
 <H1>Inventory</H1>
-<main>
-    <head>
-        <br><br>
-        <title>List of persons</title>
-    </head>
-    <body>
-        {% render_table table %}
-    </body>
+<br>
+    <input type="button" value="Go back" onClick="javascript:history.go(-1)" />
     <br><br>
-</main>
+    
+    {% render_table table %}
+
+    <br><br>
+
 
 
 {% endblock %}
