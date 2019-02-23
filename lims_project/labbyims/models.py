@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from decimal import Decimal
 
 
 class Account(models.Model):
@@ -11,6 +12,8 @@ class Account(models.Model):
 class Product(models.Model):
     cas = models.CharField('CAS number', max_length=12, unique=True)
     name = models.CharField(max_length=255)
+    min_temp = models.DecimalField('Maximum Temperature', max_digits=10, decimal_places=4, default = 25)
+    max_temp = models.DecimalField('Minimum Temperature', max_digits=10, decimal_places=4, default = 25)
     ispoison_nonvol = models.BooleanField('is poison - non-volatile')
     isreactive = models.BooleanField('is reactive')
     issolid = models.BooleanField('is solid')
@@ -59,11 +62,9 @@ class Product_Unit(models.Model):
     purity = models.CharField('purity/percentage', max_length = 255, null=True, blank = True)
     init_amount = models.DecimalField('initial amount', max_digits=10, decimal_places=4, default = 0)
     used_amount = models.DecimalField('amount used', max_digits=10, decimal_places=4, default=0)
-    curr_amount = models.DecimalField('current amount', max_digits=10, decimal_places=4, default=init_amount)
+    curr_amount = models.DecimalField('current amount', max_digits=10, decimal_places=4, default=0)
     company = models.CharField(max_length=255)
     cat_num = models.CharField('catalog number', max_length=255, blank = True)
-    min_temp = models.DecimalField('Maximum Temperature', max_digits=10, decimal_places=4, default = 25)
-    max_temp = models.DecimalField('Minimum Temperature', max_digits=10, decimal_places=4, default = 25)
     m_unit = models.CharField('measuring units', max_length=4, null=True, blank = True)
     def __str__(self):
         return self.description
