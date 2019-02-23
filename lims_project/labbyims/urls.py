@@ -1,6 +1,5 @@
 from django.urls import path, include
 from . import views
-#from labbyims.views import search_results
 from django.contrib.auth import views as auth_views
 from django.conf.urls import url
 
@@ -16,4 +15,5 @@ urlpatterns = [
     path('locations/', views.locations, name='locations'),
     path('inventory/', views.search_results, name='search_results'),
     url (r'^search/$',views.search,name='search'),
+    url (r'^search_location/$',views.search_location, name='search_location'),
 ]

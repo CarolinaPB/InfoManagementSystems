@@ -36,20 +36,20 @@
                         name='description'>
                         <button class="btn my-2 my-sm-0" type="submit">Search</button>
                     </form>
-                    <a class="nav-item nav-link" href="/add_product/">Add product</a>
-                    <a class="nav-item nav-link" href="/add_item/">Add item</a>
+                    <a class="nav-item nav-link" href="{% url 'add_product' %}">Add product</a>
+                    <a class="nav-item nav-link" href="{% url 'add_item' %}">Add item</a>
                     <div class="dropdown">
                         <button class="dropbtn my-2 my-sm-0">User<i class="fa fa-caret-down"></i></button>
                         <div class="dropdown-content">
                         <a href="#">My Reservations</a>
                         <a href="#">Expiration/re-test</a>
-                        <a href="/inventory/">Inventory</a>
-                        <a href="/locations/">Locations</a>
+                        <a href="{/inventory/}">Inventory</a>
+                        <a href="{% url 'locations' %}">Locations</a>
                         <a href="{% url 'logout' %}">Logout</a>
                         </div>
                     </div>
                     {% else %}
-                    <a class="nav-item nav-link" href="login">Login</a>
+                    <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
                     <a class="nav-item nav-link" href="#">Register</a>
                     {% endif %}
                 </div>
