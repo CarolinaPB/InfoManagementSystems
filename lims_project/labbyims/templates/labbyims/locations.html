@@ -1,8 +1,15 @@
 {% extends "labbyims/base.html" %}
+{% load render_table from django_tables2 %}
 {% block content %}
 <br><br><br><br><br><br>
-<p>this will show the available locations?????</p>
 <a href="{% url 'add_location' %}">Add location</a>
 <br>
 <a href="{% url 'add_room' %}">Add room</a>
+<main>
+	<br><br>
+	    <body>
+	        {% render_table table_1 %}
+	    </body>
+	    <br><br>
+	</main>
 {% endblock %}
