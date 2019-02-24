@@ -50,7 +50,7 @@
                     </div>
                     {% else %}
                     <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
-                    <a class="nav-item nav-link" href="/register/">Register</a>
+                    <a class="nav-item nav-link" href="{% url 'django_registration_register' %}">Register</a>
                     {% endif %}
                 </div>
             </div>
