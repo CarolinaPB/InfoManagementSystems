@@ -28,13 +28,13 @@
             <div class="container-fluid"
                 <br><br><br><br><br>
                 <h2>Reminders</h2>
-                <a href="#">My Reservations</a><br>
+                <a href="{% url 'reservations' %}">My Reservations</a><br>
                 <ul>
                     <li>reservation 1 </li>
                     <li>reservation 2 </li>
                     <li>reservation 3 </li>
                 </ul>
-                <a href="#">Expiration/re-test</a>
+                <a href="{% url 'expiring_retesting' %}">Expiration/re-test</a>
                 <ul>
                     <li>expiration 1 </li>
                     <li>expiration 2 </li>
