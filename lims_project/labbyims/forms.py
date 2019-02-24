@@ -1,6 +1,10 @@
 from django import forms
 from django_registration.forms import RegistrationForm
-from .models import User
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Submit
+from django.db import models
+from .models import User, Product_Unit, Product, Location, Room, Reserve
+from django.forms.widgets import DateInput
 
 class SignUpForm(RegistrationForm):
     first_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
@@ -11,13 +15,6 @@ class SignUpForm(RegistrationForm):
     class Meta(RegistrationForm.Meta):
         model = User
         fields = ('username', 'first_name', 'last_name', 'department', 'email', 'password1', 'password2', )
-
-from django import forms
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit
-from django.db import models
-from .models import Product_Unit, Product, Location, Room, Reserve
-from django.forms.widgets import DateInput
 
 class AdvancedSearch(forms.Form):
     search = forms.CharField(widget=forms.TextInput(attrs={'class': 'col-md-12 searchfield'}), label=False)

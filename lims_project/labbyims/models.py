@@ -74,7 +74,7 @@ class Reserve(models.Model):
     is_complete = models.BooleanField()
 
 class Uses(models.Model):
-    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     prod_un = models.ForeignKey(Product_Unit, on_delete=models.CASCADE)
     amount_used = models.DecimalField('amount used', max_digits=10, decimal_places=4)
     date_used = models.DateField('date of use')

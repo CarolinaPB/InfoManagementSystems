@@ -106,9 +106,9 @@ def search(request):
     return render(request, "labbyims/product_list.html", {'filter': product_filter})
 
 def search_location(request):
-	    location_list = Location.objects.all()
-	    location_filter = LocationFilter(request.GET, queryset=location_list)
-	    return render(request, "labbyims/search_location.html", {'filter': location_filter})
+    location_list = Location.objects.all()
+    location_filter = LocationFilter(request.GET, queryset=location_list)
+    return render(request, "labbyims/search_location.html", {'filter': location_filter})
 
 def add_room(request):
     if request.method == "POST":

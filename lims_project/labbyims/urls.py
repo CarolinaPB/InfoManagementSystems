@@ -3,7 +3,6 @@ from . import views
 from django.contrib.auth import views as auth_views
 from django_registration.backends.activation.views import RegistrationView
 from .forms import SignUpForm
-from django.conf.urls import url
 
 urlpatterns = [
     path('home/', views.home, name='home'),
@@ -14,14 +13,12 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('inventory/', views.inventory, name='inventory'),
     path('add_product/', views.add_product, name='add_product'),	
-    path('add_item/', views.add_item, name='add_item')
-    path('search_results/', views.search_results, name='search_results'),
+    path('add_item/', views.add_item, name='add_item'),
     path('add_location/', views.add_location, name='add_location'),
     path('locations/', views.locations, name='locations'),
     path('expiring_retesting/', views.expiring, name='expiring_retesting'),
-
-    url (r'^search/$',views.search,name='search'),
-    url (r'^search_location/$',views.search_location, name='search_location'),
+    re_path(r'^search/$',views.search,name='search'),
+    re_path(r'^search_location/$',views.search_location, name='search_location'),
     path('add_room/', views.add_room, name='add_room'),
     path('add_reservation/', views.add_reservation, name='add_reservation'),
     path('reservations/', views.reservations, name='reservations'),
