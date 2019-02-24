@@ -1,42 +1,64 @@
 {% extends 'labbyims/base.html' %}
 
-	{% block content %}
+{% block content %}
 
-	<br><br><br><br><br>
-	  <form method="get">
-	    {{ filter.form.as_p }}
-	    <button type="submit">Search</button>
-	      <br><br><br>
-	  </form>
-
-
-	      <table class="table table-bordered">
-	        <thead>
-	        <tr>
-	            <th>ID</th>
-	            <th>Location Name</th>
-	            <th>Description</th>
-	            <th>Is the location Restricted?</th>
-	            <th>Room ID</th>
+<br><br><br><br><br>
+  <form method="get">
+    {{ filter.form.as_p }}
+    <button type="submit">Search</button>
+      <br><br><br>
+      <p>*Restricted to be safe for</p>
+  </form>
 
 
-	      </tr>
-	        </thead>
-	          <tbody>
-	  {% for Location in filter.qs %}
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Location Name</th>
+            <th>Description</th>
+            <th>Room ID</th>
+            <th>*Poisons-non-volatile</th>
+            <th>*Reactives</th>
+            <th>*Solids</th>
+            <th>*Oxidizing Liquids</th>
+            <th>*Flammables</th>
+            <th>*Basic Liquids</th>
+            <th>*Organic and Mineral Acid</th>
+            <th>*Oxidizing Acids</th>
+            <th>*Poisons-Volatile</th>
 
-	            <tr>
-	          <td>{{ Location.id }}</td>
-	          <td>{{ Location.name }}</td>
-	          <td>{{ Location.description }}</td>
-	          <td>{{ Location.is_restricted }}</td>
-	          <td>{{ Location.room_id }}</td>
 
 
-	        </tr>
-	  {% endfor %}
+      </tr>
+        </thead>
+          <tbody>
+  {% for Location in filter.qs %}
 
-	              </tbody>
-	  </table>
+            <tr>
+          <td>{{ Location.id }}</td>
+          <td>{{ Location.name }}</td>
+          <td>{{ Location.description }}</td>
+          <td>{{ Location.room_id }}</td>
+          <td>{{ Location.ispoison_nonvol }}</td>
+          <td>{{ Location.isreactive }}</td>
+          <td>{{ Location.issolid }}</td>
+          <td>{{ Location.isoxidliq }}</td>
+          <td>{{ Location.isflammable }}</td>
+          <td>{{ Location.isbaseliq }}</td>
+          <td>{{ Location.isorgminacid }}</td>
+          <td>{{ Location.isoxidacid }}</td>
+          <td>{{ Location.ispois_vol }}</td>
 
-	{% endblock %}
+
+
+
+
+
+        </tr>
+  {% endfor %}
+
+              </tbody>
+  </table>
+
+{% endblock %}

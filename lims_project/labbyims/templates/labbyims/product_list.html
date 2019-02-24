@@ -18,19 +18,17 @@
             <th>Product</th>
             <th>Description</th>
             <th>Location</th>
+            <th>Current Amount</th>
             <th>Reservation</th>
-            <th>Is inactive?</th>
-            <th>Open date</th>
-            <th>Delivery date</th>
             <th>Expiration date</th>
             <th>Retesting date</th>
+            <th>Open date</th>
+            <th>Delivery date</th>
             <th>Purity</th>
-            <th>Initial Amount</th>
-            <th>Used Amount</th>
             <th>Company</th>
             <th>Catalog number</th>
-            <th>Temperature</th>
             <th>Measurement unit</th>
+            <th>Is inactive?</th>
 
 
       </tr>
@@ -43,19 +41,17 @@
           <td>{{ Product_Unit.product }}</td>
           <td>{{ Product_Unit.description }}</td>
           <td>{{ Product_Unit.location }}</td>
+          <td>{{ Product_Unit.curr_amount }}</td>
           <td>{{ Product_Unit.reservation }}</td>
-          <td>{{ Product_Unit.is_inactive }}</td>
-          <td>{{ Product_Unit.open_date }}</td>
-          <td>{{ Product_Unit.del_date }}</td>
           <td>{{ Product_Unit.exp_date }}</td>
           <td>{{ Product_Unit.ret_date }}</td>
+          <td>{{ Product_Unit.open_date }}</td>
+          <td>{{ Product_Unit.del_date }}</td>
           <td>{{ Product_Unit.purity }}</td>
-          <td>{{ Product_Unit.init_amount }}</td>
-          <td>{{ Product_Unit.used_amount }}</td>
           <td>{{ Product_Unit.company }}</td>
           <td>{{ Product_Unit.cat_num }}</td>
-          <td>{{ Product_Unit.temperature }}</td>
           <td>{{ Product_Unit.m_unit }}</td>
+          <td>{{ Product_Unit.is_inactive }}</td>
 
         </tr>
   {% endfor %}

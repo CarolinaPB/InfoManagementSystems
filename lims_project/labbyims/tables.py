@@ -10,3 +10,14 @@ class LocationTable(tables.Table):
 	    class Meta:
 	        model = Location
 	        template_name = 'django_tables2/bootstrap.html'
+
+class Product_Unit_ExpTable(tables.Table):
+    class Meta:
+        model = Product_Unit
+        exp_date = tables.Column(order_by=('exp_date', 'ret_date'))
+        template_name = 'django_tables2/bootstrap.html'
+
+class LocationTable(tables.Table):
+    class Meta:
+        model = Location
+        template_name = 'django_tables2/bootstrap.html'
