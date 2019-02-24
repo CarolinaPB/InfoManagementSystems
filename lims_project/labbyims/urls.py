@@ -18,7 +18,7 @@ urlpatterns = [
     path('password_reset_complete/', auth_views.PasswordResetCompleteView.as_view(template_name='labbyims/password_reset_complete.html'), name='password_reset_complete'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('inventory/', views.inventory, name='inventory'),
-    path('add_product/', views.add_product, name='add_product'),	
+    path('add_product/', views.add_product, name='add_product'),
     path('add_item/', views.add_item, name='add_item'),
     path('add_location/', views.add_location, name='add_location'),
     path('locations/', views.locations, name='locations'),
@@ -28,4 +28,5 @@ urlpatterns = [
     path('add_room/', views.add_room, name='add_room'),
     path('add_reservation/', views.add_reservation, name='add_reservation'),
     path('reservations/', views.reservations, name='reservations'),
+    path('about/', views.about, name='about'),
 ]

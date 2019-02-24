@@ -140,3 +140,6 @@ def add_reservation(request):
 
 def reservations(request):
     return render(request, 'labbyims/reservations.html')
+
+def about(request):
+    return render(request, 'labbyims/about.html')
