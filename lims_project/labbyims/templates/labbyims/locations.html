@@ -4,13 +4,12 @@
 <br><br><br><br><br><br>
 <TITLE>Locations</TITLE>
 <H1>Locations</H1>
-<br><br>
-<a href="{% url 'add_location' %}">Add location</a>
 <br>
+<a href="{% url 'add_location' %}">Add location</a>
 <a href="{% url 'add_room' %}">Add room</a>
 <br><input type="button" value="Go back" onClick="javascript:history.go(-1)" />
 <main>
-    <br><br>
+    <br>
     <body>
 
         {% render_table table_1 %}
