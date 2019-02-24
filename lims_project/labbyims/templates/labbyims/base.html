@@ -1,3 +1,4 @@
+{% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,48 +12,49 @@
     <link rel="stylesheet" type="text/css" href="/static/labbyims/main.css">
 
     {% if title %}
-        <title>Labby - {{ title }}</title>
+        <title>Labbi - {{ title }}</title>
     {% else %}
-        <title>Labby</title>
+        <title>Labbi</title>
     {% endif %}
 </head>
 <body>
     <header class="site-header">
         <nav class="navbar navbar-expand navbar-dark bg-dark fixed-top">
             <div class="container-fluid">
-                <a class="navbar-brand mr-4" href="#">Labby</a>
+                <a class="navbar-brand mr-4" href="{% url 'home' %}">Labbi</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
                 <!-- Navbar Right Side -->
                 <div class="navbar-nav">
                     {% if user.is_authenticated %}
-                    <form class="form-inline my-2 my-lg-1">
+                    <form action='/search/' class="form-inline my-2 my-lg-1">
                         <input
                         class="form-control mr-sm-2"
                         type="search"
                         placeholder="Search"
-                        name='search'
-                        value="{{search_term}}">
+                        name='description'>
                         <button class="btn my-2 my-sm-0" type="submit">Search</button>
                     </form>
-                    <a class="nav-item nav-link" href="#">Add unit</a>
+                    <a class="nav-item nav-link" href="{% url 'add_product' %}">Add product</a>
+                    <a class="nav-item nav-link" href="{% url 'add_item' %}">Add item</a>
                     <div class="dropdown">
                         <button class="dropbtn my-2 my-sm-0">User<i class="fa fa-caret-down"></i></button>
                         <div class="dropdown-content">
-                        <a href="#">My Reservations</a>
+                        <a href="{% url 'reservations' %}">My Reservations</a>
                         <a href="#">Expiration/re-test</a>
-                        <a href="#">Locations</a>
-                        <a href="#">Logout</a>
+                        <a href="/inventory/">Inventory</a>
+                        <a href="{% url 'locations' %}">Locations</a>
+                        <a href="{% url 'logout' %}">Logout</a>
                         </div>
                     </div>
                     {% else %}
-                    <a class="nav-item nav-link" href="login">Login</a>
+                    <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
                     <a class="nav-item nav-link" href="#">Register</a>
                     {% endif %}
                 </div>
             </div>
-        </nav> 
+        </nav>
     </header>
     <div class="container-fluid">
         {% if user.is_authenticated %}
@@ -63,7 +65,7 @@
     </div>
 
     <footer>
-        <p>LABBI developed by Group 5</p>
+        <p>LABBI developed by Group 5 Github About   Help</p>
     </footer>
 
 </body>
@@ -73,5 +75,5 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-</body>
+
 </html>

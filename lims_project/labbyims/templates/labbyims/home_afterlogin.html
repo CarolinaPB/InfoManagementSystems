@@ -1,39 +1,47 @@
 {% extends "labbyims/base.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
 
-<div class="container-fluid">
-    <br><br>
-    <div class="row">
-        <div class="first-column col-sm-9 col-lg-9">
-            <form  class="form-inline my-2 my-lg-1 center-search">
-              <input
-                  class="form-control mr-sm-2"
-                  type="search"
-                  placeholder="Search"
-                  name='search'
-                  value="{{search_term}}">
-              <button class="btn my-2 my-sm-0" type="submit">Search</button>
-            </form>
+<div class="row">
+    <div class="first-column col-sm-9 col-lg-9">
+        <br><br><br><br>
+        <div class="row">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4">
+                <br><br>
+                <br><br>
+                <br><br>
+                <br><br>
+                <br>
+                <center >Search</center>
+                <br>
+                <form action="" method="POST">
+                {% csrf_token %}
+                {% crispy form form.helper %}
+                </form>
+            </div>
         </div>
-            <div class="second-column col-sm-3 col-lg-3" style="background-color:#bbb;">
-                <div class="container-fluid"
-                    <br><br><br><br>
-                    <h2>Reminders</h2>
-                    <a href="#">My Reservations</a><br>
-                    <ul>
-                        <li>reservation 1 </li>
-                        <li>reservation 2 </li>
-                        <li>reservation 3 </li>
-                    </ul>
-                    <a href="#">Expiration/re-test</a>
-                    <ul>
-                        <li>expiration 1 </li>
-                        <li>expiration 2 </li>
-                        <li>expiration 3 </li>
-                    </ul>
-                </div>
-        </div>
-    </div>
 
+    </div>
+        <div class="second-column col-sm-3 col-lg-3" style="background-color:#bbb;">
+            <div class="container-fluid"
+                <br><br><br><br><br>
+                <h2>Reminders</h2>
+                <a href="#">My Reservations</a><br>
+                <ul>
+                    <li>reservation 1 </li>
+                    <li>reservation 2 </li>
+                    <li>reservation 3 </li>
+                </ul>
+                <a href="#">Expiration/re-test</a>
+                <ul>
+                    <li>expiration 1 </li>
+                    <li>expiration 2 </li>
+                    <li>expiration 3 </li>
+                </ul>
+            </div>
+    </div>
 </div>
+
 {% endblock %}

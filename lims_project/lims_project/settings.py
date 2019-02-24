@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django_tables2',
     'crispy_forms',
     'django_registration'
+    'composite_field',
 ]
 
 MIDDLEWARE = [
@@ -134,6 +135,7 @@ STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL = 'login'
+LOGOUT_REDIRECT_URL = '/home'
 
 
 # Defining which backen should be used to send email
