@@ -6,7 +6,7 @@ from .forms import SignUpForm
 
 urlpatterns = [
     path('home/', views.home, name='home'),
-    path('', views.no_login, name='no_login'),
+    path('', views.home, name='home'),
     path('register/', RegistrationView.as_view(form_class=SignUpForm), name='django_registration_register'),
     path('', include('django_registration.backends.activation.urls'), name='signup'),
     path('home/login/', auth_views.LoginView.as_view(template_name='labbyims/login.html'), name='login'),

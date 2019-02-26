@@ -5,7 +5,7 @@ class Product_UnitTable(tables.Table):
     class Meta:
         model = Product_Unit
         template_name = 'django_tables2/bootstrap.html'
-        
+
 class LocationTable(tables.Table):
 	    class Meta:
 	        model = Location
