@@ -6,9 +6,12 @@ from django.db.models import F
 from django.views import View
 from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form
 from .models import Product_Unit, Product, Location, Room
-from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable
+from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, FP_Product_UnitTable
 from django_tables2 import RequestConfig
 from .filters import ProductFilter, LocationFilter
+import datetime
+from datetime import datetime, timedelta
+from django.utils import timezone
 
 def home(request):
     if request.method == 'POST':
@@ -23,7 +26,14 @@ def home(request):
 
     else:
         form = AdvancedSearch(initial=request.GET)
-    return render(request, 'labbyims/home_afterlogin.html' ,{'form':form})
+
+    current_date = timezone.now()
+    exp_warning = current_date + timedelta(days=27)
+    exp_filter = Product_Unit.objects.filter(is_inactive = False, exp_date__range = [current_date,exp_warning ])
+    table_exp = FP_Product_UnitTable(exp_filter)
+    RequestConfig(request).configure(table_exp)
+
+    return render(request, 'labbyims/home_afterlogin.html' ,{'form':form, 'table_exp': table_exp},)
 
 def no_login(request):
     return render(request, 'labbyims/no_login.html')
@@ -87,14 +97,14 @@ def locations(request):
     return render(request, 'labbyims/locations.html', {'table_1': table_1})
 
 def expiring(request):
-    table_exp = Product_Unit_ExpTable(Product_Unit.objects.all())
+    current_date = timezone.now()
+    exp_warning = current_date + timedelta(days=27)
+    exp_filter = Product_Unit.objects.filter(exp_date__range = [current_date,exp_warning ])
+    table_exp = Product_Unit_ExpTable(exp_filter)
     RequestConfig(request).configure(table_exp)
     return render(request, 'labbyims/expiring_retesting.html', {'table_exp': table_exp})
-    #product_list = Product_Unit.objects.all()
-    #filter_exp = product_list.objects.all().filter(product_list)
-    #order_exp = filter_exp.order_by(exp_date)
-    #RequestConfig(request).configure(table_exp)
-    #return render(request, 'labbyims/expiring.html', {'table_exp': table_exp})
+
+
 
 def search(request):
     product_list = Product_Unit.objects.all()
