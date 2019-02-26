@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django_tables2',
     'crispy_forms',
     'django_registration',
-    'composite_field'
+    'composite_field',
+    'captcha'
 ]
 
 MIDDLEWARE = [
@@ -159,3 +160,9 @@ AUTH_USER_MODEL = 'labbyims.User'
 # Definging how many days an authentication link should remain active
 
 ACCOUNT_ACTIVATION_DAYS = 3
+
+
+# reCAPTCHA settings
+
+RECAPTCHA_PUBLIC_KEY = '6LdWCpQUAAAAAHb8M-OZaTUajH7x6CnZIPed-xv8'
+RECAPTCHA_PRIVATE_KEY = '6LdWCpQUAAAAAItN0ECHc9MHNoRFaNEFW0i0AiQj'

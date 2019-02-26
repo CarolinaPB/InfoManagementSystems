@@ -7,15 +7,9 @@ from labbyims.forms import SignUpForm
 from django.http import HttpResponseRedirect
 from django.db.models import F
 from django.views import View
-<<<<<<< HEAD
-from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form
-from .models import Product_Unit, Product, Location, Room
-from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, FP_Product_UnitTable
-=======
 from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form, Room_Form, Reserve_Form
 from .models import Product_Unit, Product, Location, Room, Reserve, User
-from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable
->>>>>>> origin/arnar_dev
+from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, FP_Product_UnitTable
 from django_tables2 import RequestConfig
 from .filters import ProductFilter, LocationFilter
 import datetime
