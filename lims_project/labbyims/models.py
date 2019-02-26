@@ -30,7 +30,7 @@ class Room(models.Model):
         return self.room_name
 
 class Location(models.Model):
-    product = models.ManyToManyField(Product)
+    #product = models.ManyToManyField(Product)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
@@ -63,6 +63,8 @@ class Product_Unit(models.Model):
     company = models.CharField(max_length=255)
     cat_num = models.CharField('catalog number', max_length=255, blank = True)
     m_unit = models.CharField('measuring units', max_length=4, null=True, blank = True)
+    batch = models.CharField('Batch Number', max_length=255, blank = True )
+    in_house_no = models.CharField('In House ID', max_length=255, blank = True )
     def __str__(self):
         return self.description
 
