@@ -27,13 +27,13 @@ class FP_Product_UnitTable(tables.Table):
     class Meta:
         model = Product_Unit
         fields = ('description', 'exp_date', 'ret_date')
-        exclude = ('product','location')
         template_name = 'django_tables2/bootstrap.html'
 
 class Product_Unit_ExpTable(tables.Table):
     class Meta:
         attrs = {'width':'10%'}
         model = Product_Unit
+        exclude = ('id', ' is_inactive')
         template_name = 'django_tables2/bootstrap-responsive.html'
 
 

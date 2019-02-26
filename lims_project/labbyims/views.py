@@ -32,8 +32,8 @@ def home(request):
     exp_filter = Product_Unit.objects.filter(is_inactive = False, exp_date__range = [current_date,exp_warning ])
     table_exp = FP_Product_UnitTable(exp_filter)
     RequestConfig(request).configure(table_exp)
-
     return render(request, 'labbyims/home_afterlogin.html' ,{'form':form, 'table_exp': table_exp},)
+    
 
 def no_login(request):
     return render(request, 'labbyims/no_login.html')
