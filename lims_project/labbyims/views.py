@@ -1,12 +1,21 @@
-from django.shortcuts import render
+# Create your views here.
+
+from django.contrib.auth import login, authenticate
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from labbyims.forms import SignUpForm
 from django.http import HttpResponseRedirect
 from django.db.models import F
-
 from django.views import View
+<<<<<<< HEAD
 from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form
 from .models import Product_Unit, Product, Location, Room
 from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, FP_Product_UnitTable
+=======
+from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form, Room_Form, Reserve_Form
+from .models import Product_Unit, Product, Location, Room, Reserve, User
+from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable
+>>>>>>> origin/arnar_dev
 from django_tables2 import RequestConfig
 from .filters import ProductFilter, LocationFilter
 import datetime
@@ -112,9 +121,38 @@ def search(request):
     product_filter = ProductFilter(request.GET, queryset=product_list)
     return render(request, "labbyims/product_list.html", {'filter': product_filter})
 
-
-
 def search_location(request):
     location_list = Location.objects.all()
     location_filter = LocationFilter(request.GET, queryset=location_list)
     return render(request, "labbyims/search_location.html", {'filter': location_filter})
+
+def add_room(request):
+    if request.method == "POST":
+        form = Room_Form(request.POST)
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponseRedirect('.')
+        else:
+            print(form.errors)
+    else:
+        form = Room_Form()
+
+    context = {'form': form}
+    return render(request, 'labbyims/add_room.html', context)
+
+def add_reservation(request):
+    if request.method == "POST":
+        form = Reserve_Form(request.POST)
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponseRedirect('.')
+        else:
+            print(form.errors)
+    else:
+        form = Reserve_Form()
+
+    context = {'form': form}
+    return render(request, 'labbyims/add_reservation.html', context)
+
+def reservations(request):
+    return render(request, 'labbyims/reservations.html')

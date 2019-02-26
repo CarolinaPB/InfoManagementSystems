@@ -1,14 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from decimal import Decimal
 
 
-
-class Account(models.Model):
-    user = models.OneToOneField(User,on_delete=models.CASCADE)
+class User(AbstractUser):
     department = models.CharField(max_length=255, blank = True)
-    def __str__(self):
-        return User.username
 
 class Product(models.Model):
     cas = models.CharField('CAS number', max_length=12, unique=True)
@@ -53,7 +49,7 @@ class Location(models.Model):
 class Product_Unit(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
-    reservation = models.ManyToManyField(Account, through='Reserve')
+    reservation = models.ManyToManyField(User, through='Reserve')
     description = models.CharField(max_length=255)
     is_inactive = models.BooleanField('Archived', default = False)
     del_date = models.DateField('delivery date')
@@ -73,14 +69,14 @@ class Product_Unit(models.Model):
         return self.description
 
 class Reserve(models.Model):
-    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     prod_un = models.ForeignKey(Product_Unit, on_delete=models.CASCADE)
     amount_res = models.DecimalField('amount to reserve', max_digits=10, decimal_places=4)
     date_res = models.DateField('date of reservation')
     is_complete = models.BooleanField()
 
 class Uses(models.Model):
-    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     prod_un = models.ForeignKey(Product_Unit, on_delete=models.CASCADE)
     amount_used = models.DecimalField('amount used', max_digits=10, decimal_places=4)
     date_used = models.DateField('date of use')

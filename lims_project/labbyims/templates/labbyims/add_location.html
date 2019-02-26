@@ -7,8 +7,9 @@
 <br><br>
 <form method="POST", action="">
     {% csrf_token %}
-    {{ form|crispy }}
+    {{ form|crispy}}
     <input type="submit" value="Submit">  <input type="reset" value="Reset">
+    <input type="button" value="Go back" onClick="javascript:history.go(-1)" />
 
     <br><br>
 </form>

@@ -4,18 +4,15 @@
 {% block content %}
 <br><br><br><br><br>
 
-<TITLE>Add Chemical</TITLE>
-<H1>Add Chemical</H1>
+<TITLE>Add Reservation</TITLE>
+<H1>Add Reservation</H1>
 <br><br>
 <form method="POST", action="">
     {% csrf_token %}
     {{ form|crispy}}
     <input type="submit" value="Submit">  <input type="reset" value="Reset">
-
-    <br><br>
-    <p><a class="btn" href ='{% url "add_item" %}'>Add unit</a> to the database</p>
     <input type="button" value="Go back" onClick="javascript:history.go(-1)" />
 </form>
-<br><br><br>
+
 
 {% endblock %}

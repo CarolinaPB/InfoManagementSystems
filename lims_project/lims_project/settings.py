@@ -38,10 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'crispy_forms',
-    'composite_field',
-    'django_tables2',
     'django_filters',
+    'django_tables2',
+    'crispy_forms',
+    'django_registration',
+    'composite_field'
 ]
 
 MIDDLEWARE = [
@@ -53,6 +54,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
 
 ROOT_URLCONF = 'lims_project.urls'
 
@@ -136,4 +139,23 @@ LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = '/home'
 
-#CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+# Defining which backen should be used to send email
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = 'labbyims@gmail.com'
+EMAIL_HOST_PASSWORD = 'arcahokasi'
+
+
+# Defining which model should be used for the user table
+
+AUTH_USER_MODEL = 'labbyims.User'
+
+
+# Definging how many days an authentication link should remain active
+
+ACCOUNT_ACTIVATION_DAYS = 3
