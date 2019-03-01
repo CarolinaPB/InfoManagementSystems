@@ -4,7 +4,7 @@ from decimal import Decimal
 
 
 class User(AbstractUser):
-    department = models.CharField(max_length=255, blank = True)
+    pass
 
 class Product(models.Model):
     cas = models.CharField('CAS number', max_length=12, unique=True)
@@ -30,7 +30,7 @@ class Room(models.Model):
         return self.room_name
 
 class Location(models.Model):
-    product = models.ManyToManyField(Product)
+    # product = models.ManyToManyField(Product)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
@@ -63,6 +63,8 @@ class Product_Unit(models.Model):
     company = models.CharField(max_length=255)
     cat_num = models.CharField('catalog number', max_length=255, blank = True)
     m_unit = models.CharField('measuring units', max_length=4, null=True, blank = True)
+    batch = models.CharField('Batch Number', max_length=255, blank = True )
+    in_house_no = models.CharField('In House ID', max_length=255, blank = True )
     def __str__(self):
         return self.description
 
@@ -78,3 +80,10 @@ class Uses(models.Model):
     prod_un = models.ForeignKey(Product_Unit, on_delete=models.CASCADE)
     amount_used = models.DecimalField('amount used', max_digits=10, decimal_places=4)
     date_used = models.DateField('date of use')
+
+class Department(models.Model):
+    users = models.ManyToManyField(User)
+    prod_un = models.ManyToManyField(Product_Unit)
+    name = models.CharField(max_length=255)
+    def __str__(self):
+        return self.name

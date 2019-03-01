@@ -1,5 +1,6 @@
 {% extends "labbyims/base.html" %}
 {% load crispy_forms_tags %}
+{% load render_table from django_tables2 %}
 {% block content %}
 
 <div class="row">
@@ -36,9 +37,9 @@
                 </ul>
                 <a href="{% url 'expiring_retesting' %}">Expiration/re-test</a>
                 <ul>
-                    <li>expiration 1 </li>
-                    <li>expiration 2 </li>
-                    <li>expiration 3 </li>
+                  <table>
+                      {%  render_table table_exp %}
+                  </table>
                 </ul>
             </div>
     </div>
