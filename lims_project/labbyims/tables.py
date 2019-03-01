@@ -1,5 +1,5 @@
 import django_tables2 as tables
-from .models import Product_Unit, Location
+from .models import Product_Unit, Location, Reserve
 
 class Product_UnitTable(tables.Table):
     class Meta:
@@ -9,6 +9,13 @@ class Product_UnitTable(tables.Table):
                 'open_date', 'company', 'cat_num', 'batch', 'in_house_no')
 
         template_name = 'django_tables2/bootstrap.html'
+
+class ReserveTable(tables.Table):
+    class Meta:
+        model = Reserve
+        prod_res = tables.Column(accessor='product_unit.description')
+        fields = ('date_res', 'prod_un')
+
 
 
 class Product_Unit_MyTable(tables.Table):

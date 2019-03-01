@@ -11,7 +11,8 @@
   </form>
 
 
-      <table class="table table-bordered">
+      <table class="table table-bordered" >
+
         <thead>
         <tr>
             <th>ID</th>
@@ -36,7 +37,9 @@
   {% for Location in filter.qs %}
 
             <tr>
-          <td>{{ Location.id }}</td>
+          <td {
+  font-size: 24px;
+}>{{ Location.id }}</td>
           <td>{{ Location.name }}</td>
           <td>{{ Location.description }}</td>
           <td>{{ Location.room_id }}</td>

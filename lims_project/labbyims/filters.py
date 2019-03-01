@@ -1,4 +1,4 @@
-from labbyims.models import Product_Unit, Location, Room
+from labbyims.models import Product_Unit, Location, Room, Reserve, User
 import django_filters
 
 
@@ -13,3 +13,9 @@ class LocationFilter(django_filters.FilterSet):
     class Meta:
         model = Location
         fields = ['name',]
+
+class Prod_ResFilter(django_filters.FilterSet):
+    description = django_filters.CharFilter(lookup_expr='icontains')
+    class Meta:
+        model =  Reserve
+        fields = ['description',]
