@@ -8,12 +8,6 @@
 <a href="{% url 'add_location' %}">Add location</a>
 <a href="{% url 'add_room' %}">Add room</a>
 <br><input type="button" value="Go back" onClick="javascript:history.go(-1)" />
-<main>
-    <br>
-    <body>
-
-        {% render_table table_1 %}
-    </body>
-    <br><br>
-</main>
+<br><br>
+{% render_table table_1 %}
 {% endblock %}

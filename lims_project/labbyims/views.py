@@ -2,14 +2,13 @@
 
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from labbyims.forms import SignUpForm
-from django.http import HttpResponseRedirect
 from django.db.models import F
 from django.views import View
 from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form, Room_Form, Reserve_Form
 from .models import Product_Unit, Product, Location, Room, Reserve, User
-from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, FP_Product_UnitTable
+from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, FP_Product_UnitTable, Product_Unit_MyTable
 from django_tables2 import RequestConfig
 from .filters import ProductFilter, LocationFilter
 import datetime
@@ -36,7 +35,7 @@ def home(request):
     table_exp = FP_Product_UnitTable(exp_filter)
     RequestConfig(request).configure(table_exp)
     return render(request, 'labbyims/home_afterlogin.html' ,{'form':form, 'table_exp': table_exp},)
-    
+
 
 def no_login(request):
     return render(request, 'labbyims/no_login.html')
@@ -100,12 +99,15 @@ def locations(request):
     return render(request, 'labbyims/locations.html', {'table_1': table_1})
 
 def expiring(request):
-    current_date = timezone.now()
-    exp_warning = current_date + timedelta(days=27)
-    exp_filter = Product_Unit.objects.filter(exp_date__range = [current_date,exp_warning ])
-    table_exp = Product_Unit_ExpTable(exp_filter)
-    RequestConfig(request).configure(table_exp)
-    return render(request, 'labbyims/expiring_retesting.html', {'table_exp': table_exp})
+    #current_date = timezone.now()
+    #exp_warning = current_date + timedelta(days=27)
+    #exp_filter = Product_Unit.objects.filter(exp_date__range = [current_date,exp_warning ])
+
+    #table_exp = Product_Unit_ExpTable(exp_filter)
+    table_my_inv = Product_Unit_MyTable(Product_Unit.objects.all())
+
+    RequestConfig(request).configure(table_my_inv)
+    return render(request, 'labbyims/my_inventory.html', {'table_my_inv': table_my_inv})
 
 
 

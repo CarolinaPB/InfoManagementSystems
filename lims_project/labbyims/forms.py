@@ -4,8 +4,9 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from django.db import models
 from .models import User, Product_Unit, Product, Location, Room, Reserve
-from django.forms.widgets import DateInput
+from django.forms.widgets import DateInput, TextInput
 from captcha.fields import ReCaptchaField
+
 
 class SignUpForm(RegistrationForm):
     captcha = ReCaptchaField()
@@ -75,8 +76,9 @@ class Room_Form(forms.ModelForm):
 class Reserve_Form(forms.ModelForm):
     class Meta:
         model=Reserve
+        exclude = ['is_complete']
         widgets = {
             "date_res":DateInput(attrs = {"type":"date"}),
+            'user': TextInput(attrs={'readonly': 'readonly'}),
         }
         #fields="__all__"
-        exclude = ['is_complete', "user"]

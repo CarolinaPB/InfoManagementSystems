@@ -4,6 +4,20 @@ from .models import Product_Unit, Location
 class Product_UnitTable(tables.Table):
     class Meta:
         model = Product_Unit
+        fields = ('description', 'product', 'purity', 'curr_amount', \
+                'm_unit', 'location', 'exp_date', 'ret_date', 'del_date',\
+                'open_date', 'company', 'cat_num', 'batch', 'in_house_no')
+
+        template_name = 'django_tables2/bootstrap.html'
+
+
+class Product_Unit_MyTable(tables.Table):
+    class Meta:
+        model = Product_Unit
+        fields = ('description', 'product', 'purity', 'curr_amount', \
+                'm_unit', 'location', 'exp_date', 'ret_date',  'batch', \
+                 'in_house_no' 'del_date', 'open_date', 'company', 'cat_num')
+
         template_name = 'django_tables2/bootstrap.html'
 
 class LocationTable(tables.Table):
@@ -15,11 +29,12 @@ class LocationTable(tables.Table):
 class NotificationColumn(tables.Column):
     attrs = {
 
+
         'td': {
             'description': lambda Product_Unit: Product_Unit.description,
             'exp_date': lambda Product_Unit: Product_Unit.exp_date,
             'ret_date': lambda Product_Unit: Product_Unit.ret_date,
-        }
+       }
 
     }
     def render(self, product_unit):
