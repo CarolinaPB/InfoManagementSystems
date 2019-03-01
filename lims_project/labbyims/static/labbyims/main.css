@@ -67,6 +67,8 @@
 }*/
 html, body {
     height: 100%;
+    /*font-family: 'Poppins';*/
+
 }
 
 .container-fluid {
@@ -113,4 +115,8 @@ li {
 .second_column {
     height: 100%;
 
+}
+
+h1, h2 {
+    font-family: 'Poppins';
 }
