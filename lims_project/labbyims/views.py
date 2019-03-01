@@ -1,6 +1,7 @@
 # Create your views here.
 
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from labbyims.forms import SignUpForm
@@ -139,11 +140,11 @@ def add_room(request):
 def add_reservation(request):
     if request.method == "POST":
         form = Reserve_Form(request.POST)
-        if form.is_valid():
-            form.save(commit=True)
-            return HttpResponseRedirect('.')
-        else:
-            print(form.errors)
+        add_res = form.save(commit=False)
+        print(request.user)
+        add_res.user = request.user
+        add_res.save()
+        return HttpResponseRedirect('.')
     else:
         form = Reserve_Form()
 
