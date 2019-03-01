@@ -5,53 +5,53 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from labbyims.forms import SignUpForm
-
 from django.http import HttpResponseRedirect
 from django.db.models import F,Q
 from django.views import View
-from .forms import AdvancedSearch, Product_UnitForm, Product_Form, \
-                    Location_Form, Room_Form, Reserve_Form
-from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, \
-                    FP_Product_UnitTable, Product_Unit_MyTable, ReserveTable
-
-from .models import Product_Unit, Product, Location, Room, Reserve, User
-from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, FP_Product_UnitTable, Product_Unit_MyTable
 from django_tables2 import RequestConfig
-from .filters import ProductFilter, LocationFilter, Prod_ResFilter
 import datetime
 from datetime import datetime, timedelta
 from django.utils import timezone
 
+# Labby imports
+from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form, Room_Form, Reserve_Form
+from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable,FP_Product_UnitTable, Product_Unit_MyTable, ReserveTable
+from .models import Product_Unit, Product, Location, Room, Reserve, User
+from .filters import ProductFilter, LocationFilter, Prod_ResFilter
+
+
 def home(request):
-    if request.method == 'POST':
-        form = AdvancedSearch(request.POST)
-        if form.is_valid():
-            search_res = form.cleaned_data["search"]
-            print(search_res)
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = AdvancedSearch(request.POST)
+            if form.is_valid():
+                search_res = form.cleaned_data["search"]
+            else:
+                print(form.errors)
+
+            return HttpResponseRedirect('/search/?description={}'.format(search_res))
+
         else:
-            print(form.errors)
+            form = AdvancedSearch(initial=request.GET)
 
-        return HttpResponseRedirect('/search/?description={}'.format(search_res))
+        current_date = timezone.now()
+        warning = current_date + timedelta(days=27)
 
+        exp_filter = Product_Unit.objects.filter(Q(is_inactive=False), \
+                    Q(exp_date__range = [current_date, warning ]) | \
+                    Q(ret_date__range =[current_date, warning ]) )
+        table_exp = FP_Product_UnitTable(exp_filter, prefix="1-")
+        RequestConfig(request,paginate={'per_page': 3} ).configure(table_exp)
+
+        res_list=Reserve.objects.filter(Q(user_id= request.user),\
+                    Q(date_res__range = [current_date, warning ])).select_related()
+        #res_filter = Prod_ResFilter(request.GET, queryset=res_list)
+        table_res = ReserveTable(res_list, prefix="2-")
+        RequestConfig(request).configure(table_res)
+        return render(request, 'labbyims/home_afterlogin.html',{'form':form, \
+                    'table_res':table_res, 'table_exp': table_exp,},)
     else:
-        form = AdvancedSearch(initial=request.GET)
-
-    current_date = timezone.now()
-    warning = current_date + timedelta(days=27)
-
-    exp_filter = Product_Unit.objects.filter(Q(is_inactive=False), \
-                Q(exp_date__range = [current_date, warning ]) | \
-                Q(ret_date__range =[current_date, warning ]) )
-    table_exp = FP_Product_UnitTable(exp_filter, prefix="1-")
-    RequestConfig(request,paginate={'per_page': 3} ).configure(table_exp)
-
-    res_list=Reserve.objects.filter(Q(user_id= request.user),\
-                Q(date_res__range = [current_date, warning ])).select_related()
-    #res_filter = Prod_ResFilter(request.GET, queryset=res_list)
-    table_res = ReserveTable(res_list, prefix="2-")
-    RequestConfig(request).configure(table_res)
-    return render(request, 'labbyims/home_afterlogin.html',{'form':form, \
-                'table_res':table_res, 'table_exp': table_exp,},)
+        return render(request, 'labbyims/home_afterlogin.html')
 
 
 def no_login(request):
