@@ -4,17 +4,19 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from django.db import models
 from .models import User, Product_Unit, Product, Location, Room, Reserve
-from django.forms.widgets import DateInput
+from django.forms.widgets import DateInput, TextInput
+from captcha.fields import ReCaptchaField
+
 
 class SignUpForm(RegistrationForm):
+    captcha = ReCaptchaField()
     first_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
     last_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
-    department = forms.CharField(max_length=255, required=False, help_text='Optional')
     email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
 
     class Meta(RegistrationForm.Meta):
         model = User
-        fields = ('username', 'first_name', 'last_name', 'department', 'email', 'password1', 'password2', )
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
 
 class AdvancedSearch(forms.Form):
     search = forms.CharField(widget=forms.TextInput(attrs={'class': 'col-md-12 searchfield'}), label=False)
@@ -72,10 +74,15 @@ class Room_Form(forms.ModelForm):
         fields="__all__"
 
 class Reserve_Form(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(Reserve_Form, self).__init__(*args, **kwargs)
     class Meta:
         model=Reserve
+        #exclude = ['is_complete',]
         widgets = {
             "date_res":DateInput(attrs = {"type":"date"}),
+            #'user': TextInput(),
         }
+        exclude = ['user',]
         #fields="__all__"
-        exclude = ['is_complete', "user"]
