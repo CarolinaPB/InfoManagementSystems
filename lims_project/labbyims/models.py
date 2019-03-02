@@ -46,10 +46,17 @@ class Location(models.Model):
     def __str__(self):
         return self.name
 
+class Department(models.Model):
+    users = models.ManyToManyField(User, through= 'Watching')
+    name = models.CharField(max_length=255)
+    def __str__(self):
+        return self.name
+
 class Product_Unit(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     reservation = models.ManyToManyField(User, through='Reserve')
+    #watch = models.ManyToManyField(Department, through='Watching')
     description = models.CharField(max_length=255)
     is_inactive = models.BooleanField('Archived', default = False)
     del_date = models.DateField('delivery date')
@@ -70,26 +77,21 @@ class Product_Unit(models.Model):
 
 class Reserve(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    prod_un = models.ForeignKey(Product_Unit, on_delete=models.CASCADE)
+    prod_un = models.ForeignKey(Product_Unit, verbose_name='description', on_delete=models.CASCADE)
     amount_res = models.DecimalField('amount to reserve', max_digits=10, decimal_places=4)
     date_res = models.DateField('date of reservation')
     is_complete = models.BooleanField()
 
 class Uses(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    prod_un = models.ForeignKey(Product_Unit, on_delete=models.CASCADE)
+    prod_un = models.ForeignKey(Product_Unit, verbose_name='description',  on_delete=models.CASCADE)
     amount_used = models.DecimalField('amount used', max_digits=10, decimal_places=4)
     date_used = models.DateField('date of use')
 
-class Department(models.Model):
-    users = models.ManyToManyField(User)
-    prod_un = models.ManyToManyField(Product_Unit)
-    name = models.CharField(max_length=255)
-    def __str__(self):
-        return self.name
+
 
 class Watching(models.Model):
-    users = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, default=0, on_delete=models.CASCADE)
     prod_un = models.ForeignKey(Product_Unit, on_delete=models.CASCADE)
     dept = models.ForeignKey(Department, on_delete=models.CASCADE)
     low_warn = models.BooleanField('Running Low Warning')

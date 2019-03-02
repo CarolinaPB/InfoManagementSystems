@@ -13,9 +13,25 @@ class Product_UnitTable(tables.Table):
 class FP_ReserveTable(tables.Table):
     class Meta:
         model = Reserve
-        prod_res = tables.Column(accessor='product_unit.description')
+        #prod_res = tables.Column(accessor='product_unit.description')
         fields = ('date_res', 'prod_un')
 
+class FP_Running_LowTable(tables.Table):
+    class Meta:
+        model= Product_Unit
+        fields = ('description', 'curr_amount', 'm_units')
+
+
+class Running_LowTable(tables.Table):
+    class Meta:
+        model= Product_Unit
+        template_name = 'django_tables2/bootstrap.html'
+
+class ReserveTable(tables.Table):
+    class Meta:
+        model = Reserve
+        prod_res = tables.Column(accessor='product_unit.description')
+        fields = ('date_res', 'prod_un')
 
 class Product_Unit_MyTable(tables.Table):
     class Meta:

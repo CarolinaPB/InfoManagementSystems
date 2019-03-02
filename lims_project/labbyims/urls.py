@@ -29,4 +29,5 @@ urlpatterns = [
     path('add_reservation/', views.add_reservation, name='add_reservation'),
     path('reservations/', views.reservations, name='reservations'),
     path('about/', views.about, name='about'),
+    path('running_low/', views.running_low, name='running_low'),
 ]

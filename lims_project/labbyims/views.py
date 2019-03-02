@@ -11,7 +11,8 @@ from django.views import View
 from .forms import AdvancedSearch, Product_UnitForm, Product_Form, \
                     Location_Form, Room_Form, Reserve_Form
 from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, \
-                    FP_Product_UnitTable, Product_Unit_MyTable, FP_ReserveTable
+                    FP_Product_UnitTable, Product_Unit_MyTable, FP_ReserveTable\
+                    , ReserveTable, FP_Running_LowTable, Running_LowTable
 from .models import Product_Unit, Product, Location, Room, Reserve, User
 from django_tables2 import RequestConfig
 import datetime
@@ -167,11 +168,16 @@ def reservations(request):
     warning = current_date + timedelta(days=27)
     res_list=Reserve.objects.filter(Q(user_id= request.user),\
                     Q(date_res__range = [current_date, warning ])).select_related()
-
-        #res_filter = Prod_ResFilter(request.GET, queryset=res_list)
     table_res = ReserveTable(res_list)
     RequestConfig(request).configure(table_res)
     return render(request, 'labbyims/reservations.html', {'table_res': table_res,}, )
+
+def running_low(request):
+    res_list=Reserve.objects.filter(Q(user_id= request.user),\
+                    Q(date_res__range = [current_date, warning ])).select_related()
+    table_res = ReserveTable(res_list)
+    RequestConfig(request).configure(table_res)
+    return render(request, 'labbyims/running_low.html')
 
 def about(request):
     return render(request, 'labbyims/about.html')
