@@ -8,24 +8,15 @@ from labbyims.forms import SignUpForm
 from django.http import HttpResponseRedirect
 from django.db.models import F,Q
 from django.views import View
-
 from .forms import AdvancedSearch, Product_UnitForm, Product_Form, \
                     Location_Form, Room_Form, Reserve_Form
 from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, \
                     FP_Product_UnitTable, Product_Unit_MyTable, FP_ReserveTable
-
 from .models import Product_Unit, Product, Location, Room, Reserve, User
-from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, FP_Product_UnitTable, Product_Unit_MyTable
-
 from django_tables2 import RequestConfig
 import datetime
 from datetime import datetime, timedelta
 from django.utils import timezone
-
-# Labby imports
-from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form, Room_Form, Reserve_Form
-from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable,FP_Product_UnitTable, Product_Unit_MyTable, ReserveTable
-from .models import Product_Unit, Product, Location, Room, Reserve, User
 from .filters import ProductFilter, LocationFilter, Prod_ResFilter
 
 
@@ -56,7 +47,7 @@ def home(request):
         res_list=Reserve.objects.filter(Q(user_id= request.user),\
                     Q(date_res__range = [current_date, warning ])).select_related()
         #res_filter = Prod_ResFilter(request.GET, queryset=res_list)
-        table_res = ReserveTable(res_list, prefix="2-")
+        table_res = FP_ReserveTable(res_list, prefix="2-")
         RequestConfig(request).configure(table_res)
         return render(request, 'labbyims/home_afterlogin.html',{'form':form, \
                     'table_res':table_res, 'table_exp': table_exp,},)
