@@ -87,3 +87,9 @@ class Department(models.Model):
     name = models.CharField(max_length=255)
     def __str__(self):
         return self.name
+
+class Watching(models.Model):
+    users = models.ForeignKey(User, on_delete=models.CASCADE)
+    prod_un = models.ForeignKey(Product_Unit, on_delete=models.CASCADE)
+    dept = models.ForeignKey(Department, on_delete=models.CASCADE)
+    low_warn = models.BooleanField('Running Low Warning')
