@@ -9,7 +9,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('register/', RegistrationView.as_view(form_class=SignUpForm), name='django_registration_register'),
     path('', include('django_registration.backends.activation.urls'), name='signup'),
-    path('home/login/', auth_views.LoginView.as_view(template_name='labbyims/login.html'), name='login'),
+    path('login/', auth_views.LoginView.as_view(template_name='labbyims/login.html'), name='login'),
     path('password_change/', auth_views.PasswordChangeView.as_view(template_name='labbyims/password_change.html'), name='password_change'),
     path('password_change_done/', auth_views.PasswordChangeDoneView.as_view(template_name='labbyims/password_change_done.html'), name='password_change_done'),
     path('password_reset/', auth_views.PasswordResetView.as_view(template_name='labbyims/password_reset.html', email_template_name='labbyims/password_reset_email.html', subject_template_name='labbyims/password_reset_subject.txt'), name='password_reset'),
