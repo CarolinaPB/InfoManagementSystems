@@ -1,7 +1,8 @@
 from django.contrib import admin
-from .models import Account, Product, Room, Location, Product_Unit, Reserve
+from django.contrib.auth.admin import UserAdmin
+from .models import User, Product, Room, Location, Product_Unit, Reserve
 
-admin.site.register(Account)
+admin.site.register(User, UserAdmin)
 admin.site.register(Product)
 admin.site.register(Room)
 admin.site.register(Location)

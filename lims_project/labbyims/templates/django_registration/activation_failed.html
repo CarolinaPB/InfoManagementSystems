@@ -1,0 +1,9 @@
+{% extends "labbyims/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Activation failed" %}{% endblock %}
+{% block login %}
+<br><br><br><br><br>
+{% blocktrans %}
+Activation failed!  This is due to the following reason(s): {{ activation_error }}
+{% endblocktrans %}
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "labbyims/base.html" %}
+{% load render_table from django_tables2 %}
+{% block content %}
+<br><br><br><br><br>
+<TITLE>Locations</TITLE>
+<H1>Locations</H1>
+<br>
+<a href="{% url 'add_location' %}">Add location</a>
+<a href="{% url 'add_room' %}">Add room</a>
+<br><input type="button" value="Go back" onClick="javascript:history.go(-1)" />
+<main>
+    <br>
+    <body>
+
+        {% render_table table_1 %}
+    </body>
+    <br><br>
+</main>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "labbyims/base.html" %}
+{% block content %}
+<br><br><br><br><br>
+<TITLE>Reservations</TITLE>
+<H1>Reservations</H1>
+<br><br>
+<p>this will show the user's reservations</p>
+<a href="{% url 'add_reservation' %}">Add reservation</a>
+<br><input type="button" value="Go back" onClick="javascript:history.go(-1)" />
+
+{% endblock %}
