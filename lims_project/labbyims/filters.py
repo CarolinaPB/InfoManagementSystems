@@ -19,3 +19,10 @@ class Prod_ResFilter(django_filters.FilterSet):
     class Meta:
         model =  Reserve
         fields = ['description',]
+
+class ProductCASFilter(django_filters.FilterSet):
+    cas = django_filters.CharFilter(lookup_expr='iexact')
+    class Meta:
+        model = Product
+        fields = ["cas", "name"]
+from labbyims.models import Product_Unit, Location, Room, Product

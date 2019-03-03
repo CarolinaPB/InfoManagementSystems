@@ -1,0 +1,34 @@
+<form action="" method="POST">
+	{% csrf_token %}
+	<P>{{ form.product.label }}* <br> {{ form.product }}  {{ form.product.errors }}
+	<fieldset>
+		<legend>Delivery</legend>
+		<P>{{ form.del_date.label }}* <br> {{ form.del_date }}  {{ form.del_date.errors }}
+		<P>{{ form.company.label }}* <br> {{ form.company }}  {{ form.company.errors }}
+		<P>{{ form.cat_num.label }} <br> {{ form.cat_num }} {{ form.cat_num.errors }}
+	</fieldset>
+	<br>
+	<fieldset>
+		<legend>Chemical Properties</legend>
+		<P>{{ form.description.label }}* <br> {{ form.description }}  {{ form.description.errors }}
+		<P>{{ form.init_amount.label }}* <br> {{ form.init_amount }}  {{ form.init_amount.errors }}
+		<P>{{ form.purity.label }} <br> {{ form.purity }}  {{ form.del_date.errors }}
+		<P>{{ form.exp_date.label }} <br> {{ form.exp_date }}  {{ form.exp_date.errors }}
+		<P>{{ form.ret_date.label }} <br> {{ form.ret_date }}  {{ form.ret_date.errors }}
+        <P>{{ form.open_date.label }} <br> {{ form.open_date }}  {{ form.open_date.errors }}
+        <P>{{ form.used_amount.label }} <br> {{ form.used_amount }}  {{ form.used_amount.errors }}
+	</fieldset>
+    <br>
+    <fieldset>
+		<legend>Location</legend>
+        <P>{{ form.location.label }}* <br> {{ form.location }}  {{ form.location.errors }}
+    </fieldset>
+	<br>
+
+    <input type="submit" value="Submit" name="Submit">  <input type="reset" value="Reset" name="Reset">
+    <input type="button" value="Go back" onClick="javascript:history.go(-1)" />
+    <br><br><br>
+
+</form>
+
+<br><br><br>

@@ -69,6 +69,7 @@ class FP_Product_UnitTable(tables.Table):
     class Meta:
         model = Product_Unit
         fields = ('description', 'exp_date', 'ret_date')
+        template_name = 'django_tables2/bootstrap.html'
 
 
 class Product_Unit_ExpTable(tables.Table):

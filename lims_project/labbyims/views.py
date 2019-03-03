@@ -1,11 +1,9 @@
 # Create your views here.
 
 from django.contrib.auth import login, authenticate
-from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from labbyims.forms import SignUpForm
-from django.http import HttpResponseRedirect
 from django.db.models import F,Q
 from django.views import View
 from .forms import AdvancedSearch, Product_UnitForm, Product_Form, \
@@ -78,18 +76,30 @@ def add_product(request):
 def add_item(request):
     if request.method == "POST":
         form = Product_UnitForm(request.POST)
+        number = request.POST.get('number', False)
+        number = int(number)
         if form.is_valid():
-            form.save(commit=True)
+            instance = form.save(commit=False)
+            for i in range(0, number):
+                instance.pk = None
+                instance.save()
             return HttpResponseRedirect('.')
-            #return render(request, 'labbyims/home_afterlogin.html')
+            #return render(request, 'labbyims/home.html')
         else:
             print(form.errors)
     else:
         form = Product_UnitForm()
 
+    return render(request, 'labbyims/add_item.html', {'form': form})
 
-    context = {'form': form}
-    return render(request, 'labbyims/add_item.html', context)
+def add_item_cas(request):
+    if request.method == "POST":
+        product_list = Product.objects.all()
+        product_filter = ProductCASFilter(request.GET, queryset=product_list)
+        print(product_filter)
+        return render(request, "labbyims/add_item.html", {'filter': product_filter})
+    else:
+        return render(request, 'labbyims/add_item_cas.html')
 
 def inventory(request):
     table = Product_UnitTable(Product_Unit.objects.all())
