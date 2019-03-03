@@ -1,4 +1,4 @@
-from labbyims.models import Product_Unit, Location, Room, Reserve, User
+from labbyims.models import Product_Unit, Location, Room, Reserve, User, Product
 import django_filters
 
 
@@ -25,4 +25,3 @@ class ProductCASFilter(django_filters.FilterSet):
     class Meta:
         model = Product
         fields = ["cas", "name"]
-from labbyims.models import Product_Unit, Location, Room, Product

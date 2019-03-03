@@ -16,7 +16,7 @@ from django_tables2 import RequestConfig
 import datetime
 from datetime import datetime, timedelta
 from django.utils import timezone
-from .filters import ProductFilter, LocationFilter, Prod_ResFilter
+from .filters import ProductFilter, LocationFilter, Prod_ResFilter, ProductCASFilter
 
 
 def home(request):
@@ -183,6 +183,8 @@ def reservations(request):
     return render(request, 'labbyims/reservations.html', {'table_res': table_res,}, )
 
 def running_low(request):
+    current_date = timezone.now()
+    warning = current_date + timedelta(days=27)
     res_list=Reserve.objects.filter(Q(user_id= request.user),\
                     Q(date_res__range = [current_date, warning ])).select_related()
     table_res = ReserveTable(res_list)
