@@ -15,7 +15,8 @@
                 <br><br>
                 <br><br>
                 <br>
-                <center >Search</center>
+                <h2 id="Search_title">
+                <center >Search</center></h2>
                 <br>
                 <form action="" method="POST">
                 {% csrf_token %}
@@ -25,24 +26,41 @@
         </div>
 
     </div>
-        <div class="second-column col-sm-3 col-lg-3" style="background-color:#bbb;">
+        <div class="second-column col-sm-3 col-lg-3" style="background-color:#f2f2f2">
             <div class="container-fluid"
                 <br><br><br><br><br>
                 <h2>Reminders</h2>
-                <a href="{% url 'reservations' %}">My Reservations</a><br>
-                <ul>
-                    <li>reservation 1 </li>
-                    <li>reservation 2 </li>
-                    <li>reservation 3 </li>
-                </ul>
-                <a href="">Expiration/re-test</a>
-                <ul>
-                  <table>
-                      {%  render_table table_exp %}
-                  </table>
-                </ul>
-            </div>
-    </div>
-</div>
 
-{% endblock %}
+
+
+                <div>
+
+                  <style>
+                    table{
+                      font-size: 12px;
+                      white-space: nowrap;
+                      width: 100%;
+                        }
+                  </style>
+
+
+                  <tr>
+
+                    <body>
+                        <a href="{% url 'reservations' %}">My Reservations</a><br>
+                        <table>
+                          {% render_table table_res %}
+                        </table>
+                        <br>
+                    </body>
+                    <body>
+                        <a href="{% url 'my_inventory' %}">Expiration/re-test</a>
+                        <table>
+
+                          {%  render_table table_exp %}
+                      </table>
+                    </body>
+                  </tr>
+
+                </div>
+  {% endblock %}

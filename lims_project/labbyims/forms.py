@@ -74,11 +74,15 @@ class Room_Form(forms.ModelForm):
         fields="__all__"
 
 class Reserve_Form(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(Reserve_Form, self).__init__(*args, **kwargs)
     class Meta:
         model=Reserve
-        exclude = ['is_complete']
+        #exclude = ['is_complete',]
         widgets = {
             "date_res":DateInput(attrs = {"type":"date"}),
-            'user': TextInput(attrs={'readonly': 'readonly'}),
+            #'user': TextInput(),
         }
+        exclude = ['user',]
         #fields="__all__"

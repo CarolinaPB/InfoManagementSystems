@@ -1,40 +1,60 @@
 # Create your views here.
 
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from labbyims.forms import SignUpForm
-from django.db.models import F
+from django.http import HttpResponseRedirect
+from django.db.models import F,Q
 from django.views import View
-from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form, Room_Form, Reserve_Form
+from .forms import AdvancedSearch, Product_UnitForm, Product_Form, \
+                    Location_Form, Room_Form, Reserve_Form
+from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, \
+                    FP_Product_UnitTable, Product_Unit_MyTable, FP_ReserveTable\
+                    , ReserveTable, FP_Running_LowTable, Running_LowTable
 from .models import Product_Unit, Product, Location, Room, Reserve, User
-from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, FP_Product_UnitTable, Product_Unit_MyTable
 from django_tables2 import RequestConfig
-from .filters import ProductFilter, LocationFilter
 import datetime
 from datetime import datetime, timedelta
 from django.utils import timezone
+from .filters import ProductFilter, LocationFilter, Prod_ResFilter
+
 
 def home(request):
-    if request.method == 'POST':
-        form = AdvancedSearch(request.POST)
-        if form.is_valid():
-            search_res = form.cleaned_data["search"]
-            print(search_res)
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = AdvancedSearch(request.POST)
+            if form.is_valid():
+                search_res = form.cleaned_data["search"]
+            else:
+                print(form.errors)
+
+            return HttpResponseRedirect('/search/?description={}'.format(search_res))
+
         else:
-            print(form.errors)
+            form = AdvancedSearch(initial=request.GET)
 
-        return HttpResponseRedirect('/search/?description={}'.format(search_res))
+        current_date = timezone.now()
+        warning = current_date + timedelta(days=27)
 
+        exp_filter = Product_Unit.objects.filter(Q(is_inactive=False), \
+                    Q(exp_date__range = [current_date, warning ]) | \
+                    Q(ret_date__range =[current_date, warning ]) )
+        table_exp = FP_Product_UnitTable(exp_filter, prefix="1-")
+        RequestConfig(request,paginate={'per_page': 3} ).configure(table_exp)
+
+
+        res_list=Reserve.objects.filter(Q(user_id= request.user),\
+                    Q(date_res__range = [current_date, warning ])).select_related()
+        #res_filter = Prod_ResFilter(request.GET, queryset=res_list)
+        table_res = FP_ReserveTable(res_list, prefix="2-")
+        RequestConfig(request).configure(table_res)
+        return render(request, 'labbyims/home_afterlogin.html',{'form':form, \
+                    'table_res':table_res, 'table_exp': table_exp,},)
     else:
-        form = AdvancedSearch(initial=request.GET)
+        return render(request, 'labbyims/home_afterlogin.html')
 
-    current_date = timezone.now()
-    exp_warning = current_date + timedelta(days=27)
-    exp_filter = Product_Unit.objects.filter(is_inactive = False, exp_date__range = [current_date,exp_warning ])
-    table_exp = FP_Product_UnitTable(exp_filter)
-    RequestConfig(request).configure(table_exp)
-    return render(request, 'labbyims/home_afterlogin.html' ,{'form':form, 'table_exp': table_exp},)
 
 
 def no_login(request):
@@ -98,18 +118,10 @@ def locations(request):
     RequestConfig(request).configure(table_1)
     return render(request, 'labbyims/locations.html', {'table_1': table_1})
 
-def expiring(request):
-    #current_date = timezone.now()
-    #exp_warning = current_date + timedelta(days=27)
-    #exp_filter = Product_Unit.objects.filter(exp_date__range = [current_date,exp_warning ])
-
-    #table_exp = Product_Unit_ExpTable(exp_filter)
+def my_inventory(request):
     table_my_inv = Product_Unit_MyTable(Product_Unit.objects.all())
-
     RequestConfig(request).configure(table_my_inv)
     return render(request, 'labbyims/my_inventory.html', {'table_my_inv': table_my_inv})
-
-
 
 def search(request):
     product_list = Product_Unit.objects.all()
@@ -120,7 +132,8 @@ def search(request):
 def search_location(request):
     location_list = Location.objects.all()
     location_filter = LocationFilter(request.GET, queryset=location_list)
-    return render(request, "labbyims/search_location.html", {'filter': location_filter})
+    return render(request, "labbyims/search_location.html",\
+                {'filter': location_filter})
 
 def add_room(request):
     if request.method == "POST":
@@ -139,11 +152,11 @@ def add_room(request):
 def add_reservation(request):
     if request.method == "POST":
         form = Reserve_Form(request.POST)
-        if form.is_valid():
-            form.save(commit=True)
-            return HttpResponseRedirect('.')
-        else:
-            print(form.errors)
+        add_res = form.save(commit=False)
+        print(request.user)
+        add_res.user = request.user
+        add_res.save()
+        return HttpResponseRedirect('.')
     else:
         form = Reserve_Form()
 
@@ -151,7 +164,20 @@ def add_reservation(request):
     return render(request, 'labbyims/add_reservation.html', context)
 
 def reservations(request):
-    return render(request, 'labbyims/reservations.html')
+    current_date = timezone.now()
+    warning = current_date + timedelta(days=27)
+    res_list=Reserve.objects.filter(Q(user_id= request.user),\
+                    Q(date_res__range = [current_date, warning ])).select_related()
+    table_res = ReserveTable(res_list)
+    RequestConfig(request).configure(table_res)
+    return render(request, 'labbyims/reservations.html', {'table_res': table_res,}, )
+
+def running_low(request):
+    res_list=Reserve.objects.filter(Q(user_id= request.user),\
+                    Q(date_res__range = [current_date, warning ])).select_related()
+    table_res = ReserveTable(res_list)
+    RequestConfig(request).configure(table_res)
+    return render(request, 'labbyims/running_low.html')
 
 def about(request):
     return render(request, 'labbyims/about.html')
