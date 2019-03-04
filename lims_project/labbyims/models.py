@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from decimal import Decimal
+from django.core.validators import MinValueValidator
 
 
 class User(AbstractUser):
@@ -64,9 +65,9 @@ class Product_Unit(models.Model):
     exp_date = models.DateField('expiration date', null=True, blank = True)
     ret_date = models.DateField('retest date', null=True, blank = True)
     purity = models.CharField('purity/percentage', max_length = 255, null=True, blank = True)
-    init_amount = models.DecimalField('initial amount', max_digits=10, decimal_places=4, default = 0)
+    init_amount = models.DecimalField('initial amount', validators=[MinValueValidator(0)],max_digits=10, decimal_places=4, default = 0)
     used_amount = models.DecimalField('amount used', max_digits=10, decimal_places=4, default=0)
-    curr_amount = models.DecimalField('current amount', max_digits=10, decimal_places=4, default=0)
+    curr_amount = models.DecimalField('current amount', max_digits=10, validators=[MinValueValidator(0)], decimal_places=4, default=0)
     company = models.CharField(max_length=255)
     cat_num = models.CharField('catalog number', max_length=255, blank = True)
     m_unit = models.CharField('measuring units', max_length=4, null=True, blank = True)
@@ -98,6 +99,6 @@ class Watching(models.Model):
     prod_perc = models.DecimalField('Percent left', default = 100, max_digits=10, decimal_places=4)
     def save(self, *args, **kwargs):
         self.prod_perc = (self.prod_un.curr_amount/self.prod_un.init_amount)*100
-        super(Watching, self).save(*args, **kwargs)
+        return super(Watching, self).save(*args, **kwargs)
     def __str__(self):
         return self.low_warn
