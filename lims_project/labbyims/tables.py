@@ -1,5 +1,5 @@
 import django_tables2 as tables
-from .models import Product_Unit, Location, Reserve
+from .models import Product_Unit, Location, Reserve, Watching
 
 class Product_UnitTable(tables.Table):
     class Meta:
@@ -24,7 +24,7 @@ class FP_Running_LowTable(tables.Table):
 
 class Running_LowTable(tables.Table):
     class Meta:
-        model= Product_Unit
+        model= Watching
         template_name = 'django_tables2/bootstrap.html'
 
 class ReserveTable(tables.Table):
