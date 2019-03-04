@@ -193,3 +193,15 @@ def running_low(request):
 
 def about(request):
     return render(request, 'labbyims/about.html')
+
+def user_page(request):
+
+    model = User
+    template_name = 'labbyims/user_page.html'
+    def get_queryset():
+        return User.objects.all()
+    u = get_queryset()
+    print (u)
+    context={'user':u}
+
+    return render(request, 'labbyims/user_page.html', context)
