@@ -1,23 +1,22 @@
 # Create your views here.
 
 from django.contrib.auth import login, authenticate
-from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from labbyims.forms import SignUpForm
-from django.http import HttpResponseRedirect
 from django.db.models import F,Q
 from django.views import View
+from .forms import AdvancedSearch, Product_UnitForm, Product_Form, \
+                    Location_Form, Room_Form, Reserve_Form
+from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, \
+                    FP_Product_UnitTable, Product_Unit_MyTable, FP_ReserveTable\
+                    , ReserveTable, FP_Running_LowTable, Running_LowTable
+from .models import Product_Unit, Product, Location, Room, Reserve, User
 from django_tables2 import RequestConfig
 import datetime
 from datetime import datetime, timedelta
 from django.utils import timezone
-
-# Labby imports
-from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form, Room_Form, Reserve_Form
-from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable,FP_Product_UnitTable, Product_Unit_MyTable, ReserveTable
-from .models import Product_Unit, Product, Location, Room, Reserve, User
-from .filters import ProductFilter, LocationFilter, Prod_ResFilter
+from .filters import ProductFilter, LocationFilter, Prod_ResFilter, ProductCASFilter
 
 
 def home(request):
@@ -43,15 +42,17 @@ def home(request):
         table_exp = FP_Product_UnitTable(exp_filter, prefix="1-")
         RequestConfig(request,paginate={'per_page': 3} ).configure(table_exp)
 
+
         res_list=Reserve.objects.filter(Q(user_id= request.user),\
                     Q(date_res__range = [current_date, warning ])).select_related()
         #res_filter = Prod_ResFilter(request.GET, queryset=res_list)
-        table_res = ReserveTable(res_list, prefix="2-")
+        table_res = FP_ReserveTable(res_list, prefix="2-")
         RequestConfig(request).configure(table_res)
         return render(request, 'labbyims/home_afterlogin.html',{'form':form, \
                     'table_res':table_res, 'table_exp': table_exp,},)
     else:
         return render(request, 'labbyims/home_afterlogin.html')
+
 
 
 def no_login(request):
@@ -75,18 +76,30 @@ def add_product(request):
 def add_item(request):
     if request.method == "POST":
         form = Product_UnitForm(request.POST)
+        number = request.POST.get('number', False)
+        number = int(number)
         if form.is_valid():
-            form.save(commit=True)
+            instance = form.save(commit=False)
+            for i in range(0, number):
+                instance.pk = None
+                instance.save()
             return HttpResponseRedirect('.')
-            #return render(request, 'labbyims/home_afterlogin.html')
+            #return render(request, 'labbyims/home.html')
         else:
             print(form.errors)
     else:
         form = Product_UnitForm()
 
+    return render(request, 'labbyims/add_item.html', {'form': form})
 
-    context = {'form': form}
-    return render(request, 'labbyims/add_item.html', context)
+def add_item_cas(request):
+    if request.method == "POST":
+        product_list = Product.objects.all()
+        product_filter = ProductCASFilter(request.GET, queryset=product_list)
+        print(product_filter)
+        return render(request, "labbyims/add_item.html", {'filter': product_filter})
+    else:
+        return render(request, 'labbyims/add_item_cas.html')
 
 def inventory(request):
     table = Product_UnitTable(Product_Unit.objects.all())
@@ -165,11 +178,18 @@ def reservations(request):
     warning = current_date + timedelta(days=27)
     res_list=Reserve.objects.filter(Q(user_id= request.user),\
                     Q(date_res__range = [current_date, warning ])).select_related()
-
-        #res_filter = Prod_ResFilter(request.GET, queryset=res_list)
     table_res = ReserveTable(res_list)
     RequestConfig(request).configure(table_res)
     return render(request, 'labbyims/reservations.html', {'table_res': table_res,}, )
+
+def running_low(request):
+    current_date = timezone.now()
+    warning = current_date + timedelta(days=27)
+    res_list=Reserve.objects.filter(Q(user_id= request.user),\
+                    Q(date_res__range = [current_date, warning ])).select_related()
+    table_res = ReserveTable(res_list)
+    RequestConfig(request).configure(table_res)
+    return render(request, 'labbyims/running_low.html')
 
 def about(request):
     return render(request, 'labbyims/about.html')

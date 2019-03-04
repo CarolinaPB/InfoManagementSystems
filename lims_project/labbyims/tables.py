@@ -10,13 +10,28 @@ class Product_UnitTable(tables.Table):
 
         template_name = 'django_tables2/bootstrap.html'
 
+class FP_ReserveTable(tables.Table):
+    class Meta:
+        model = Reserve
+        #prod_res = tables.Column(accessor='product_unit.description')
+        fields = ('date_res', 'prod_un')
+
+class FP_Running_LowTable(tables.Table):
+    class Meta:
+        model= Product_Unit
+        fields = ('description', 'curr_amount', 'm_units')
+
+
+class Running_LowTable(tables.Table):
+    class Meta:
+        model= Product_Unit
+        template_name = 'django_tables2/bootstrap.html'
+
 class ReserveTable(tables.Table):
     class Meta:
         model = Reserve
         prod_res = tables.Column(accessor='product_unit.description')
         fields = ('date_res', 'prod_un')
-
-
 
 class Product_Unit_MyTable(tables.Table):
     class Meta:
@@ -56,12 +71,18 @@ class FP_Product_UnitTable(tables.Table):
         fields = ('description', 'exp_date', 'ret_date')
         template_name = 'django_tables2/bootstrap.html'
 
+
 class Product_Unit_ExpTable(tables.Table):
     class Meta:
         attrs = {'width':'10%'}
         model = Product_Unit
         exclude = ('id', ' is_inactive')
         template_name = 'django_tables2/bootstrap-responsive.html'
+
+#class FP_Product_Unit_LowTable(tables.Table):
+#    class Meta:
+#        model = Watching
+
 
 
 class LocationTable(tables.Table):
