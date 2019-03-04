@@ -3,5 +3,6 @@
 {% block login %}
 <br><br><br><br><br>
 {% url 'auth_login' as auth_login_url %}
-Thanks, activation complete!  You may now <a href="{% url 'login' %}">login</a> using the username and password you set at registration.
+Thanks, activation complete!  You may now <a href="{% url 'login'%}">login</a> using the username and password you set at registration.
+
 {% endblock %}

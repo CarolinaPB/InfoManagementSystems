@@ -4,19 +4,20 @@ from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from labbyims.forms import SignUpForm
-from django.db.models import F,Q
+
+from django.db.models import F,Q, FloatField
+from django.db.models.functions import Cast
+
 from django.views import View
-from .forms import AdvancedSearch, Product_UnitForm, Product_Form, \
-                    Location_Form, Room_Form, Reserve_Form
-from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, \
-                    FP_Product_UnitTable, Product_Unit_MyTable, FP_ReserveTable\
-                    , ReserveTable, FP_Running_LowTable, Running_LowTable
-from .models import Product_Unit, Product, Location, Room, Reserve, User
+from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form, Room_Form, Reserve_Form
+from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, FP_Product_UnitTable, Product_Unit_MyTable, FP_ReserveTable, ReserveTable, FP_Running_LowTable, Running_LowTable
+from .models import Product_Unit, Product, Location, Room, Reserve, User,Watching
 from django_tables2 import RequestConfig
 import datetime
 from datetime import datetime, timedelta
 from django.utils import timezone
 from .filters import ProductFilter, LocationFilter, Prod_ResFilter, ProductCASFilter
+from decimal import Decimal
 
 
 def home(request):
@@ -42,12 +43,11 @@ def home(request):
         table_exp = FP_Product_UnitTable(exp_filter, prefix="1-")
         RequestConfig(request,paginate={'per_page': 3} ).configure(table_exp)
 
-
         res_list=Reserve.objects.filter(Q(user_id= request.user),\
                     Q(date_res__range = [current_date, warning ])).select_related()
-        #res_filter = Prod_ResFilter(request.GET, queryset=res_list)
         table_res = FP_ReserveTable(res_list, prefix="2-")
         RequestConfig(request).configure(table_res)
+
         return render(request, 'labbyims/home_afterlogin.html',{'form':form, \
                     'table_res':table_res, 'table_exp': table_exp,},)
     else:
@@ -183,13 +183,25 @@ def reservations(request):
     return render(request, 'labbyims/reservations.html', {'table_res': table_res,}, )
 
 def running_low(request):
-    current_date = timezone.now()
-    warning = current_date + timedelta(days=27)
-    res_list=Reserve.objects.filter(Q(user_id= request.user),\
-                    Q(date_res__range = [current_date, warning ])).select_related()
-    table_res = ReserveTable(res_list)
-    RequestConfig(request).configure(table_res)
-    return render(request, 'labbyims/running_low.html')
+    if request.user.is_authenticated:
+        run_low = F('init_amount')/2
+
+        ##prod = Product_Unit.object.get(curr_amount__lte =Cast(\
+                    #F('init_amount')/2, FloatField()))[0]
+
+
+
+
+        #prod = Product_Unit.objects.get()
+        watch_list = Watching.objects.filter(Q(),Q(user_id= request.user),\
+                    Q(low_warn = True),Q()).select_related()
+
+
+        table_watch = Running_LowTable(watch_list)
+        RequestConfig(request).configure(table_watch)
+        return render(request, 'labbyims/running_low.html', {'table_watch':table_watch,},)
+    else:
+        return render(request, 'labbyims/home_afterlogin.html')
 
 def about(request):
     return render(request, 'labbyims/about.html')
