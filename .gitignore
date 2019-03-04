@@ -36,3 +36,5 @@ lims_project/lims_project/__pycache__/settings.cpython-37.pyc
 *.pyc
 
 lims_project/labbyims/migrations/0001_initial\.py
+*.pyc
+*.pyc
