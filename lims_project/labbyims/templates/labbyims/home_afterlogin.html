@@ -30,7 +30,11 @@
             <div class="container-fluid"
                 <br><br><br><br><br>
                 <h2>Reminders</h2>
+
+
+
                 <div>
+
                   <style>
                     table{
                       font-size: 12px;
@@ -38,20 +42,25 @@
                       width: 100%;
                         }
                   </style>
+
+
                   <tr>
+
                     <body>
+                        <a href="{% url 'reservations' %}">My Reservations</a><br>
                         <table>
-                          <a href="{% url 'reservations' %}">My Reservations</a><br>
                           {% render_table table_res %}
-                          <br><br>
-                          <a href="{% url 'my_inventory' %}">Expiration/re-test</a>
-                          {%  render_table table_exp %}
-                          <br><br>
-                          <a href="{% url 'running_low' %}">Running Low</a>
-                          {%  render_table table_low %}
                         </table>
                         <br>
                     </body>
+                    <body>
+                        <a href="{% url 'my_inventory' %}">Expiration/re-test</a>
+                        <table>
+
+                          {%  render_table table_exp %}
+                      </table>
+                    </body>
                   </tr>
+
                 </div>
   {% endblock %}
