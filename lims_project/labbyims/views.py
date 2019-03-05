@@ -202,3 +202,6 @@ def running_low(request):
 
 def about(request):
     return render(request, 'labbyims/about.html')
+
+def user_info(request):
+    return render(request, 'labbyims/user_info.html')
