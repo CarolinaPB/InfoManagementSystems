@@ -49,7 +49,7 @@ class Location(models.Model):
         return self.name
 
 class Department(models.Model):
-    users = models.ManyToManyField(User, through= 'Watching')
+    users = models.ForeignKey(User, default = 1, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     def __str__(self):
         return self.name
@@ -92,7 +92,6 @@ class Uses(models.Model):
     prod_un = models.ForeignKey(Product_Unit, verbose_name='description',  on_delete=models.CASCADE)
     amount_used = models.DecimalField('amount used', max_digits=10, decimal_places=4)
     date_used = models.DateField('date of use')
-
 
 
 class Watching(models.Model):
