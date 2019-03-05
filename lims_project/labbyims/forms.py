@@ -98,11 +98,12 @@ class Reserve_Form(forms.ModelForm):
     class Meta:
         model=Reserve
         #exclude = ['is_complete',]
+
         widgets = {
             "date_res":DateInput(attrs = {"type":"date"}),
             #'user': TextInput(),
         }
-        exclude = ['user','is_complete',]
+        exclude = ['user',]
         #fields="__all__"
 
 class Update_item_Form(forms.ModelForm):
@@ -138,7 +139,7 @@ class Update_item_Form(forms.ModelForm):
     class Meta:
         model = Product_Unit
 
-        fields = ("prod_units","used_amount", "ret_date", "open_date",)
+        fields = ("prod_units","used_amount", "ret_date", "open_date","location",)
 
         widgets = {
             "open_date":DateInput(attrs = {"type":"date"}),

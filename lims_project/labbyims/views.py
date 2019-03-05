@@ -162,7 +162,7 @@ def add_reservation(request):
     if request.method == "POST":
         form = Reserve_Form(request.POST)
         add_res = form.save(commit=False)
-        print(request.user)
+        #print(request.user)
         add_res.user = request.user
         add_res.save()
         return HttpResponseRedirect('.')
@@ -234,6 +234,7 @@ def update_item(request):
         used_amount = form.cleaned_data["used_amount"]
         retest_date = form.cleaned_data["ret_date"]
         opened = form.cleaned_data["open_date"]
+        loc = form.cleaned_data["location"]
         print(prod_units)
         print(used_amount)
         print(retest_date)
@@ -252,6 +253,8 @@ def update_item(request):
 
         if opened:
             change_prod_unit.open_date = opened
+        if loc:
+            change_prod_unit.location = loc
 
         change_prod_unit.save()
 
