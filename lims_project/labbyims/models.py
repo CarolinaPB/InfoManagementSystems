@@ -100,5 +100,3 @@ class Watching(models.Model):
     prod_un = models.ForeignKey(Product_Unit, on_delete=models.CASCADE)
     dept = models.ForeignKey(Department, on_delete=models.CASCADE)
     low_warn = models.BooleanField('Running Low Warning')
-    def __str__(self):
-        return self.low_warn
