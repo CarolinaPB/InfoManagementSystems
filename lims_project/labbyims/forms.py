@@ -1,3 +1,5 @@
+from django.forms.widgets import DateInput, Select
+from django.core.validators import MinValueValidator
 from django import forms
 from django_registration.forms import RegistrationForm
 from crispy_forms.helper import FormHelper
@@ -47,15 +49,31 @@ class AdvancedSearch(forms.Form):
         )
 
 class Product_UnitForm(forms.ModelForm):
+    number = forms.IntegerField(label='How many items with exactly those properies do you want to add to the database?',
+    initial=1, validators=[MinValueValidator(1)])
+
+
+
     class Meta:
+        UNIT_CHOICES = (
+        ('kg', 'kg'),
+        ('l', 'l'),
+        ('g', 'g'),
+        ('ml', 'ml'),
+        ('mg', 'mg'),
+        ('µl', 'µl'),
+        ('µg', 'µg')
+        )
         model = Product_Unit
-        exclude = ['reservation']
+        exclude = ['reservation', 'is_inactive', 'curr_amount']
         widgets = {
             "del_date":DateInput(attrs = {"type":"date"}),
             "open_date":DateInput(attrs = {"type":"date"}),
             "exp_date":DateInput(attrs = {"type":"date"}),
             "ret_date":DateInput(attrs = {"type":"date"}),
+            "m_unit":Select(choices=UNIT_CHOICES),
         }
+        #m_unit = forms.MultipleChoiceField
 
 class Product_Form(forms.ModelForm):
     class Meta:
@@ -84,5 +102,43 @@ class Reserve_Form(forms.ModelForm):
             "date_res":DateInput(attrs = {"type":"date"}),
             #'user': TextInput(),
         }
-        exclude = ['user',]
+        exclude = ['user','is_complete',]
         #fields="__all__"
+
+class Update_item_Form(forms.ModelForm):
+    used_amount = forms.IntegerField(label='Used amount')
+    all_units = Product_Unit.objects.all()
+    lenght =0
+    opt = []
+    m_un = []
+    for el in all_units:
+        opt.append("option{}".format(lenght))
+        m_un.append("option{}".format(lenght))
+        lenght+=1
+
+    dict={}
+    dict_m_un={}
+    n=0
+    for i in opt:
+        dict[i]=all_units[n].description
+        dict_m_un[i]=all_units[n].m_unit
+        print(all_units[n].description)
+        n+=1
+    prod_unit_list = dict.items()
+    m_unit_list = dict_m_un.items()
+
+
+    print(prod_unit_list)
+    prod_units = forms.ChoiceField(choices=prod_unit_list, label=False)
+    #m_units = forms.ChoiceField(choices=m_unit_list)
+
+
+    class Meta:
+        model = Product_Unit
+
+        fields = ("prod_units","used_amount", "ret_date", "open_date",)
+
+        widgets = {
+            "open_date":DateInput(attrs = {"type":"date"}),
+            "ret_date":DateInput(attrs = {"type":"date"}),
+        }
