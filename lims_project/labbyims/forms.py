@@ -106,15 +106,17 @@ class Reserve_Form(forms.ModelForm):
         #fields="__all__"
 
 class Update_item_Form(forms.ModelForm):
-    used_amount = forms.IntegerField(label='Used amount')
+    used_amount = forms.IntegerField(label='Used amount', required=False)
     all_units = Product_Unit.objects.all()
     lenght =0
     opt = []
     m_un = []
+    n=0
     for el in all_units:
-        opt.append("option{}".format(lenght))
-        m_un.append("option{}".format(lenght))
+        opt.append(all_units[n].description)
+        m_un.append(all_units[n].m_unit)
         lenght+=1
+        n+=1
 
     dict={}
     dict_m_un={}
@@ -122,13 +124,13 @@ class Update_item_Form(forms.ModelForm):
     for i in opt:
         dict[i]=all_units[n].description
         dict_m_un[i]=all_units[n].m_unit
-        print(all_units[n].description)
+        #print(all_units[n].description)
         n+=1
     prod_unit_list = dict.items()
     m_unit_list = dict_m_un.items()
 
 
-    print(prod_unit_list)
+    #print(prod_unit_list)
     prod_units = forms.ChoiceField(choices=prod_unit_list, label=False)
     #m_units = forms.ChoiceField(choices=m_unit_list)
 

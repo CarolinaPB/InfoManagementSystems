@@ -17,7 +17,7 @@ from django_tables2 import RequestConfig
 import datetime
 from datetime import datetime, timedelta
 from django.utils import timezone
-from .filters import ProductFilter, LocationFilter, Prod_ResFilter, ProductCASFilter, ProductUnitFilter
+from .filters import ProductFilter, LocationFilter, Prod_ResFilter, ProductCASFilter
 from decimal import Decimal
 
 
@@ -226,18 +226,54 @@ def user_page(request):
     return render(request, 'labbyims/user_page.html', html)
 
 def update_item(request):
-    form = Update_item_Form(request.POST)
-    context = {'form': form}
-
-
-    return render(request, 'labbyims/update_item.html', context)
-
-
-def choose_item_to_update(request):
     if request.method == "POST":
-        product_list = Product.objects.all()
-        product_filter = ProducUnitFilter(request.GET, queryset=product_list)
-        print(product_filter)
-        return render(request, "labbyims/add_item.html", {'filter': product_filter})
+        form = Update_item_Form(request.POST)
+        edit = form.save(commit=False)
+
+        prod_units = form.cleaned_data["prod_units"]
+        used_amount = form.cleaned_data["used_amount"]
+        retest_date = form.cleaned_data["ret_date"]
+        opened = form.cleaned_data["open_date"]
+        print(prod_units)
+        print(used_amount)
+        print(retest_date)
+        unit = Product_Unit.objects.get(description=prod_units)
+        change_prod_unit = Product_Unit.objects.get(id=unit.id)
+
+        if used_amount:
+            if used_amount > change_prod_unit.curr_amount:
+                pass
+            else:
+                change_prod_unit.curr_amount = change_prod_unit.curr_amount - used_amount
+                print(change_prod_unit.curr_amount)
+                #change_prod_unit.save()
+        if retest_date:
+            change_prod_unit.ret_date = retest_date
+
+        if opened:
+            change_prod_unit.open_date = opened
+
+        change_prod_unit.save()
+
+
+
+        return HttpResponseRedirect('.')
     else:
-        return render(request, 'labbyims/choose_item_to_update.html')
+        form = Update_item_Form()
+
+
+    return render(request, 'labbyims/update_item.html', {"form":form})
+
+
+
+
+
+
+#def choose_item_to_update(request):
+#    if request.method == "POST":
+#        product_list = Product.objects.all()
+#        product_filter = ProducUnitFilter(request.GET, queryset=product_list)
+#        print(product_filter)
+#        return render(request, "labbyims/add_item.html", {'filter': product_filter})
+#    else:
+#        return render(request, 'labbyims/choose_item_to_update.html')

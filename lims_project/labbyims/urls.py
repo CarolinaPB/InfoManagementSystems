@@ -33,5 +33,5 @@ urlpatterns = [
     path('running_low/', views.running_low, name='running_low'),
     path('user/', views.user_page, name='user_page'),
     path('update_item/', views.update_item, name='update_item'),
-    path('choose_item_to_update/', views.choose_item_to_update, name='choose_item_to_update'),
+    #path('choose_item_to_update/', views.choose_item_to_update, name='choose_item_to_update'),
 ]
