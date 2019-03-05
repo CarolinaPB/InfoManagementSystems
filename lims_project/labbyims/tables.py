@@ -54,7 +54,7 @@ class Product_Unit_MyTable(tables.Table):
         model = Product_Unit
         fields = ('description', 'product', 'purity', 'curr_amount', \
                 'm_unit', 'location', 'exp_date', 'ret_date',  'batch', \
-                 'in_house_no' 'del_date', 'open_date', 'company', 'cat_num')
+                 'in_house_no', 'del_date', 'open_date', 'company', 'cat_num')
         template_name = 'django_tables2/bootstrap.html'
 
 class LocationTable(tables.Table):
