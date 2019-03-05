@@ -157,6 +157,7 @@ EMAIL_HOST_PASSWORD = 'arcahokasi'
 AUTH_USER_MODEL = 'labbyims.User'
 
 
+
 # Definging how many days an authentication link should remain active
 
 ACCOUNT_ACTIVATION_DAYS = 3

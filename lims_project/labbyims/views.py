@@ -13,12 +13,13 @@ from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, \
                     FP_Product_UnitTable, Product_Unit_MyTable, FP_ReserveTable\
                     , ReserveTable, FP_Running_LowTable, Running_LowTable
 from .models import Product_Unit, Product, Location, Room, Reserve, User,\
-                    Watching
+                    Watching, Department
 from django_tables2 import RequestConfig
 import datetime
 from datetime import datetime, timedelta
 from django.utils import timezone
-from .filters import ProductFilter, LocationFilter, Prod_ResFilter
+from .filters import ProductFilter, LocationFilter, Prod_ResFilter, UserFilter,\
+                    DeptFilter
 from decimal import Decimal
 
 
@@ -204,4 +205,14 @@ def about(request):
     return render(request, 'labbyims/about.html')
 
 def user_info(request):
-    return render(request, 'labbyims/user_info.html')
+    if request.user.is_authenticated:
+
+        userprofile = User.objects.filter(id= request.user.id)
+        user_filter = UserFilter(request.GET, queryset=userprofile)
+
+        user_dept = Department.objects.filter(users = request.user.id)
+        dept_filter = UserFilter(request.GET, queryset=user_dept)
+
+        return render(request, 'labbyims/user_info.html', {'filter':user_filter}, {'filter':dept_filter})
+    else:
+        return render(request, 'labbyims/home_afterlogin.html')

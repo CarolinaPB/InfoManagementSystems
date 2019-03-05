@@ -7,6 +7,7 @@ from django.core.validators import MinValueValidator
 class User(AbstractUser):
     pass
 
+
 class Product(models.Model):
     cas = models.CharField('CAS number', max_length=12, unique=True)
     name = models.CharField(max_length=255)
