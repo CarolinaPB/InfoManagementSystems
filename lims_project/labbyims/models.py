@@ -60,24 +60,23 @@ class Department(models.Model):
 
 class Product_Unit(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    location = models.ForeignKey(Location, on_delete=models.CASCADE)
-    reservation = models.ManyToManyField(User, through='Reserve')
-    #watch = models.ManyToManyField(Department, through='Watching')
-    description = models.CharField(max_length=255)
-    is_inactive = models.BooleanField('Archived', default = False)
+    in_house_no = models.CharField('In House ID', max_length=255, blank = True )
     del_date = models.DateField('delivery date')
-    open_date = models.DateField('date opened', null=True, blank = True)
-    exp_date = models.DateField('expiration date', null=True, blank = True)
-    ret_date = models.DateField('retest date', null=True, blank = True)
-    purity = models.CharField('purity/percentage', max_length = 255, null=True, blank = True)
-    init_amount = models.DecimalField('initial amount', max_digits=10, decimal_places=4, default = 0, validators=[MinValueValidator(Decimal('0.0000'))])
-    used_amount = models.DecimalField('amount used', max_digits=10, decimal_places=4, default=0)
-    curr_amount = models.DecimalField('current amount', max_digits=10, decimal_places=4, default=0, validators=[MinValueValidator(Decimal('0.0000'))])
     company = models.CharField(max_length=255)
     cat_num = models.CharField('catalog number', max_length=255, blank = True)
-    m_unit = models.CharField('measuring units', max_length=4, null=True, blank = True)
+    description = models.CharField(max_length=255)
     batch = models.CharField('Batch Number', max_length=255, blank = True )
-    in_house_no = models.CharField('In House ID', max_length=255, blank = True )
+    init_amount = models.DecimalField('initial amount', max_digits=10, decimal_places=4, default = 0)
+    m_unit = models.CharField('measuring units', max_length=4, null=True, blank = True)
+    purity = models.CharField('purity/percentage', max_length = 255, null=True, blank = True)
+    exp_date = models.DateField('expiration date', null=True, blank = True)
+    ret_date = models.DateField('retest date', null=True, blank = True)
+    open_date = models.DateField('date opened', null=True, blank = True)
+    used_amount = models.DecimalField('amount used', max_digits=10, decimal_places=4, default=0)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    reservation = models.ManyToManyField(User, through='Reserve')
+    is_inactive = models.BooleanField('Archived', default = False)
+    curr_amount = models.DecimalField('current amount', max_digits=10, decimal_places=4, default=0, blank = True)
     #def curr_am(self):
     #    return self.init_amount - self.used_amount
     def __str__(self):
@@ -101,3 +100,9 @@ class Watching(models.Model):
     prod_un = models.ForeignKey(Product_Unit, on_delete=models.CASCADE)
     dept = models.ForeignKey(Department, on_delete=models.CASCADE)
     low_warn = models.BooleanField('Running Low Warning')
+    prod_perc = models.DecimalField('Percent left', default = 100, max_digits=10, decimal_places=4)
+    def save(self, *args, **kwargs):
+        self.prod_perc = (self.prod_un.curr_amount/self.prod_un.init_amount)*100
+        super(Watching, self).save(*args, **kwargs)
+    def __str__(self):
+        return self.low_warn

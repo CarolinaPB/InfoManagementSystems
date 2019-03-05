@@ -49,11 +49,11 @@ class AdvancedSearch(forms.Form):
         )
 
 class Product_UnitForm(forms.ModelForm):
-    number = forms.IntegerField(label='How many items with exactly those properies do you want to add to the database?', 
+    number = forms.IntegerField(label='How many items with exactly those properies do you want to add to the database?',
     initial=1, validators=[MinValueValidator(1)])
-    
 
-    
+
+
     class Meta:
         UNIT_CHOICES = (
         ('kg', 'kg'),
@@ -102,5 +102,5 @@ class Reserve_Form(forms.ModelForm):
             "date_res":DateInput(attrs = {"type":"date"}),
             #'user': TextInput(),
         }
-        exclude = ['user',]
+        exclude = ['user','is_complete',]
         #fields="__all__"
