@@ -73,6 +73,9 @@ class Product_Unit(models.Model):
     m_unit = models.CharField('measuring units', max_length=4, null=True, blank = True)
     batch = models.CharField('Batch Number', max_length=255, blank = True )
     in_house_no = models.CharField('In House ID', max_length=255, blank = True )
+    @property
+    def perc_left(self):
+        return self.curr_amount/self.init_amount
     def __str__(self):
         return self.description
 
@@ -80,7 +83,7 @@ class Reserve(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     prod_un = models.ForeignKey(Product_Unit, verbose_name='description', on_delete=models.CASCADE)
     amount_res = models.DecimalField('amount to reserve', max_digits=10, decimal_places=4)
-    date_res = models.DateField('date of reservation')
+    date_res = models.DateField('reservation date')
     is_complete = models.BooleanField()
 
 class Uses(models.Model):
@@ -96,9 +99,5 @@ class Watching(models.Model):
     prod_un = models.ForeignKey(Product_Unit, on_delete=models.CASCADE)
     dept = models.ForeignKey(Department, on_delete=models.CASCADE)
     low_warn = models.BooleanField('Running Low Warning')
-    prod_perc = models.DecimalField('Percent left', default = 100, max_digits=10, decimal_places=4)
-    def save(self, *args, **kwargs):
-        self.prod_perc = (self.prod_un.curr_amount/self.prod_un.init_amount)*100
-        return super(Watching, self).save(*args, **kwargs)
     def __str__(self):
         return self.low_warn
