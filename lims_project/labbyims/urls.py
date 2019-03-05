@@ -20,7 +20,6 @@ urlpatterns = [
     path('inventory/', views.inventory, name='inventory'),
     path('add_product/', views.add_product, name='add_product'),
     path('add_item/', views.add_item, name='add_item'),
-    path('add_item_cas/', views.add_item_cas, name='add_item_cas'),
     path('add_location/', views.add_location, name='add_location'),
     path('locations/', views.locations, name='locations'),
     path('my_inventory/', views.my_inventory, name='my_inventory'),
@@ -32,7 +31,4 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('running_low/', views.running_low, name='running_low'),
     path('user_info/', views.user_info, name = 'user_info')
-    path('update_item/', views.update_item, name='update_item'),
-    path('choose_item_to_update/', views.choose_item_to_update, name='choose_item_to_update'),
-
 ]

@@ -1,9 +1,7 @@
 import django_tables2 as tables
-
 from django_tables2 import TemplateColumn
 from .models import Product_Unit, Location, Reserve, Watching
 from django_tables2.utils import A
-
 
 class Product_UnitTable(tables.Table):
     class Meta:
@@ -69,7 +67,6 @@ class FP_Product_UnitTable(tables.Table):
     class Meta:
         model = Product_Unit
         fields = ('description', 'exp_date', 'ret_date')
-        template_name = 'django_tables2/bootstrap.html'
 
 
 class Product_Unit_ExpTable(tables.Table):
@@ -83,11 +80,4 @@ class Product_Unit_ExpTable(tables.Table):
 class LocationTable(tables.Table):
     class Meta:
         model = Location
-        template_name = 'django_tables2/bootstrap.html'
-
-
-class User_info_table(tables.Table):
-    class Meta:
-        model= User
-        #fields = ('username', 'first_name', 'last_name', 'email')
         template_name = 'django_tables2/bootstrap.html'

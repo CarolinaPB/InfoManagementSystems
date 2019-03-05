@@ -1,4 +1,4 @@
-from labbyims.models import Product_Unit, Location, Room, Reserve, User, Product
+from labbyims.models import Product_Unit, Location, Room, Reserve, User
 import django_filters
 
 
@@ -19,15 +19,3 @@ class Prod_ResFilter(django_filters.FilterSet):
     class Meta:
         model =  Reserve
         fields = ['description',]
-
-class ProductCASFilter(django_filters.FilterSet):
-    cas = django_filters.CharFilter(lookup_expr='iexact')
-    class Meta:
-        model = Product
-        fields = ["cas", "name"]
-
-class ProductUnitFilter(django_filters.FilterSet):
-    description = django_filters.CharFilter(lookup_expr='iexact')
-    class Meta:
-        model = Product_Unit
-        fields = ["description", ]
