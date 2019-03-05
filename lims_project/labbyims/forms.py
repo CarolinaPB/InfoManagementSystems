@@ -1,5 +1,3 @@
-from django.forms.widgets import DateInput, Select
-from django.core.validators import MinValueValidator
 from django import forms
 from django_registration.forms import RegistrationForm
 from crispy_forms.helper import FormHelper
@@ -49,31 +47,15 @@ class AdvancedSearch(forms.Form):
         )
 
 class Product_UnitForm(forms.ModelForm):
-    number = forms.IntegerField(label='How many items with exactly those properies do you want to add to the database?',
-    initial=1, validators=[MinValueValidator(1)])
-
-
-
     class Meta:
-        UNIT_CHOICES = (
-        ('kg', 'kg'),
-        ('l', 'l'),
-        ('g', 'g'),
-        ('ml', 'ml'),
-        ('mg', 'mg'),
-        ('µl', 'µl'),
-        ('µg', 'µg')
-        )
         model = Product_Unit
-        exclude = ['reservation', 'is_inactive', 'curr_amount']
+        exclude = ['reservation']
         widgets = {
             "del_date":DateInput(attrs = {"type":"date"}),
             "open_date":DateInput(attrs = {"type":"date"}),
             "exp_date":DateInput(attrs = {"type":"date"}),
             "ret_date":DateInput(attrs = {"type":"date"}),
-            "m_unit":Select(choices=UNIT_CHOICES),
         }
-        #m_unit = forms.MultipleChoiceField
 
 class Product_Form(forms.ModelForm):
     class Meta:

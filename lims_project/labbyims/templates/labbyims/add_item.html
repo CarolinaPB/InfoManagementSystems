@@ -1,5 +1,4 @@
 {% extends "labbyims/base.html" %}
-{% load crispy_forms_tags %}
 {% block content %}
 <br><br><br><br><br>
 
@@ -7,20 +6,36 @@
 <H1>Add Item</H1>
 <br><br>
 <P>Please fill out this form to add new items to the database:
-
-<!-- {% for Product in filter.qs %}
-    <tr>
-    <td>{{ Product.name }}</td>
-    <td>{{ Product.cas }}</td>
-    </tr>
-{% endfor %} -->
-
 <form action="" method="POST">
-
 	{% csrf_token %}
-    {{ form|crispy}}
-    <br><br>
-    <input type="submit" value="Submit" name="Submit">  <input type="reset" value="Reset" name="Reset">
+	<P>{{ form.product.label }} <br> {{ form.product }}  {{ form.product.errors }}
+	<fieldset>
+		<legend>Delivery</legend>
+		<P>{{ form.del_date.label }} <br> {{ form.del_date }}  {{ form.del_date.errors }}
+		<P>{{ form.company.label }} <br> {{ form.company }}  {{ form.company.errors }}
+		<P>{{ form.cat_num.label }} <br> {{ form.cat_num }} {{ form.cat_num.errors }}
+	</fieldset>
+	<br>
+	<fieldset>
+		<legend>Chemical Properties</legend>
+		<P>{{ form.description.label }} <br> {{ form.description }}  {{ form.description.errors }}
+		<P>Amount <br> {{ form.init_amount }}  {{ form.init_amount.errors }}
+		<P>{{ form.purity.label }} <br> {{ form.purity }}  {{ form.del_date.errors }}
+		<P>{{ form.temperature.label }} <br> {{ form.temperature }}  {{ form.temperature.errors }}
+		<P>{{ form.exp_date.label }} <br> {{ form.exp_date }}  {{ form.exp_date.errors }}
+		<P>{{ form.ret_date.label }} <br> {{ form.ret_date }}  {{ form.ret_date.errors }}
+        <P>{{ form.open_date.label }} <br> {{ form.open_date }}  {{ form.open_date.errors }}
+        <P>{{ form.used_amount.label }} <br> {{ form.used_amount }}  {{ form.used_amount.errors }}
+        <P>{{ form.curr_amount.label }} <br> {{ form.curr_amount }}  {{ form.curr_amount.errors }}
+	</fieldset>
+    <br>
+    <fieldset>
+		<legend>Location</legend>
+        <P>{{ form.location.label }} <br> {{ form.location }}  {{ form.location.errors }}
+    </fieldset>
+	<br>
+
+    <input type="submit" value="Submit">  <input type="reset" value="Reset">
     <input type="button" value="Go back" onClick="javascript:history.go(-1)" />
     <br><br><br>
 

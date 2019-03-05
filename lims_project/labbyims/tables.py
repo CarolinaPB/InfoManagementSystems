@@ -1,5 +1,7 @@
 import django_tables2 as tables
-from .models import Product_Unit, Location, Reserve, Watching, User
+from django_tables2 import TemplateColumn
+from .models import Product_Unit, Location, Reserve, Watching
+from django_tables2.utils import A
 
 class Product_UnitTable(tables.Table):
     class Meta:
@@ -13,33 +15,46 @@ class Product_UnitTable(tables.Table):
 class FP_ReserveTable(tables.Table):
     class Meta:
         model = Reserve
-        #prod_res = tables.Column(accessor='product_unit.description')
-        fields = ('date_res', 'prod_un')
+        fields = ('date_res', 'prod_un', 'amount_res')
 
 class FP_Running_LowTable(tables.Table):
-    class Meta:
-        model= Product_Unit
-        fields = ('description', 'curr_amount', 'm_units')
+    prod_res = tables.Column(accessor='prod_un.description')
+    prod_perc = tables.Column(accessor='prod_un.perc_left',\
+                verbose_name = '% left')
+    perc_left = tables.Column(accessor = 'prod_un.in_house_no')
+
 
 
 class Running_LowTable(tables.Table):
-    class Meta:
-        model= Watching
-        template_name = 'django_tables2/bootstrap.html'
+        prod_res = tables.Column(accessor='prod_un.description')
+        prod_perc = tables.Column(accessor='prod_un.perc_left', \
+                    verbose_name = '% left')
+        department = tables.Column(accessor = 'dept', \
+                    verbose_name = 'Department')
+        location = tables.Column(accessor = 'prod_un.location')
+        date_exp = tables.Column(accessor = 'prod_un.exp_date')
+        date_ret = tables.Column(accessor = 'prod_un.ret_date')
+        perc_left = tables.Column(accessor = 'prod_un.in_house_no')
+        class Meta:
+            template_name = 'django_tables2/bootstrap.html'
 
 class ReserveTable(tables.Table):
+    prod_res = tables.Column(accessor='prod_un.description')
+    res = tables.Column(accessor = 'user')
+    date = tables.Column(accessor = 'date_res')
+    meas_u = tables.Column(accessor = 'prod_un.m_unit')
+    res_amount = tables.Column(accessor = 'amount_res')
+    prod_curr_amount = tables.Column(accessor='prod_un.curr_amount')
+    house_no = tables.Column(accessor='prod_un.in_house_no')
     class Meta:
-        model = Reserve
-        prod_res = tables.Column(accessor='product_unit.description')
-        fields = ('date_res', 'prod_un')
+        template_name = 'django_tables2/bootstrap.html'
 
 class Product_Unit_MyTable(tables.Table):
     class Meta:
         model = Product_Unit
         fields = ('description', 'product', 'purity', 'curr_amount', \
                 'm_unit', 'location', 'exp_date', 'ret_date',  'batch', \
-                 'in_house_no' 'del_date', 'open_date', 'company', 'cat_num')
-
+                 'in_house_no', 'del_date', 'open_date', 'company', 'cat_num')
         template_name = 'django_tables2/bootstrap.html'
 
 class LocationTable(tables.Table):
@@ -48,28 +63,10 @@ class LocationTable(tables.Table):
 	        template_name = 'django_tables2/bootstrap.html'
 
 
-class NotificationColumn(tables.Column):
-    attrs = {
-
-
-        'td': {
-            'description': lambda Product_Unit: Product_Unit.description,
-            'exp_date': lambda Product_Unit: Product_Unit.exp_date,
-            'ret_date': lambda Product_Unit: Product_Unit.ret_date,
-       }
-
-    }
-    def render(self, product_unit):
-        return '{} {}'.format(Product_Unit.description, Product_Unit.exp_date, Product_Unit.ret_date)
-
-
 class FP_Product_UnitTable(tables.Table):
-    #product_table = NotificationColumn()
-    #attrs = {'width':'20%'}
     class Meta:
         model = Product_Unit
         fields = ('description', 'exp_date', 'ret_date')
-        template_name = 'django_tables2/bootstrap.html'
 
 
 class Product_Unit_ExpTable(tables.Table):
@@ -79,20 +76,8 @@ class Product_Unit_ExpTable(tables.Table):
         exclude = ('id', ' is_inactive')
         template_name = 'django_tables2/bootstrap-responsive.html'
 
-#class FP_Product_Unit_LowTable(tables.Table):
-#    class Meta:
-#        model = Watching
-
-
 
 class LocationTable(tables.Table):
     class Meta:
         model = Location
-        template_name = 'django_tables2/bootstrap.html'
-
-
-class User_info_table(tables.Table):
-    class Meta:
-        model= User
-        #fields = ('username', 'first_name', 'last_name', 'email')
         template_name = 'django_tables2/bootstrap.html'

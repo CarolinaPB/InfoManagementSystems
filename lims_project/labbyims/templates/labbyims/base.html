@@ -22,7 +22,7 @@
     <header class="site-header">
         <nav class="navbar navbar-expand navbar-dark bg-dark fixed-top">
             <div class="container-fluid">
-                <a class="navbar-brand mr-4" href="{% url 'home' %}">Labby</a>
+                <a class="navbar-brand mr-4" href="/home/">Labby</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
@@ -38,7 +38,7 @@
                         <button class="btn my-2 my-sm-0" type="submit">Search</button>
                     </form>
                     <a class="nav-item nav-link" href="{% url 'add_product' %}">Add product</a>
-                    <a class="nav-item nav-link" href="{% url 'add_item_cas' %}">Add item</a>
+                    <a class="nav-item nav-link" href="{% url 'add_item' %}">Add item</a>
                     <li class="nav-item dropdown hidden-md-down">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           <strong>User</strong>
@@ -49,6 +49,7 @@
                           <a href="{% url 'running_low' %}" class="dropdown-item">Running Low</a>
                           <a href="{% url 'inventory' %}" class="dropdown-item"> General Inventory</a>
                           <a href="{% url 'locations' %}" class="dropdown-item">Locations</a>
+                          <a href="{% url 'user_info' %}" class="dropdown-item"> User Info</a>
                           <a href="{% url 'password_change' %}" class="dropdown-item">Change password</a>
                           <a href="{% url 'logout' %}" class="dropdown-item">
                           <div class="dropdown-divider"></div>
