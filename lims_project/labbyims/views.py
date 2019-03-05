@@ -1,5 +1,3 @@
-# Create your views here.
-
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
@@ -42,22 +40,27 @@ def home(request):
         warning = current_date + timedelta(days=27)
 
         exp_filter = Product_Unit.objects.filter(Q(is_inactive=False), \
+                    Q(is_inactive = False), \
                     Q(exp_date__range = [current_date, warning ]) | \
                     Q(ret_date__range =[current_date, warning ]) )
         table_exp = FP_Product_UnitTable(exp_filter, prefix="1-")
         RequestConfig(request,paginate={'per_page': 3} ).configure(table_exp)
 
-        res_list=Reserve.objects.filter(Q(user_id= request.user),\
-                    Q(date_res__range = [current_date, warning ])).select_related()
+        res_list=Reserve.objects.filter(Q(prod_un__is_inactive = False),\
+                    Q(user_id= request.user),Q(date_res__range = \
+                    [current_date, warning ])).select_related()
         table_res = FP_ReserveTable(res_list, prefix="2-")
         RequestConfig(request,paginate = {'per_page': 3}).configure(table_res)
 
-        watch_list = Watching.objects.filter(Q(),Q(user_id= request.user),\
-                    Q(low_warn = True),Q()).select_related()
+        watch_list = Watching.objects.filter(Q(prod_un__is_inactive = False), \
+                    Q(user_id= request.user), \
+                    Q(low_warn = True)).select_related()
         table_low = FP_Running_LowTable(watch_list, prefix='3-')
         RequestConfig(request,paginate = {'per_page': 3}).configure(table_low)
+
         return render(request, 'labbyims/home_afterlogin.html',{'form':form, \
-                    'table_res':table_res, 'table_exp': table_exp, 'table_low':table_low},)
+                    'table_res':table_res, 'table_exp': table_exp, \
+                    'table_low':table_low},)
     else:
         return render(request, 'labbyims/home_afterlogin.html')
 
@@ -98,7 +101,8 @@ def add_item(request):
     return render(request, 'labbyims/add_item.html', context)
 
 def inventory(request):
-    table = Product_UnitTable(Product_Unit.objects.all())
+    inv_filter = Product_Unit.objects.filter(is_inactive = False)
+    table = Product_UnitTable(inv_filter)
     RequestConfig(request).configure(table)
     return render(request, 'labbyims/inventory.html', {'table': table})
 
@@ -125,15 +129,19 @@ def locations(request):
     return render(request, 'labbyims/locations.html', {'table_1': table_1})
 
 def my_inventory(request):
-    table_my_inv = Product_Unit_MyTable(Product_Unit.objects.all())
+    my_inv_filter = Product_Unit.objects.filter(is_inactive = False)
+    table_my_inv = Product_Unit_MyTable(my_inv_filter)
     RequestConfig(request).configure(table_my_inv)
-    return render(request, 'labbyims/my_inventory.html', {'table_my_inv': table_my_inv})
+    return render(request, 'labbyims/my_inventory.html', \
+                {'table_my_inv': table_my_inv})
 
 def search(request):
     product_list = Product_Unit.objects.all()
-    product_list_up = product_list.update(curr_amount=F('init_amount')-F('used_amount'))
+    product_list_up = product_list.update(curr_amount=F('init_amount')- \
+                    F('used_amount'))
     product_filter = ProductFilter(request.GET, queryset=product_list)
-    return render(request, "labbyims/product_list.html", {'filter': product_filter})
+    return render(request, "labbyims/product_list.html", \
+                {'filter': product_filter})
 
 def search_location(request):
     location_list = Location.objects.all()
@@ -173,29 +181,22 @@ def reservations(request):
     current_date = timezone.now()
     warning = current_date + timedelta(days=27)
     res_list=Reserve.objects.filter(Q(user_id= request.user),\
-                    Q(date_res__range = [current_date, warning ])).select_related()
+                    Q(date_res__range = [current_date, \
+                    warning ])).select_related()
     table_res = ReserveTable(res_list)
     RequestConfig(request).configure(table_res)
-    return render(request, 'labbyims/reservations.html', {'table_res': table_res,}, )
+    return render(request, 'labbyims/reservations.html', \
+                {'table_res': table_res,}, )
 
 def running_low(request):
     if request.user.is_authenticated:
-        run_low = F('init_amount')/2
-
-        ##prod = Product_Unit.object.get(curr_amount__lte =Cast(\
-                    #F('init_amount')/2, FloatField()))[0]
-
-
-
-
-        #prod = Product_Unit.objects.get()
-        watch_list = Watching.objects.filter(Q(),Q(user_id= request.user),\
-                    Q(low_warn = True),Q()).select_related()
-
-
+        watch_list = Watching.objects.filter(Q(prod_un__is_inactive = False), \
+                    Q(user_id= request.user), \
+                    Q(low_warn = True)).select_related()
         table_watch = Running_LowTable(watch_list)
         RequestConfig(request).configure(table_watch)
-        return render(request, 'labbyims/running_low.html', {'table_watch':table_watch,},)
+        return render(request, 'labbyims/running_low.html', \
+                    {'table_watch':table_watch,},)
     else:
         return render(request, 'labbyims/home_afterlogin.html')
 
