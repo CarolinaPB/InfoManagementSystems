@@ -50,10 +50,14 @@ def home(request):
         res_list=Reserve.objects.filter(Q(user_id= request.user),\
                     Q(date_res__range = [current_date, warning ])).select_related()
         table_res = FP_ReserveTable(res_list, prefix="2-")
-        RequestConfig(request).configure(table_res)
+        RequestConfig(request,paginate = {'per_page': 3}).configure(table_res)
 
+        watch_list = Watching.objects.filter(Q(),Q(user_id= request.user),\
+                    Q(low_warn = True),Q()).select_related()
+        table_low = FP_Running_LowTable(watch_list, prefix='3-')
+        RequestConfig(request,paginate = {'per_page': 3}).configure(table_low)
         return render(request, 'labbyims/home_afterlogin.html',{'form':form, \
-                    'table_res':table_res, 'table_exp': table_exp,},)
+                    'table_res':table_res, 'table_exp': table_exp, 'table_low':table_low},)
     else:
         return render(request, 'labbyims/home_afterlogin.html')
 
