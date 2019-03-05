@@ -1,5 +1,5 @@
 import django_tables2 as tables
-from .models import Product_Unit, Location, Reserve, Watching
+from .models import Product_Unit, Location, Reserve, Watching, User
 
 class Product_UnitTable(tables.Table):
     class Meta:
@@ -88,4 +88,11 @@ class Product_Unit_ExpTable(tables.Table):
 class LocationTable(tables.Table):
     class Meta:
         model = Location
+        template_name = 'django_tables2/bootstrap.html'
+
+
+class User_info_table(tables.Table):
+    class Meta:
+        model= User
+        #fields = ('username', 'first_name', 'last_name', 'email')
         template_name = 'django_tables2/bootstrap.html'

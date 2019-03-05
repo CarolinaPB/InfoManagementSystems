@@ -25,3 +25,9 @@ class ProductCASFilter(django_filters.FilterSet):
     class Meta:
         model = Product
         fields = ["cas", "name"]
+
+class ProductUnitFilter(django_filters.FilterSet):
+    description = django_filters.CharFilter(lookup_expr='iexact')
+    class Meta:
+        model = Product_Unit
+        fields = ["description", ]

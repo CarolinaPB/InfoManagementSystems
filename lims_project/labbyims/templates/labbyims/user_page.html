@@ -1,16 +1,13 @@
 {% extends "labbyims/base.html" %}
-{% load staticfiles %}
+{% load render_table from django_tables2 %}
 {% block content %}
 <br><br><br><br><br>
 
 <TITLE>User</TITLE>
 <br><br>
-<h1>User</h1>
+<h1>{{user}}</h1>
 
-{% for u in user %}
-    {{u}}
-{% endfor %}
-
+<!--{% render_table user_table %}-->
 
 
 

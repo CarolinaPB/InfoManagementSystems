@@ -4,19 +4,20 @@ from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from labbyims.forms import SignUpForm
+from django.template import Context, Template
 
 from django.db.models import F,Q, FloatField
 from django.db.models.functions import Cast
 
 from django.views import View
-from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form, Room_Form, Reserve_Form
-from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, FP_Product_UnitTable, Product_Unit_MyTable, FP_ReserveTable, ReserveTable, FP_Running_LowTable, Running_LowTable
+from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form, Room_Form, Reserve_Form, Update_item_Form
+from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, FP_Product_UnitTable, Product_Unit_MyTable, FP_ReserveTable, ReserveTable, FP_Running_LowTable, Running_LowTable, User_info_table
 from .models import Product_Unit, Product, Location, Room, Reserve, User,Watching
 from django_tables2 import RequestConfig
 import datetime
 from datetime import datetime, timedelta
 from django.utils import timezone
-from .filters import ProductFilter, LocationFilter, Prod_ResFilter, ProductCASFilter
+from .filters import ProductFilter, LocationFilter, Prod_ResFilter, ProductCASFilter, ProductUnitFilter
 from decimal import Decimal
 
 
@@ -106,7 +107,6 @@ def inventory(request):
     RequestConfig(request).configure(table)
     return render(request, 'labbyims/inventory.html', {'table': table})
 
-
 def add_location(request):
     if request.method == "POST":
         form = Location_Form(request.POST)
@@ -121,7 +121,6 @@ def add_location(request):
 
     context = {'form': form}
     return render(request, 'labbyims/add_location.html', context,)
-
 
 def locations(request):
     table_1 = LocationTable(Location.objects.all())
@@ -207,13 +206,38 @@ def about(request):
     return render(request, 'labbyims/about.html')
 
 def user_page(request):
+    #print(request.user)
+    #user_list = User.objects.all()
+    #user_table=User_info_table(user_list)
+    #RequestConfig(request).configure(user_table)
 
-    model = User
-    template_name = 'labbyims/user_page.html'
-    def get_queryset():
-        return User.objects.all()
-    u = get_queryset()
-    print (u)
-    context={'user':u}
+    #user_list = User.objects.all()
+    #user_filter = User(request.GET, queryset=user_list)
+    #print(user_filter)
 
-    return render(request, 'labbyims/user_page.html', context)
+    #print (User.username)
+    #return render(request, 'labbyims/user_page.html', {'filter':user_filter})
+
+    t = Template('This is your <span>{{ message }}</span>.')
+    c = Context({'message': 'Your message'})
+    html = t.render(c)
+
+
+    return render(request, 'labbyims/user_page.html', html)
+
+def update_item(request):
+    form = Update_item_Form(request.POST)
+    context = {'form': form}
+
+
+    return render(request, 'labbyims/update_item.html', context)
+
+
+def choose_item_to_update(request):
+    if request.method == "POST":
+        product_list = Product.objects.all()
+        product_filter = ProducUnitFilter(request.GET, queryset=product_list)
+        print(product_filter)
+        return render(request, "labbyims/add_item.html", {'filter': product_filter})
+    else:
+        return render(request, 'labbyims/choose_item_to_update.html')
