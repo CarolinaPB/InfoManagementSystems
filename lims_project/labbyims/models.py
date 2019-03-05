@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from decimal import Decimal
+from django.core.validators import MinValueValidator
 
 
 class User(AbstractUser):
@@ -43,6 +44,11 @@ class Location(models.Model):
     isorgminacid = models.BooleanField('is organic and mineral acid', default = False)
     isoxidacid = models.BooleanField('is oxidizing acid', default = False)
     ispois_vol = models.BooleanField('is poison - volatile', default = False)
+    #def is_valid(self, Product):
+    #    if self.ispois_vol == Product.ispoison_nonvol:
+    #        return True
+    #    else:
+    #        return False
     def __str__(self):
         return self.name
 
@@ -64,14 +70,16 @@ class Product_Unit(models.Model):
     exp_date = models.DateField('expiration date', null=True, blank = True)
     ret_date = models.DateField('retest date', null=True, blank = True)
     purity = models.CharField('purity/percentage', max_length = 255, null=True, blank = True)
-    init_amount = models.DecimalField('initial amount', max_digits=10, decimal_places=4, default = 0)
+    init_amount = models.DecimalField('initial amount', max_digits=10, decimal_places=4, default = 0, validators=[MinValueValidator(Decimal('0.0000'))])
     used_amount = models.DecimalField('amount used', max_digits=10, decimal_places=4, default=0)
-    curr_amount = models.DecimalField('current amount', max_digits=10, decimal_places=4, default=0)
+    curr_amount = models.DecimalField('current amount', max_digits=10, decimal_places=4, default=0, validators=[MinValueValidator(Decimal('0.0000'))])
     company = models.CharField(max_length=255)
     cat_num = models.CharField('catalog number', max_length=255, blank = True)
     m_unit = models.CharField('measuring units', max_length=4, null=True, blank = True)
     batch = models.CharField('Batch Number', max_length=255, blank = True )
     in_house_no = models.CharField('In House ID', max_length=255, blank = True )
+    #def curr_am(self):
+    #    return self.init_amount - self.used_amount
     def __str__(self):
         return self.description
 
