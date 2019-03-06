@@ -44,16 +44,16 @@ class Location(models.Model):
     isorgminacid = models.BooleanField('is organic and mineral acid', default = False)
     isoxidacid = models.BooleanField('is oxidizing acid', default = False)
     ispois_vol = models.BooleanField('is poison - volatile', default = False)
-    #def is_valid(self, Product):
-    #    if self.ispois_vol == Product.ispoison_nonvol:
-    #        return True
-    #    else:
-    #        return False
+    def is_valid(self, Product):
+        if (self.ispois_vol == Product.ispoison_nonvol and self.ispoison_nonvol == Product.ispoison_nonvol and self.issolid == Product.issolid):
+            return True
+        else:
+            return False
     def __str__(self):
         return self.name
 
 class Department(models.Model):
-    users = models.ManyToManyField(User, through= 'Watching')
+    users = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     def __str__(self):
         return self.name
@@ -77,11 +77,14 @@ class Product_Unit(models.Model):
     reservation = models.ManyToManyField(User, through='Reserve')
     is_inactive = models.BooleanField('Archived', default = False)
     curr_amount = models.DecimalField('current amount', max_digits=10, decimal_places=4, default=0, blank = True)
-    #def curr_am(self):
-    #    return self.init_amount - self.used_amount
-    @property
+    def curr_am(self):
+        init = float(self.init_amount)
+        used = float(self.used_amount)
+        return init - used
     def perc_left(self):
-        return self.curr_amount/self.init_amount
+        current = self.curr_am()
+        initial = float(self.init_amount)
+        return (current/initial)*100
     def __str__(self):
         return self.description
 
