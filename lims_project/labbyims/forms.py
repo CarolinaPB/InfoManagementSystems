@@ -6,7 +6,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from django.db import models
 from .models import User, Product_Unit, Product, Location, Room, Reserve
-from django.forms.widgets import DateInput, TextInput, Select
+from django.forms.widgets import DateInput, TextInput, Select, NumberInput
 from captcha.fields import ReCaptchaField
 
 
@@ -108,7 +108,6 @@ class Reserve_Form(forms.ModelForm):
 
 class Update_item_Form(forms.ModelForm):
 
-    used_amount = forms.IntegerField(label='Used amount', required=False)
     prod_units = forms.ModelChoiceField(queryset=Product_Unit.objects.all(), label="Select a unit")
 
     class Meta:
@@ -123,3 +122,4 @@ class Update_item_Form(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(Update_item_Form, self).__init__(*args, **kwargs)
         self.fields['location'].required = False
+        self.fields['used_amount'].required = False

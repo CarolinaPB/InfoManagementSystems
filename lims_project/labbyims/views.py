@@ -206,25 +206,6 @@ def running_low(request):
 def about(request):
     return render(request, 'labbyims/about.html')
 
-def user_page(request):
-    #print(request.user)
-    #user_list = User.objects.all()
-    #user_table=User_info_table(user_list)
-    #RequestConfig(request).configure(user_table)
-
-    #user_list = User.objects.all()
-    #user_filter = User(request.GET, queryset=user_list)
-    #print(user_filter)
-
-    #print (User.username)
-    #return render(request, 'labbyims/user_page.html', {'filter':user_filter})
-
-    t = Template('This is your <span>{{ message }}</span>.')
-    c = Context({'message': 'Your message'})
-    html = t.render(c)
-
-
-    return render(request, 'labbyims/user_page.html', html)
 
 def user_info(request):
     if request.user.is_authenticated:
@@ -235,7 +216,7 @@ def user_info(request):
         user_dept = Department.objects.filter(user = request.user.id)
         dept_filter = UserFilter(request.GET, queryset=user_dept)
 
-        return render(request, 'labbyims/user_info.html', {'filter':user_filter}, {'filter':dept_filter})
+        return render(request, 'labbyims/user_info.html', {'filter':user_filter}, {'filter_dept':dept_filter})
     else:
         return render(request, 'labbyims/home_afterlogin.html')
 
@@ -251,9 +232,9 @@ def update_item(request):
         loc = form.cleaned_data["location"]
         expi_date = form.cleaned_data["exp_date"]
         delete=request.POST.getlist("delete_entry")
-
-        unit = Product_Unit.objects.get(description=prod_units)
-        change_prod_unit = Product_Unit.objects.get(id=unit.id)
+        print(prod_units.id)
+        #unit = Product_Unit.objects.get(description=prod_units)
+        change_prod_unit = Product_Unit.objects.get(id=prod_units.id)
 
         if delete:
             change_prod_unit.delete()
