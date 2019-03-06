@@ -53,7 +53,7 @@ class Location(models.Model):
         return self.name
 
 class Department(models.Model):
-    users = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     def __str__(self):
         return self.name
