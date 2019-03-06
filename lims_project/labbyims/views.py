@@ -10,14 +10,16 @@ from django.db.models import F,Q, FloatField
 from django.db.models.functions import Cast
 
 from django.views import View
+
 from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form, Room_Form, Reserve_Form, Update_item_Form
 from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, FP_Product_UnitTable, Product_Unit_MyTable, FP_ReserveTable, ReserveTable, FP_Running_LowTable, Running_LowTable, User_info_table
-from .models import Product_Unit, Product, Location, Room, Reserve, User,Watching
+from .models import Product_Unit, Product, Location, Room, Reserve, User, Watching, Department
+
 from django_tables2 import RequestConfig
 import datetime
 from datetime import datetime, timedelta
 from django.utils import timezone
-from .filters import ProductFilter, LocationFilter, Prod_ResFilter, ProductCASFilter
+from .filters import ProductFilter, LocationFilter, Prod_ResFilter, ProductCASFilter, UserFilter, DeptFilter
 from decimal import Decimal
 
 
@@ -280,3 +282,16 @@ def update_item(request):
 #        return render(request, "labbyims/add_item.html", {'filter': product_filter})
 #    else:
 #        return render(request, 'labbyims/choose_item_to_update.html')
+
+def user_info(request):
+    if request.user.is_authenticated:
+
+        userprofile = User.objects.filter(id= request.user.id)
+        user_filter = UserFilter(request.GET, queryset=userprofile)
+
+        user_dept = Department.objects.filter(users = request.user.id)
+        dept_filter = UserFilter(request.GET, queryset=user_dept)
+
+        return render(request, 'labbyims/user_info.html', {'filter':user_filter}, {'filter':dept_filter})
+    else:
+        return render(request, 'labbyims/home_afterlogin.html')

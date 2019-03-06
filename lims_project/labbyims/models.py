@@ -6,6 +6,7 @@ from decimal import Decimal
 class User(AbstractUser):
     pass
 
+
 class Product(models.Model):
     cas = models.CharField('CAS number', max_length=12, unique=True)
     name = models.CharField(max_length=255)
@@ -47,7 +48,7 @@ class Location(models.Model):
         return self.name
 
 class Department(models.Model):
-    users = models.ManyToManyField(User, through= 'Watching')
+    users = models.ForeignKey(User, default = 1, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     def __str__(self):
         return self.name
@@ -92,6 +93,7 @@ class Watching(models.Model):
     prod_un = models.ForeignKey(Product_Unit, on_delete=models.CASCADE)
     dept = models.ForeignKey(Department, on_delete=models.CASCADE)
     low_warn = models.BooleanField('Running Low Warning')
+
     prod_perc = models.DecimalField('Percent left', default = 100, max_digits=10, decimal_places=4)
     def save(self, *args, **kwargs):
         self.prod_perc = (self.prod_un.curr_amount/self.prod_un.init_amount)*100

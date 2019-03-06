@@ -26,6 +26,18 @@ class ProductCASFilter(django_filters.FilterSet):
         model = Product
         fields = ["cas", "name"]
 
+class UserFilter(django_filters.FilterSet):
+    description = django_filters.CharFilter(lookup_expr='icontains')
+    class Meta:
+        model = User
+        fields = ['id',]
+
+class DeptFilter(django_filters.FilterSet):
+    description = django_filters.CharFilter(lookup_expr='icontains')
+    class Meta:
+        model = Department
+        fields = ['id',]
+
 #class ProductUnitFilter(django_filters.FilterSet):
 #    description = django_filters.CharFilter(lookup_expr='iexact')
 #    class Meta:

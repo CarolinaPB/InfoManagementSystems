@@ -7,8 +7,26 @@
 <br><br>
 <h1>{{user}}</h1>
 
-<!--{% render_table user_table %}-->
-
-
 
 {% endblock content %}
+
+<h1>My Profile</h1>
+<br><br>
+<ul>
+  {% for User in filter.qs %}
+  <h5>Username: {{User.username}}</h5>
+  <br>
+  <h5>First Name: {{User.first_name}}</h5>
+  <br>
+  <h5>First Name: {{User.last_name}}</h5>
+  <br>
+  <h5>Email: {{User.email}}</h5>
+  <br>
+  <h5>Last Name: {{User.last_login}}</h5>
+
+</ul>
+{% endfor%}
+{% for User in filter.qs %}
+    <h5>Username: {{Dept.name}}</h5>
+    {% endfor%}
+{% endblock %}
