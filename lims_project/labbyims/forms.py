@@ -6,7 +6,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from django.db import models
 from .models import User, Product_Unit, Product, Location, Room, Reserve
-from django.forms.widgets import DateInput, TextInput
+from django.forms.widgets import DateInput, TextInput, Select
 from captcha.fields import ReCaptchaField
 
 
@@ -107,41 +107,20 @@ class Reserve_Form(forms.ModelForm):
         #fields="__all__"
 
 class Update_item_Form(forms.ModelForm):
+
     used_amount = forms.IntegerField(label='Used amount', required=False)
-    all_units = Product_Unit.objects.all()
-    lenght =0
-    opt = []
-    m_un = []
-    n=0
-    for el in all_units:
-        opt.append(all_units[n].description)
-        m_un.append(all_units[n].m_unit)
-        lenght+=1
-        n+=1
-
-    dict={}
-    dict_m_un={}
-    n=0
-    for i in opt:
-        dict[i]=all_units[n].description
-        dict_m_un[i]=all_units[n].m_unit
-        #print(all_units[n].description)
-        n+=1
-    prod_unit_list = dict.items()
-    m_unit_list = dict_m_un.items()
-
-
-    #print(prod_unit_list)
-    prod_units = forms.ChoiceField(choices=prod_unit_list, label=False)
-    #m_units = forms.ChoiceField(choices=m_unit_list)
+    prod_units = forms.ModelChoiceField(queryset=Product_Unit.objects.all(), label="Select a unit")
 
 
     class Meta:
         model = Product_Unit
-
-        fields = ("prod_units","used_amount", "ret_date", "open_date","location",)
+        fields = ("prod_units","used_amount", "open_date","ret_date", "exp_date", "location",)
 
         widgets = {
             "open_date":DateInput(attrs = {"type":"date"}),
             "ret_date":DateInput(attrs = {"type":"date"}),
+            "exp_date":DateInput(attrs = {"type":"date"}),
         }
+    def __init__(self, *args, **kwargs):
+        super(Update_item_Form, self).__init__(*args, **kwargs)
+        self.fields['location'].required = False
