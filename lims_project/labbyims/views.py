@@ -249,6 +249,7 @@ def update_item(request):
         retest_date = form.cleaned_data["ret_date"]
         opened = form.cleaned_data["open_date"]
         loc = form.cleaned_data["location"]
+        expi_date = form.cleaned_data["exp_date"]
         print(prod_units)
         print(used_amount)
         print(retest_date)
@@ -269,6 +270,8 @@ def update_item(request):
             change_prod_unit.open_date = opened
         if loc:
             change_prod_unit.location = loc
+        if expi_date:
+            change_prod_unit.exp_date = expi_date
 
         change_prod_unit.save()
 
