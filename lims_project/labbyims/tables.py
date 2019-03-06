@@ -1,5 +1,7 @@
 import django_tables2 as tables
+from django_tables2 import TemplateColumn
 from .models import Product_Unit, Location, Reserve, Watching, User
+from django_tables2.utils import A
 
 class Product_UnitTable(tables.Table):
     class Meta:
@@ -47,6 +49,19 @@ class LocationTable(tables.Table):
 	        model = Location
 	        template_name = 'django_tables2/bootstrap.html'
 
+class NotificationColumn(tables.Column):
+    attrs = {
+
+
+        'td': {
+            'description': lambda Product_Unit: Product_Unit.description,
+            'exp_date': lambda Product_Unit: Product_Unit.exp_date,
+            'ret_date': lambda Product_Unit: Product_Unit.ret_date,
+       }
+
+    }
+    def render(self, product_unit):
+        return '{} {}'.format(Product_Unit.description, Product_Unit.exp_date, Product_Unit.ret_date)
 
 class NotificationColumn(tables.Column):
     attrs = {
@@ -79,15 +94,11 @@ class Product_Unit_ExpTable(tables.Table):
         exclude = ('id', ' is_inactive')
         template_name = 'django_tables2/bootstrap-responsive.html'
 
-#class FP_Product_Unit_LowTable(tables.Table):
-#    class Meta:
-#        model = Watching
 
-
-
-class LocationTable(tables.Table):
+class User_info_table(tables.Table):
     class Meta:
-        model = Location
+        model= User
+        #fields = ('username', 'first_name', 'last_name', 'email')
         template_name = 'django_tables2/bootstrap.html'
 
 

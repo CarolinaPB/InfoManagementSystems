@@ -24,8 +24,8 @@ urlpatterns = [
     path('add_location/', views.add_location, name='add_location'),
     path('locations/', views.locations, name='locations'),
     path('my_inventory/', views.my_inventory, name='my_inventory'),
-    re_path(r'^search/$',views.search,name='search'),
-    re_path(r'^search_location/$',views.search_location, name='search_location'),
+    re_path(r'^search/$', views.search, name='search'),
+    re_path(r'^search_location/$', views.search_location, name='search_location'),
     path('add_room/', views.add_room, name='add_room'),
     path('add_reservation/', views.add_reservation, name='add_reservation'),
     path('reservations/', views.reservations, name='reservations'),
@@ -33,5 +33,5 @@ urlpatterns = [
     path('running_low/', views.running_low, name='running_low'),
     path('user/', views.user_page, name='user_page'),
     path('update_item/', views.update_item, name='update_item'),
-    #path('choose_item_to_update/', views.choose_item_to_update, name='choose_item_to_update'),
+
 ]
