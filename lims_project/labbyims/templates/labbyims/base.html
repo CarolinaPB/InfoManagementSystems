@@ -39,6 +39,7 @@
                     </form>
                     <a class="nav-item nav-link" href="{% url 'add_product' %}">Add product</a>
                     <a class="nav-item nav-link" href="{% url 'add_item_cas' %}">Add item</a>
+                    <a class="nav-item nav-link" href="{% url 'update_item' %}">Update item</a>
                     <li class="nav-item dropdown hidden-md-down">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           <strong>User</strong>
@@ -91,5 +92,20 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+    <script type="text/javascript">
+    function cTrig(clickedid) {
+      if (document.getElementById(clickedid).checked == false) {
+        return false;
+      } else {
+        var box= confirm("Are you sure you want to remove this item from the database? This action is irreversible");
+        if (box==true)
+            return true;
+        else
+           document.getElementById(clickedid).checked = false;
+      }
+    }
+
+    </script>
 
 </html>

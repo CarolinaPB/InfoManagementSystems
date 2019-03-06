@@ -11,7 +11,7 @@
     {{ form|crispy}}
     <br>
 
-    <input type="checkbox"name="delete_entry" />
+    <input type="checkbox"name="delete_entry" id="delete_entry" onchange="cTrig('delete_entry')"/>
     <label id="label_for_DELETE" for="delete_entry">DELETE entry from database?</label>
     <p id="label_for_DELETE">This change will be permanent
     <br><br>
@@ -21,6 +21,6 @@
 
 </form>
 
-<br><br><br>
+<br>
 
 {% endblock content %}

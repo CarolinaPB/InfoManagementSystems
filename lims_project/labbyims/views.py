@@ -77,7 +77,7 @@ def add_product(request):
 
 def add_item(request):
     if request.method == "POST":
-        form = Product_UnitForm(request.POST)
+        form = Product_UnitForm(request.POST or None)
         number = request.POST.get('number', False)
         number = int(number)
         if form.is_valid():
@@ -275,8 +275,6 @@ def update_item(request):
             change_prod_unit.exp_date = expi_date
         else:
             change_prod_unit.save()
-
-
 
         return HttpResponseRedirect('.')
     else:
