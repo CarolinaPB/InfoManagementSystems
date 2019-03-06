@@ -32,4 +32,5 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('running_low/', views.running_low, name='running_low'),
     path('user/', views.user_page, name='user_page'),
+    path('update_item/', views.update_item, name='update_item'),
 ]
