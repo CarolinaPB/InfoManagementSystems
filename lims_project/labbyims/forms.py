@@ -111,7 +111,6 @@ class Update_item_Form(forms.ModelForm):
     used_amount = forms.IntegerField(label='Used amount', required=False)
     prod_units = forms.ModelChoiceField(queryset=Product_Unit.objects.all(), label="Select a unit")
 
-
     class Meta:
         model = Product_Unit
         fields = ("prod_units","used_amount", "open_date","ret_date", "exp_date", "location",)

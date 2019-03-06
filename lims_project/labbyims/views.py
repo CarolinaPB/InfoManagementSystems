@@ -250,30 +250,31 @@ def update_item(request):
         opened = form.cleaned_data["open_date"]
         loc = form.cleaned_data["location"]
         expi_date = form.cleaned_data["exp_date"]
-        print(prod_units)
-        print(used_amount)
-        print(retest_date)
+        delete=request.POST.getlist("delete_entry")
+
         unit = Product_Unit.objects.get(description=prod_units)
         change_prod_unit = Product_Unit.objects.get(id=unit.id)
 
-        if used_amount:
+        if delete:
+            change_prod_unit.delete()
+        elif used_amount:
             if used_amount > change_prod_unit.curr_amount:
                 pass
             else:
                 change_prod_unit.curr_amount = change_prod_unit.curr_amount - used_amount
                 print(change_prod_unit.curr_amount)
                 #change_prod_unit.save()
-        if retest_date:
+        elif retest_date:
             change_prod_unit.ret_date = retest_date
 
-        if opened:
+        elif opened:
             change_prod_unit.open_date = opened
-        if loc:
+        elif loc:
             change_prod_unit.location = loc
-        if expi_date:
+        elif expi_date:
             change_prod_unit.exp_date = expi_date
-
-        change_prod_unit.save()
+        else:
+            change_prod_unit.save()
 
 
 

@@ -120,3 +120,7 @@ li {
 h1, h2 {
     font-family: 'Poppins';
 }
+
+#label_for_DELETE{
+    color:red;
+}
