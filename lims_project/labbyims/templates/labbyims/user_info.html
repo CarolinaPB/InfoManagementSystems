@@ -23,7 +23,7 @@
   {% for dept in filter_dept.qs %}
       <p><strong>Department: {{dept.name}}</strong>
   {% endfor%}
-
-  {% endblock %}
-
 </ul>
+<br>
+<input type="button" value="Go back" onClick="javascript:history.go(-1)" />
+  {% endblock %}
