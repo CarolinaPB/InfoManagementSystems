@@ -20,7 +20,7 @@
   <br>
   {% endfor%}
 
-  {% for dept in filter_dept %}
+  {% for dept in filter_dept.qs %}
       <p><strong>Department: {{dept.name}}</strong>
   {% endfor%}
 

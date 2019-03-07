@@ -215,6 +215,7 @@ def user_info(request):
 
         user_dept = Department.objects.filter(user = request.user.id)
         dept_filter = UserFilter(request.GET, queryset=user_dept)
+        print(type(dept_filter))
 
         return render(request, 'labbyims/user_info.html', {'filter':user_filter}, {'filter_dept':dept_filter})
     else:
@@ -233,8 +234,6 @@ def update_item(request):
         expi_date = form.cleaned_data["exp_date"]
         delete=request.POST.getlist("delete_entry")
         archived = request.POST.getlist("is_inactive")
-        #print(prod_units.id)
-        #unit = Product_Unit.objects.get(description=prod_units)
         change_prod_unit = Product_Unit.objects.get(id=prod_units.id)
 
         if delete:
