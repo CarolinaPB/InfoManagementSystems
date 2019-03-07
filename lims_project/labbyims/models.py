@@ -53,7 +53,7 @@ class Location(models.Model):
         return self.name
 
 class Department(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ManyToManyField(User, through="Watching")
     name = models.CharField(max_length=255)
     def __str__(self):
         return self.name
@@ -77,7 +77,8 @@ class Product_Unit(models.Model):
     reservation = models.ManyToManyField(User, through='Reserve')
     is_inactive = models.BooleanField('Archived', default = False)
     curr_amount = models.DecimalField('current amount', max_digits=10, decimal_places=4, default=0, blank = True, validators = [MinValueValidator(0.0000)])
-    watch = models.ManyToManyField(Department, through='Watching')
+    #watch = models.ManyToManyField(Department, through='Watching')
+    department = models.ManyToManyField(Department, through="Watching", default=None, blank=True)
     def curr_am(self):
         init = float(self.init_amount)
         used = float(self.used_amount)
@@ -111,5 +112,5 @@ class Watching(models.Model):
     def save(self, *args, **kwargs):
         self.prod_perc = (self.prod_un.curr_amount/self.prod_un.init_amount)*100
         super(Watching, self).save(*args, **kwargs)
-    def __str__(self):
-        return self.low_warn
+    # def __str__(self):
+    #     return self.low_warn

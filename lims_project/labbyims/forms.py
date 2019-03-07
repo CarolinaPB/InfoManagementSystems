@@ -5,8 +5,8 @@ from django_registration.forms import RegistrationForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from django.db import models
-from .models import User, Product_Unit, Product, Location, Room, Reserve
-from django.forms.widgets import DateInput, TextInput, Select, NumberInput
+from .models import User, Product_Unit, Product, Location, Room, Reserve, Department
+from django.forms.widgets import DateInput, TextInput, Select, NumberInput, CheckboxInput
 from captcha.fields import ReCaptchaField
 
 
@@ -49,7 +49,8 @@ class AdvancedSearch(forms.Form):
         )
 
 class Product_UnitForm(forms.ModelForm):
-    number = forms.IntegerField(label='How many items with exactly those properies do you want to add to the database?',
+    low_warn_form = forms.BooleanField(widget=CheckboxInput, label='Running Low Warning (only possible if you choose a department)', initial=False, required=False)
+    number = forms.IntegerField(label='How many items with exactly those properties do you want to add to the database?',
     initial=1, validators=[MinValueValidator(1)])
 
 
@@ -123,3 +124,8 @@ class Update_item_Form(forms.ModelForm):
         super(Update_item_Form, self).__init__(*args, **kwargs)
         self.fields['location'].required = False
         self.fields['used_amount'].required = False
+
+class Department_Form(forms.ModelForm):
+    class Meta:
+        model = Department
+        fields = ["name"]

@@ -8,7 +8,7 @@ from django.db.models import F,Q, FloatField
 from django.db.models.functions import Cast
 
 from django.views import View
-from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form, Room_Form, Reserve_Form, Update_item_Form
+from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form, Room_Form, Reserve_Form, Update_item_Form, Department_Form
 from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, FP_Product_UnitTable, Product_Unit_MyTable, FP_ReserveTable, ReserveTable, FP_Running_LowTable, Running_LowTable, User_info_table
 from .models import Product_Unit, Product, Location, Room, Reserve, User, Watching, Department
 
@@ -74,32 +74,51 @@ def add_product(request):
 
 
 def add_item(request):
-    if request.method == "POST":
-        form = Product_UnitForm(request.POST or None)
-        number = request.POST.get('number', False)
-        number = int(number)
+    if request.method == "POST" and 'Submit' in request.POST:
+        print("getting to POST")
+        form = Product_UnitForm(request.POST)
         if form.is_valid():
+            number = int(request.POST.get('number', False))
+            low_warn_form = form.cleaned_data['low_warn_form']
+            dep_id_list = list(request.POST.getlist('department'))
+            print("this is ")
+            print(dep_id_list)
             instance = form.save(commit=False)
             for i in range(0, number):
                 instance.pk = None
                 instance.save()
-            return HttpResponseRedirect('.')
-            #return render(request, 'labbyims/home.html')
+                j = 0
+                if dep_id_list != False:
+                    for j in range(0, len(dep_id_list)):
+                        dep_id = dep_id_list[j]
+                        #print(dep_id)
+                        dep = Department.objects.get(pk=dep_id)
+                        #print(dep)
+                        w = Watching(user = request.user, prod_un=instance, dept=dep, low_warn=low_warn_form)
+                        #print(w)
+                        w.save()
+                        j += 1
+            return redirect("/home/")
         else:
             print(form.errors)
-    else:
-        form = Product_UnitForm()
 
-    return render(request, 'labbyims/add_item.html', {'form': form})
+    else:
+        cas_search = request.GET.get('Search', None)
+        print(cas_search)
+        prod_set = Product.objects.filter(cas=cas_search)
+        print(prod_set)
+        if not prod_set:
+            return render(request, 'labbyims/add_item_cas.html', {'text':"No product with this CAS number was found. Please try again."})
+        else:
+            for prod in prod_set:
+                prod_name = prod.name
+                prod_id = prod.id
+            form = Product_UnitForm(initial={'product': Product.objects.get(pk=prod_id)})
+
+    return render(request, 'labbyims/add_item.html', {'form': form, 'cas': cas_search, 'name':prod_name})
 
 def add_item_cas(request):
-    if request.method == "POST":
-        product_list = Product.objects.all()
-        product_filter = ProductCASFilter(request.GET, queryset=product_list)
-        print(product_filter)
-        return render(request, "labbyims/add_item.html", {'filter': product_filter})
-    else:
-        return render(request, 'labbyims/add_item_cas.html')
+    return render(request, 'labbyims/add_item_cas.html')
 
 def inventory(request):
     table = Product_UnitTable(Product_Unit.objects.all())
