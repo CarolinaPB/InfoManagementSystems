@@ -21,18 +21,15 @@ class SignUpForm(RegistrationForm):
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
 
 class AdvancedSearch(forms.Form):
-    search = forms.CharField(widget=forms.TextInput(attrs={'class': 'col-md-12 searchfield'}), label=False)
+    search = forms.CharField(widget=forms.TextInput(attrs={'class': 'col-md-12 searchfield'}), label=False,required=False)
     CHOICES=[
              ('unit', 'Unit'),
              ('location','Location'),
-             ('item_type','Item type'),
-             ('finished', 'Finished')
+             ('product','Product'),
              ]
     advanced_search = forms.ChoiceField(choices=CHOICES, label=False)
     advanced_search.widget.attrs.update({'class': 'col-md-6'})
-    advanced_search.widget.attrs.update({'name': 'advanced_search'})
-    advanced_search.widget.attrs.update({'id': 'advanced_search'})
-    #search.widget.attrs.update({'action': '/search/'})
+
     search.widget.attrs.update({'name': 'description'})
     search.widget.attrs.update({'type': 'search'})
 
@@ -40,12 +37,13 @@ class AdvancedSearch(forms.Form):
         super().__init__(*args, **kwargs)
 
         self.helper = FormHelper
-        #self.helper.form_method = "post='/search/'"
+        self.helper.form_show_labels = False
+
 
         self.helper.layout = Layout(
             "search",
             "advanced_search",
-            Submit("submit", "Search", css_class="btn")
+            Submit("submit", "search", css_class="btn")
         )
 
 class Product_UnitForm(forms.ModelForm):

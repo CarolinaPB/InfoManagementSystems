@@ -1,6 +1,6 @@
 import django_tables2 as tables
 from django_tables2 import TemplateColumn
-from .models import Product_Unit, Location, Reserve, Watching, User
+from .models import Product_Unit, Location, Reserve, Watching, User,Product
 from django_tables2.utils import A
 
 class Product_UnitTable(tables.Table):
@@ -119,4 +119,10 @@ class User_info_table(tables.Table):
     class Meta:
         model= User
         #fields = ('username', 'first_name', 'last_name', 'email')
+        template_name = 'django_tables2/bootstrap.html'
+
+class Product_Table(tables.Table):
+    class Meta:
+        model = Product
+        fields = ('name', 'cas')
         template_name = 'django_tables2/bootstrap.html'
