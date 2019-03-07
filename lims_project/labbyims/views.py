@@ -1,5 +1,3 @@
-# Create your views here.
-
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
@@ -263,3 +261,17 @@ def update_item(request):
 
 
     return render(request, 'labbyims/update_item.html', {"form":form})
+
+
+def add_department(request):
+    if request.method == "POST":
+        form = Department_Form(request.POST)
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponseRedirect('.')
+        else:
+            print(form.errors)
+    else:
+        form = Department_Form()
+    context = {'form': form}
+    return render(request, 'labbyims/add_department.html', context)
