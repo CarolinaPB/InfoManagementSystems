@@ -287,7 +287,7 @@ def user_info(request):
         userprofile = User.objects.filter(id= request.user.id)
         user_filter = UserFilter(request.GET, queryset=userprofile)
 
-        dept_list = Department.objects.filter(user = request.user.id)
+        dept_list =Association.objects.filter(user = request.user.id)
         table_dept = User_DeptTable(dept_list)
         RequestConfig(request).configure(table_dept)
 
@@ -295,7 +295,7 @@ def user_info(request):
                     {'filter':user_filter, 'table_dept':table_dept})
     else:
         return render(request, 'labbyims/home_afterlogin.html')
-        
+
 
 def update_item(request):
     if request.method == "POST":

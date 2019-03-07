@@ -1,7 +1,7 @@
 import django_tables2 as tables
 from django_tables2 import TemplateColumn
 from .models import Product_Unit, Location, Reserve, Watching, Product, \
-                    Department
+                    Association
 from django_tables2.utils import A
 
 class Product_UnitTable(tables.Table):
@@ -95,6 +95,7 @@ class Product_Table(tables.Table):
 
 
 class User_DeptTable(tables.Table):
-    dept_name = tables.Column(accessor = 'Department.name', verbose_name='Department')
     class Meta:
+        model = Association
+        exclude = ('id', 'user')
         template_name = 'django_tables2/bootstrap-responsive.html'
