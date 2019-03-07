@@ -75,7 +75,7 @@ class Product_UnitForm(forms.ModelForm):
 class Product_Form(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ["cas"]
+        fields = "__all__"
 
 class Association_Form(forms.ModelForm):
     class Meta:
