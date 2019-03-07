@@ -112,7 +112,7 @@ class Update_item_Form(forms.ModelForm):
 
     class Meta:
         model = Product_Unit
-        fields = ("prod_units","used_amount", "open_date","ret_date", "exp_date", "location",)
+        fields = ("prod_units","used_amount", "open_date","ret_date", "exp_date", "location","is_inactive")
 
         widgets = {
             "open_date":DateInput(attrs = {"type":"date"}),

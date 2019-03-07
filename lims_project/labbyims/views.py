@@ -232,29 +232,30 @@ def update_item(request):
         loc = form.cleaned_data["location"]
         expi_date = form.cleaned_data["exp_date"]
         delete=request.POST.getlist("delete_entry")
-        print(prod_units.id)
+        archived = request.POST.getlist("is_inactive")
+        #print(prod_units.id)
         #unit = Product_Unit.objects.get(description=prod_units)
         change_prod_unit = Product_Unit.objects.get(id=prod_units.id)
 
         if delete:
             change_prod_unit.delete()
-        elif used_amount:
-            if used_amount > change_prod_unit.curr_amount:
-                pass
-            else:
-                change_prod_unit.curr_amount = change_prod_unit.curr_amount - used_amount
-                print(change_prod_unit.curr_amount)
-                #change_prod_unit.save()
-        elif retest_date:
-            change_prod_unit.ret_date = retest_date
-
-        elif opened:
-            change_prod_unit.open_date = opened
-        elif loc:
-            change_prod_unit.location = loc
-        elif expi_date:
-            change_prod_unit.exp_date = expi_date
         else:
+            if used_amount:
+                if used_amount > change_prod_unit.curr_amount:
+                    pass
+                else:
+                    change_prod_unit.curr_amount = change_prod_unit.curr_amount - used_amount
+                    print(change_prod_unit.curr_amount)
+            if retest_date:
+                change_prod_unit.ret_date = retest_date
+            if opened:
+                change_prod_unit.open_date = opened
+            if loc:
+                change_prod_unit.location = loc
+            if expi_date:
+                change_prod_unit.exp_date = expi_date
+            if archived:
+                change_prod_unit.is_inactive = True
             change_prod_unit.save()
 
         return HttpResponseRedirect('.')
