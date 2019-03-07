@@ -1,0 +1,14 @@
+{% extends "labbyims/base.html" %}
+{% block content %}
+<br><br><br><br><br><br>
+<p> You are already associated with this department!
+
+<form action="" method="POST">
+        {% csrf_token %}
+        <br><br>
+        <input type="button" value="Go back" onClick="javascript:history.go(-1)" />
+        <br><br><br>
+    
+    </form>
+</p>
+{% endblock %}

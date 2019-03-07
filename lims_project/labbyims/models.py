@@ -112,3 +112,5 @@ class Watching(models.Model):
 class Association(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     dept = models.ForeignKey(Department, on_delete=models.CASCADE)
+    class Meta:
+        unique_together = ('user', 'dept',)

@@ -19,6 +19,8 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 from .filters import ProductFilter, LocationFilter, Prod_ResFilter, ProductCASFilter, UserFilter, DeptFilter
 from decimal import Decimal
+from django.db import IntegrityError
+from django.shortcuts import render_to_response
 
 n = []
 
@@ -207,14 +209,17 @@ def add_department(request):
 
 def add_association(request):
     if request.method == "POST":
-        form = Association_Form(request.POST)
-        if form.is_valid():
-            assoc = form.save(commit=False)
-            assoc.user = request.user
-            assoc.save()
-            return HttpResponseRedirect('.')
-        else:
-            print(form.errors)
+        try:
+            form = Association_Form(request.POST)
+            if form.is_valid():
+                assoc = form.save(commit=False)
+                assoc.user = request.user
+                assoc.save()
+                return HttpResponseRedirect('.')
+            else:
+                print(form.errors)
+        except IntegrityError:
+            return render(request, "labbyims/assoc_error.html", {'form': form})
     else:
         form = Association_Form()
     context = {'form': form}
