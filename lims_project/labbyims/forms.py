@@ -113,11 +113,6 @@ class Reserve_Form(forms.ModelForm):
         exclude = ['user','is_complete',]
         #fields="__all__"
 
-class Department_Form(forms.ModelForm):
-    class Meta:
-        model = Department
-        exclude = ['user',]
-
 class Update_item_Form(forms.ModelForm):
     pass
 """    used_amount = forms.IntegerField(label='Used amount', required=False)
