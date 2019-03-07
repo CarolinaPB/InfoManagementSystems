@@ -83,7 +83,6 @@ class Product_Unit(models.Model):
     reservation = models.ManyToManyField(User, through='Reserve')
     is_inactive = models.BooleanField('Archived', default = False)
     curr_amount = models.DecimalField('current amount', max_digits=10, decimal_places=4, default=0, blank = True, validators = [MinValueValidator(0.0000)])
-
     department = models.ManyToManyField(Department, through="Watching", default=None, blank=True)
     def curr_am(self):
         init = float(self.init_amount)
