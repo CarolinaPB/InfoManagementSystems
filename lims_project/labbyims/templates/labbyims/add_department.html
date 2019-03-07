@@ -3,16 +3,12 @@
 {% block content %}
 <br><br><br><br><br>
 
-<TITLE>Add Item</TITLE>
-<H1>Add Item</H1>
+<TITLE>Add Department</TITLE>
+<H1>Add Department</H1>
 <br><br>
-<P>Please fill out this form to add new items to the database:
+<P>Please choose a name for the new department:
 
-<br>{{ cas }}
-<br>{{ name }}
-
-<form action="" method=POST>
-
+<form action="" method="POST">
 	{% csrf_token %}
     {{ form|crispy}}
     <br><br>
@@ -23,7 +19,5 @@
 </form>
 
 <br><br><br>
-
-
 
 {% endblock content %}
