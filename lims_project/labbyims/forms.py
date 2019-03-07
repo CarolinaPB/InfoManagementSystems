@@ -6,7 +6,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from django.db import models
 from .models import User, Product_Unit, Product, Location, Room, Reserve, Department, Association
-from django.forms.widgets import DateInput, TextInput
+from django.forms.widgets import DateInput, TextInput, CheckboxInput
 from captcha.fields import ReCaptchaField
 
 
@@ -18,7 +18,7 @@ class SignUpForm(RegistrationForm):
     department = forms.ModelChoiceField(queryset=Department.objects.all(), empty_label='Department')
     class Meta(RegistrationForm.Meta):
         model = User
-        fields = ('username', 'first_name', 'last_name', 'department', 'email', 'password1', 'password2', )
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
 
 class AdvancedSearch(forms.Form):
     search = forms.CharField(widget=forms.TextInput(attrs={'class': 'col-md-12 searchfield'}), label=False)
@@ -49,11 +49,10 @@ class AdvancedSearch(forms.Form):
         )
 
 class Product_UnitForm(forms.ModelForm):
-    number = forms.IntegerField(label='How many items with exactly those properies do you want to add to the database?',
+    low_warn_form = forms.BooleanField(widget=CheckboxInput, label='Running Low Warning (only possible if you choose a department)', initial=False, required=False)
+    number = forms.IntegerField(label='How many items with exactly those properties do you want to add to the database?',
     initial=1, validators=[MinValueValidator(1)])
-
-
-
+    
     class Meta:
         UNIT_CHOICES = (
         ('kg', 'kg'),
@@ -73,12 +72,12 @@ class Product_UnitForm(forms.ModelForm):
             "ret_date":DateInput(attrs = {"type":"date"}),
             "m_unit":Select(choices=UNIT_CHOICES),
         }
-        #m_unit = forms.MultipleChoiceField
+
 
 class Product_Form(forms.ModelForm):
     class Meta:
         model = Product
-        fields = "__all__"
+        fields = ["cas"]
 
 class Association_Form(forms.ModelForm):
     class Meta:
@@ -94,6 +93,11 @@ class Room_Form(forms.ModelForm):
     class Meta:
         model = Room
         fields="__all__"
+        
+class Department_Form(forms.ModelForm):
+    class Meta:
+        model = Department
+        fields = ["name"]
 
 class Reserve_Form(forms.ModelForm):
     def __init__(self, *args, **kwargs):
