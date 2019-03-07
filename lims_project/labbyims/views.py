@@ -10,8 +10,8 @@ from .forms import AdvancedSearch, Product_UnitForm, Product_Form, \
                     Location_Form, Room_Form, Reserve_Form, Update_item_Form, \
                     Department_Form
 from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, \
-                    FP_Product_UnitTable, Product_Unit_MyTable, FP_ReserveTable\
-                    , ReserveTable, FP_Running_LowTable, Running_LowTable
+                    FP_Product_UnitTable, Product_Unit_MyTable, FP_ReserveTable,\
+                     ReserveTable, FP_Running_LowTable, Running_LowTable
 from .models import Product_Unit, Product, Location, Room, Reserve, User,\
                     Watching, Department
 
@@ -21,7 +21,7 @@ import datetime
 from datetime import datetime, timedelta
 from django.utils import timezone
 from .filters import ProductFilter, LocationFilter, Prod_ResFilter, UserFilter,\
-                DeptFilter, ProductCASFilter,
+                DeptFilter, ProductCASFilter
 from decimal import Decimal
 
 
@@ -51,10 +51,17 @@ def home(request):
         res_list=Reserve.objects.filter(Q(user_id= request.user),\
                     Q(date_res__range = [current_date, warning ])).select_related()
         table_res = FP_ReserveTable(res_list, prefix="2-")
-        RequestConfig(request).configure(table_res)
+        RequestConfig(request, paginate = {'per_page': 3}).configure(table_res)
+
+        watch_list = Watching.objects.filter(Q(prod_un__is_inactive = False), \
+                    Q(user_id= request.user), \
+                    Q(low_warn = True)).select_related()
+        table_low = FP_Running_LowTable(watch_list, prefix='3-')
+        RequestConfig(request,paginate = {'per_page': 3}).configure(table_low)
 
         return render(request, 'labbyims/home_afterlogin.html',{'form':form, \
-                    'table_res':table_res, 'table_exp': table_exp,},)
+                    'table_res':table_res, 'table_exp': table_exp, \
+                    'table_low':table_low},)
     else:
         return render(request, 'labbyims/home_afterlogin.html')
 
@@ -229,6 +236,19 @@ def about(request):
     return render(request, 'labbyims/about.html')
 
 
+def running_low(request):
+    if request.user.is_authenticated:
+        watch_list = Watching.objects.filter(Q(prod_un__is_inactive = False), \
+                    Q(user_id= request.user), \
+                    Q(low_warn = True)).select_related()
+        table_watch = Running_LowTable(watch_list)
+        RequestConfig(request).configure(table_watch)
+        return render(request, 'labbyims/running_low.html', \
+                    {'table_watch':table_watch,},)
+    else:
+        return render(request, 'labbyims/home_afterlogin.html')
+
+
 def user_info(request):
     if request.user.is_authenticated:
 
@@ -283,6 +303,8 @@ def update_item(request):
 
 
     return render(request, 'labbyims/update_item.html', {"form":form})
+
+
 
 
 def add_department(request):
