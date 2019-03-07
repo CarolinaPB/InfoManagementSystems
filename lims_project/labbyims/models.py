@@ -3,9 +3,14 @@ from django.contrib.auth.models import AbstractUser
 from decimal import Decimal
 from django.core.validators import MinValueValidator
 
-
 class User(AbstractUser):
     pass
+
+class Department(models.Model):
+    user = models.ManyToManyField(User, through='Association')
+    name = models.CharField(max_length=255)
+    def __str__(self):
+        return self.name
 
 class Product(models.Model):
     cas = models.CharField('CAS number', max_length=12, unique=True)
@@ -49,12 +54,6 @@ class Location(models.Model):
             return True
         else:
             return False
-    def __str__(self):
-        return self.name
-
-class Department(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
     def __str__(self):
         return self.name
 
@@ -109,3 +108,7 @@ class Watching(models.Model):
     low_warn = models.BooleanField('Running Low Warning')
     def __str__(self):
         return self.low_warn
+
+class Association(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    dept = models.ForeignKey(Department, on_delete=models.CASCADE)

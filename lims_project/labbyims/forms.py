@@ -5,7 +5,7 @@ from django_registration.forms import RegistrationForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from django.db import models
-from .models import User, Product_Unit, Product, Location, Room, Reserve
+from .models import User, Product_Unit, Product, Location, Room, Reserve, Department
 from django.forms.widgets import DateInput, TextInput
 from captcha.fields import ReCaptchaField
 
@@ -15,10 +15,10 @@ class SignUpForm(RegistrationForm):
     first_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
     last_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
     email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
-
+    department = forms.ModelChoiceField(queryset=Department.objects.all(), empty_label='Department')
     class Meta(RegistrationForm.Meta):
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
+        fields = ('username', 'first_name', 'last_name', 'department', 'email', 'password1', 'password2', )
 
 class AdvancedSearch(forms.Form):
     search = forms.CharField(widget=forms.TextInput(attrs={'class': 'col-md-12 searchfield'}), label=False)
@@ -105,8 +105,14 @@ class Reserve_Form(forms.ModelForm):
         exclude = ['user','is_complete',]
         #fields="__all__"
 
+class Department_Form(forms.ModelForm):
+    class Meta:
+        model = Department
+        exclude = ['user',]
+
 class Update_item_Form(forms.ModelForm):
-    used_amount = forms.IntegerField(label='Used amount', required=False)
+    pass
+"""    used_amount = forms.IntegerField(label='Used amount', required=False)
     all_units = Product_Unit.objects.all()
     lenght =0
     opt = []
@@ -143,4 +149,4 @@ class Update_item_Form(forms.ModelForm):
         widgets = {
             "open_date":DateInput(attrs = {"type":"date"}),
             "ret_date":DateInput(attrs = {"type":"date"}),
-        }
+        }"""
