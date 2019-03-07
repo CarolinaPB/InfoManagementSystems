@@ -18,16 +18,18 @@
   <br>
   <p><strong>Last Login:</strong> {{User.last_login}}
   <br>
-  {% endfor%}
+  <br>
+  <a href="{% url 'password_change' %}">Change password</a>
+  <br><br>
+  <input type="button" value="Go back" onClick="javascript:history.go(-1)" />
+  <br>
+  {% endfor %}
 
+  <br>
+  <table>
+  {%  render_table table_dept %}
+  </table>
 
-  {% for dept in filter_dept.qs %}
-      <p><strong>Department: {{dept.name}}</strong>
-  {% endfor%}
 </ul>
 
-<br>
-<a href="{% url 'password_change' %}">Change password</a>
-<br><br>
-<input type="button" value="Go back" onClick="javascript:history.go(-1)" />
   {% endblock %}

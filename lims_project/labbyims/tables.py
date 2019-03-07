@@ -1,14 +1,16 @@
 import django_tables2 as tables
 from django_tables2 import TemplateColumn
-from .models import Product_Unit, Location, Reserve, Watching, User,Product
+from .models import Product_Unit, Location, Reserve, Watching, Product, \
+                    Department
 from django_tables2.utils import A
 
 class Product_UnitTable(tables.Table):
     class Meta:
         model = Product_Unit
         fields = ('description', 'product', 'purity', 'curr_amount', \
-                'm_unit', 'location', 'exp_date', 'ret_date', 'del_date',\
-                'open_date', 'company', 'cat_num', 'batch', 'in_house_no')
+                'm_unit', 'location', 'room', 'exp_date', 'ret_date', \
+                'del_date', 'open_date', 'company', 'cat_num', 'batch', \
+                'in_house_no')
 
         template_name = 'django_tables2/bootstrap.html'
 
@@ -45,6 +47,8 @@ class ReserveTable(tables.Table):
     res_amount = tables.Column(accessor = 'amount_res')
     prod_curr_amount = tables.Column(accessor='prod_un.curr_amount')
     house_no = tables.Column(accessor='prod_un.in_house_no')
+    prod_loc = tables.Column(accessor='prod_un.location')
+    prod_room = tables.Column(accessor='prod_un.room', verbose_name='Room')
     class Meta:
         template_name = 'django_tables2/bootstrap.html'
 
@@ -52,7 +56,7 @@ class Product_Unit_MyTable(tables.Table):
     class Meta:
         model = Product_Unit
         fields = ('description', 'product', 'purity', 'curr_amount', \
-                'm_unit', 'location', 'exp_date', 'ret_date',  'batch', \
+                'm_unit', 'location', 'room', 'exp_date', 'ret_date',  'batch', \
                  'in_house_no' 'del_date', 'open_date', 'company', 'cat_num')
 
         template_name = 'django_tables2/bootstrap.html'
@@ -62,33 +66,6 @@ class LocationTable(tables.Table):
 	        model = Location
 	        template_name = 'django_tables2/bootstrap.html'
 
-class NotificationColumn(tables.Column):
-    attrs = {
-
-
-        'td': {
-            'description': lambda Product_Unit: Product_Unit.description,
-            'exp_date': lambda Product_Unit: Product_Unit.exp_date,
-            'ret_date': lambda Product_Unit: Product_Unit.ret_date,
-       }
-
-    }
-    def render(self, product_unit):
-        return '{} {}'.format(Product_Unit.description, Product_Unit.exp_date, Product_Unit.ret_date)
-
-class NotificationColumn(tables.Column):
-    attrs = {
-
-
-        'td': {
-            'description': lambda Product_Unit: Product_Unit.description,
-            'exp_date': lambda Product_Unit: Product_Unit.exp_date,
-            'ret_date': lambda Product_Unit: Product_Unit.ret_date,
-       }
-
-    }
-    def render(self, product_unit):
-        return '{} {}'.format(Product_Unit.description, Product_Unit.exp_date, Product_Unit.ret_date)
 
 
 class FP_Product_UnitTable(tables.Table):
@@ -108,21 +85,16 @@ class Product_Unit_ExpTable(tables.Table):
         template_name = 'django_tables2/bootstrap-responsive.html'
 
 
-class User_info_table(tables.Table):
-    class Meta:
-        model= User
-        #fields = ('username', 'first_name', 'last_name', 'email')
-        template_name = 'django_tables2/bootstrap.html'
-
-
-class User_info_table(tables.Table):
-    class Meta:
-        model= User
-        #fields = ('username', 'first_name', 'last_name', 'email')
-        template_name = 'django_tables2/bootstrap.html'
 
 class Product_Table(tables.Table):
     class Meta:
         model = Product
         fields = ('name', 'cas')
         template_name = 'django_tables2/bootstrap.html'
+
+
+
+class User_DeptTable(tables.Table):
+    dept_name = tables.Column(accessor = 'Department.name', verbose_name='Department')
+    class Meta:
+        template_name = 'django_tables2/bootstrap-responsive.html'
