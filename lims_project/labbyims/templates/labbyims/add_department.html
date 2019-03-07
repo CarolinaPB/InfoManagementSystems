@@ -1,19 +1,23 @@
 {% extends "labbyims/base.html" %}
 {% load crispy_forms_tags %}
-
 {% block content %}
 <br><br><br><br><br>
 
 <TITLE>Add Department</TITLE>
 <H1>Add Department</H1>
 <br><br>
-<form method="POST", action="">
-    {% csrf_token %}
+<P>Please choose a name for the new department:
+
+<form action="" method="POST">
+	{% csrf_token %}
     {{ form|crispy}}
     <br><br>
-    <input type="submit" value="Submit">  <input type="reset" value="Reset">
+    <input type="submit" value="Submit" name="Submit">  <input type="reset" value="Reset" name="Reset">
     <input type="button" value="Go back" onClick="javascript:history.go(-1)" />
+    <br><br><br>
+
 </form>
 
+<br><br><br>
 
-{% endblock %}
+{% endblock content %}

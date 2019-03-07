@@ -1,19 +1,20 @@
 {% extends "labbyims/base.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
 <br><br><br><br><br>
 
 <TITLE>Add Item CAS</TITLE>
 <H1>Add Item CAS</H1>
 <br><br>
-<FORM METHOD=POST ACTION="/add_item/">
+<FORM METHOD=GET ACTION="/add_item">
     {% csrf_token %}
     <P>Please enter the CAS of the chemical you wish to add: <br>
-    <input type="search" name="Search"> <button>Search</button>
+    <input type="search" name="Search"> <button>Search</button><br>
+    <input type="reset" value="Reset" name="Reset">
+    <input type="button" value="Go back" onClick="javascript:history.go(-1)" />
+    <br><br>
+    {{ text }}
 </FORM>
 <input type="button" value="Go back" onClick="javascript:history.go(-1)" />
-
-</form>
-
-
 
 {% endblock content %}

@@ -20,6 +20,7 @@ from django.utils import timezone
 from .filters import ProductFilter, LocationFilter, Prod_ResFilter, ProductCASFilter, UserFilter, DeptFilter
 from decimal import Decimal
 
+n = []
 
 def home(request):
     if request.user.is_authenticated:
@@ -84,32 +85,49 @@ def add_product(request):
 
 
 def add_item(request):
-    if request.method == "POST":
+    if request.method == "POST" and 'Submit' in request.POST:
+        print("getting to POST")
         form = Product_UnitForm(request.POST)
-        number = request.POST.get('number', False)
-        number = int(number)
         if form.is_valid():
+            number = int(request.POST.get('number', False))
+            low_warn_form = form.cleaned_data['low_warn_form']
+            dep_id_list = list(request.POST.getlist('department'))
+            print(dep_id_list)
             instance = form.save(commit=False)
             for i in range(0, number):
                 instance.pk = None
                 instance.save()
-            return HttpResponseRedirect('.')
-            #return render(request, 'labbyims/home.html')
+                j = 0
+                if dep_id_list != False:
+                    for j in range(0, len(dep_id_list)):
+                        dep_id = dep_id_list[j]
+                        #print(dep_id)
+                        dep = Department.objects.get(pk=dep_id)
+                        #print(dep)
+                        w = Watching(user = request.user, prod_un=instance, dept=dep, low_warn=low_warn_form)
+                        w.save()
+                        j += 1
+            return redirect("/home/")
         else:
             print(form.errors)
-    else:
-        form = Product_UnitForm()
 
-    return render(request, 'labbyims/add_item.html', {'form': form})
-
-def add_item_cas(request):
-    if request.method == "POST":
-        product_list = Product.objects.all()
-        product_filter = ProductCASFilter(request.GET, queryset=product_list)
-        print(product_filter)
-        return render(request, "labbyims/add_item.html", {'filter': product_filter})
     else:
-        return render(request, 'labbyims/add_item_cas.html')
+        cas_search = request.GET.get('Search', None)
+        print(cas_search)
+        prod_set = Product.objects.filter(cas=cas_search)
+        print(prod_set)
+        if not prod_set:
+            return render(request, 'labbyims/add_item_cas.html', {'text':"No product with this CAS number was found. Please try again."})
+        else:
+            for prod in prod_set:
+                prod_name = prod.name
+                prod_id = prod.id
+            form = Product_UnitForm(initial={'product': Product.objects.get(pk=prod_id)})
+
+    return render(request, 'labbyims/add_item.html', {'form': form, 'cas': cas_search, 'name':prod_name})
+
+def add_item_cas(request):   
+    return render(request, 'labbyims/add_item_cas.html')
 
 def inventory(request):
     inv_filter = Product_Unit.objects.filter(is_inactive = False)
@@ -174,7 +192,7 @@ def add_room(request):
     context = {'form': form}
     return render(request, 'labbyims/add_room.html', context)
 
-def add_dept(request):
+def add_department(request):
     if request.method == "POST":
         form = Department_Form(request.POST)
         if form.is_valid():
@@ -184,10 +202,9 @@ def add_dept(request):
             print(form.errors)
     else:
         form = Department_Form()
-
     context = {'form': form}
     return render(request, 'labbyims/add_department.html', context)
-
+    
 def add_reservation(request):
     if request.method == "POST":
         form = Reserve_Form(request.POST)

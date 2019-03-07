@@ -8,14 +8,10 @@
 <br><br>
 <P>Please fill out this form to add new items to the database:
 
-<!-- {% for Product in filter.qs %}
-    <tr>
-    <td>{{ Product.name }}</td>
-    <td>{{ Product.cas }}</td>
-    </tr>
-{% endfor %} -->
+<br>{{ cas }}
+<br>{{ name }}
 
-<form action="" method="POST">
+<form action="" method=POST>
 
 	{% csrf_token %}
     {{ form|crispy}}

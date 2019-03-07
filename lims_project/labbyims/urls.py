@@ -22,6 +22,7 @@ urlpatterns = [
     path('add_item/', views.add_item, name='add_item'),
     path('add_item_cas/', views.add_item_cas, name='add_item_cas'),
     path('add_location/', views.add_location, name='add_location'),
+    path('add_department/', views.add_department, name='add_department'),
     path('locations/', views.locations, name='locations'),
     path('my_inventory/', views.my_inventory, name='my_inventory'),
     re_path(r'^search/$', views.search, name='search'),
