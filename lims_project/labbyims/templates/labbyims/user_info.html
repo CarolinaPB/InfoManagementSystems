@@ -20,7 +20,7 @@
 
 </ul>
 {% endfor%}
-{% for User in filter.qs %}
-    <h5>Username: {{Dept.name}}</h5>
+{% for Department in filter.qs %}
+    <h5>Departments: {{Department.name}}</h5>
     {% endfor%}
 {% endblock %}
