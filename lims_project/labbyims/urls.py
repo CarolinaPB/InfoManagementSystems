@@ -35,5 +35,6 @@ urlpatterns = [
     path('user/', views.user_page, name='user_page'),
     path('update_item/', views.update_item, name='update_item'),
     path('user_info/', views.user_info, name = 'user_info'),
-    path('add_department',views.add_dept, name='add_department')
+    path('add_department',views.add_department, name='add_department'),
+    path('add_association', views.add_association, name='add_association')
 ]

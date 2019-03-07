@@ -5,7 +5,7 @@ from django_registration.forms import RegistrationForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from django.db import models
-from .models import User, Product_Unit, Product, Location, Room, Reserve, Department
+from .models import User, Product_Unit, Product, Location, Room, Reserve, Department, Association
 from django.forms.widgets import DateInput, TextInput
 from captcha.fields import ReCaptchaField
 
@@ -80,6 +80,10 @@ class Product_Form(forms.ModelForm):
         model = Product
         fields = "__all__"
 
+class Association_Form(forms.ModelForm):
+    class Meta:
+        model = Association
+        exclude = ['user',]
 
 class Location_Form(forms.ModelForm):
     class Meta:

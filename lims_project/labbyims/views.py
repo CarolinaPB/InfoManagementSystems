@@ -10,9 +10,9 @@ from django.db.models import F,Q, FloatField
 from django.db.models.functions import Cast
 
 from django.views import View
-from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form, Room_Form, Reserve_Form, Update_item_Form, Department_Form
+from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form, Room_Form, Reserve_Form, Update_item_Form, Department_Form, Association_Form
 from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, FP_Product_UnitTable, Product_Unit_MyTable, FP_ReserveTable, ReserveTable, FP_Running_LowTable, Running_LowTable, User_info_table
-from .models import Product_Unit, Product, Location, Room, Reserve, User, Watching, Department
+from .models import Product_Unit, Product, Location, Room, Reserve, User, Watching, Department, Association
 from django_tables2 import RequestConfig
 import datetime
 from datetime import datetime, timedelta
@@ -204,6 +204,21 @@ def add_department(request):
         form = Department_Form()
     context = {'form': form}
     return render(request, 'labbyims/add_department.html', context)
+
+def add_association(request):
+    if request.method == "POST":
+        form = Association_Form(request.POST)
+        if form.is_valid():
+            assoc = form.save(commit=False)
+            assoc.user = request.user
+            assoc.save()
+            return HttpResponseRedirect('.')
+        else:
+            print(form.errors)
+    else:
+        form = Association_Form()
+    context = {'form': form}
+    return render(request, 'labbyims/add_association.html', context)
     
 def add_reservation(request):
     if request.method == "POST":
