@@ -9,13 +9,17 @@
 <form action="" method="POST">
 	{% csrf_token %}
     {{ form|crispy}}
+    <br>
+
+    <input type="checkbox"name="delete_entry" id="delete_entry" onchange="cTrig('delete_entry')"/>
+    <label id="label_for_DELETE" for="delete_entry">DELETE entry from database?</label>
+    <p id="label_for_DELETE">This change will be permanent
     <br><br>
     <input type="submit" value="Submit" name="Submit">  <input type="reset" value="Reset" name="Reset">
     <input type="button" value="Go back" onClick="javascript:history.go(-1)" />
-    <br><br><br>
+    <br><br>
 
 </form>
 
-<br><br><br>
 
 {% endblock content %}

@@ -38,9 +38,3 @@ class DeptFilter(django_filters.FilterSet):
     class Meta:
         model = Department
         fields = ['id',]
-
-#class ProductUnitFilter(django_filters.FilterSet):
-#    description = django_filters.CharFilter(lookup_expr='iexact')
-#    class Meta:
-#        model = Product_Unit
-#        fields = ["description", ]

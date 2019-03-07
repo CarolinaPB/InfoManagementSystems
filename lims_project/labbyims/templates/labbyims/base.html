@@ -22,7 +22,7 @@
     <header class="site-header">
         <nav class="navbar navbar-expand navbar-dark bg-dark fixed-top">
             <div class="container-fluid">
-                <a class="navbar-brand mr-4" href="/home/">Labby</a>
+                <a class="navbar-brand mr-4" href="{% url 'home' %}">Labby</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
@@ -33,12 +33,13 @@
                         <input
                         class="form-control mr-sm-2"
                         type="search"
-                        placeholder="Search"
+                        placeholder="Search unit"
                         name='description'>
                         <button class="btn my-2 my-sm-0" type="submit">Search</button>
                     </form>
                     <a class="nav-item nav-link" href="{% url 'add_product' %}">Add product</a>
-                    <a class="nav-item nav-link" href="{% url 'add_item' %}">Add item</a>
+                    <a class="nav-item nav-link" href="{% url 'add_item_cas' %}">Add item</a>
+                    <a class="nav-item nav-link" href="{% url 'update_item' %}">Update item</a>
                     <li class="nav-item dropdown hidden-md-down">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           <strong>User</strong>
@@ -49,7 +50,7 @@
                           <a href="{% url 'running_low' %}" class="dropdown-item">Running Low</a>
                           <a href="{% url 'inventory' %}" class="dropdown-item"> General Inventory</a>
                           <a href="{% url 'locations' %}" class="dropdown-item">Locations</a>
-                          <a href="{% url 'user_info' %}" class="dropdown-item"> User Info</a>
+                          <a href="{% url 'add_department' %}" class="dropdown-item">Add Department</a>
                           <a href="{% url 'password_change' %}" class="dropdown-item">Change password</a>
                           <a href="{% url 'logout' %}" class="dropdown-item">
                           <div class="dropdown-divider"></div>
@@ -91,5 +92,22 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+    "Shows pop-up window asking the user to confirm if they really want to delete the item from the database"
+    "If the user cancels, the checkbox becomes unchecked"
+    function cTrig(clickedid) {
+      if (document.getElementById(clickedid).checked == false) {
+        return false;
+      } else {
+        var box= confirm("Are you sure you want to remove this item from the database? This action is irreversible");
+        if (box==true)
+            return true;
+        else
+           document.getElementById(clickedid).checked = false;
+      }
+    }
+
+    </script>
 
 </html>
