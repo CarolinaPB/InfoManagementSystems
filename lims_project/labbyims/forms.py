@@ -5,7 +5,7 @@ from django_registration.forms import RegistrationForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from django.db import models
-from .models import User, Product_Unit, Product, Location, Room, Reserve, Department
+from .models import User, Product_Unit, Product, Location, Room, Reserve, Department,Association
 from django.forms.widgets import DateInput, TextInput, Select, NumberInput, CheckboxInput
 from captcha.fields import ReCaptchaField
 
@@ -15,7 +15,7 @@ class SignUpForm(RegistrationForm):
     first_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
     last_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
     email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
-
+    department = forms.ModelChoiceField(queryset=Department.objects.all(), empty_label='Department')
     class Meta(RegistrationForm.Meta):
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
@@ -53,8 +53,6 @@ class Product_UnitForm(forms.ModelForm):
     number = forms.IntegerField(label='How many items with exactly those properties do you want to add to the database?',
     initial=1, validators=[MinValueValidator(1)])
 
-
-
     class Meta:
         UNIT_CHOICES = (
         ('kg', 'kg'),
@@ -74,13 +72,17 @@ class Product_UnitForm(forms.ModelForm):
             "ret_date":DateInput(attrs = {"type":"date"}),
             "m_unit":Select(choices=UNIT_CHOICES),
         }
-        #m_unit = forms.MultipleChoiceField
+
 
 class Product_Form(forms.ModelForm):
     class Meta:
         model = Product
-        fields = "__all__"
+        fields = ["cas"]
 
+class Association_Form(forms.ModelForm):
+    class Meta:
+        model = Association
+        exclude = ['user',]
 
 class Location_Form(forms.ModelForm):
     class Meta:
@@ -91,6 +93,11 @@ class Room_Form(forms.ModelForm):
     class Meta:
         model = Room
         fields="__all__"
+
+class Department_Form(forms.ModelForm):
+    class Meta:
+        model = Department
+        fields = ["name"]
 
 class Reserve_Form(forms.ModelForm):
     def __init__(self, *args, **kwargs):

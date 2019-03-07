@@ -3,16 +3,16 @@
 {% block content %}
 <br><br><br><br><br>
 
-<TITLE>Add Department</TITLE>
-<H1>Add Department</H1>
+<TITLE>Add Association</TITLE>
+<H1>Add Association</H1>
 <br><br>
-<P>Please choose a name for the new department:
+<P>Please associate with a department:
 
 <form action="" method="POST">
 	{% csrf_token %}
     {{ form|crispy}}
     <br><br>
-    <input type="submit" value="Submit" name="Submit">  <input type="reset" value="Reset" name="Reset">
+    <input type="submit" value="Submit" name="Submit">
     <input type="button" value="Go back" onClick="javascript:history.go(-1)" />
     <br><br><br>
 

@@ -45,11 +45,17 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='Association',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+            ],
+        ),
+        migrations.CreateModel(
             name='Department',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=255)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('user', models.ManyToManyField(through='labbyims.Association', to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
@@ -163,5 +169,15 @@ class Migration(migrations.Migration):
             model_name='location',
             name='room',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='labbyims.Room'),
+        ),
+        migrations.AddField(
+            model_name='association',
+            name='dept',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='labbyims.Department'),
+        ),
+        migrations.AddField(
+            model_name='association',
+            name='user',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
     ]

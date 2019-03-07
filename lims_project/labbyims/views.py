@@ -8,12 +8,12 @@ from django.db.models.functions import Cast
 from django.views import View
 from .forms import AdvancedSearch, Product_UnitForm, Product_Form, \
                     Location_Form, Room_Form, Reserve_Form, Update_item_Form, \
-                    Department_Form
+                    Department_Form, Association_Form
 from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, \
                     FP_Product_UnitTable, Product_Unit_MyTable, FP_ReserveTable,\
                      ReserveTable, FP_Running_LowTable, Running_LowTable
 from .models import Product_Unit, Product, Location, Room, Reserve, User,\
-                    Watching, Department
+                    Watching, Department, Association
 
 
 from django_tables2 import RequestConfig
@@ -24,6 +24,7 @@ from .filters import ProductFilter, LocationFilter, Prod_ResFilter, UserFilter,\
                 DeptFilter, ProductCASFilter
 from decimal import Decimal
 
+n = []
 
 def home(request):
     if request.user.is_authenticated:
@@ -93,7 +94,6 @@ def add_item(request):
             number = int(request.POST.get('number', False))
             low_warn_form = form.cleaned_data['low_warn_form']
             dep_id_list = list(request.POST.getlist('department'))
-            print("this is ")
             print(dep_id_list)
             instance = form.save(commit=False)
             for i in range(0, number):
@@ -107,7 +107,6 @@ def add_item(request):
                         dep = Department.objects.get(pk=dep_id)
                         #print(dep)
                         w = Watching(user = request.user, prod_un=instance, dept=dep, low_warn=low_warn_form)
-                        #print(w)
                         w.save()
                         j += 1
             return redirect("/home/")
@@ -187,6 +186,34 @@ def add_room(request):
 
     context = {'form': form}
     return render(request, 'labbyims/add_room.html', context)
+
+def add_department(request):
+    if request.method == "POST":
+        form = Department_Form(request.POST)
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponseRedirect('.')
+        else:
+            print(form.errors)
+    else:
+        form = Department_Form()
+    context = {'form': form}
+    return render(request, 'labbyims/add_department.html', context)
+
+def add_association(request):
+    if request.method == "POST":
+        form = Association_Form(request.POST)
+        if form.is_valid():
+            assoc = form.save(commit=False)
+            assoc.user = request.user
+            assoc.save()
+            return HttpResponseRedirect('.')
+        else:
+            print(form.errors)
+    else:
+        form = Association_Form()
+    context = {'form': form}
+    return render(request, 'labbyims/add_association.html', context)
 
 def add_reservation(request):
     if request.method == "POST":
