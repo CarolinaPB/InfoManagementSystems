@@ -1,21 +1,24 @@
+from django.forms.widgets import DateInput, Select
+from django.core.validators import MinValueValidator
 from django import forms
 from django_registration.forms import RegistrationForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from django.db import models
-from .models import User, Product_Unit, Product, Location, Room, Reserve
-from django.forms.widgets import DateInput, Select
-from django.core.validators import MinValueValidator
+from .models import User, Product_Unit, Product, Location, Room, Reserve, Department
+from django.forms.widgets import DateInput, TextInput, CheckboxInput
+from captcha.fields import ReCaptchaField
+
 
 class SignUpForm(RegistrationForm):
+    captcha = ReCaptchaField()
     first_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
     last_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
-    department = forms.CharField(max_length=255, required=False, help_text='Optional')
     email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
 
     class Meta(RegistrationForm.Meta):
         model = User
-        fields = ('username', 'first_name', 'last_name', 'department', 'email', 'password1', 'password2', )
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
 
 class AdvancedSearch(forms.Form):
     search = forms.CharField(widget=forms.TextInput(attrs={'class': 'col-md-12 searchfield'}), label=False)
@@ -46,10 +49,9 @@ class AdvancedSearch(forms.Form):
         )
 
 class Product_UnitForm(forms.ModelForm):
-    number = forms.IntegerField(label='How many items with exactly those properies do you want to add to the database?', 
+    low_warn_form = forms.BooleanField(widget=CheckboxInput, label='Running Low Warning (only possible if you choose a department)', initial=False, required=False)
+    number = forms.IntegerField(label='How many items with exactly those properties do you want to add to the database?',
     initial=1, validators=[MinValueValidator(1)])
-    
-
     
     class Meta:
         UNIT_CHOICES = (
@@ -70,12 +72,12 @@ class Product_UnitForm(forms.ModelForm):
             "ret_date":DateInput(attrs = {"type":"date"}),
             "m_unit":Select(choices=UNIT_CHOICES),
         }
-        #m_unit = forms.MultipleChoiceField
+
 
 class Product_Form(forms.ModelForm):
     class Meta:
         model = Product
-        fields = "__all__"
+        fields = ["cas"]
 
 
 class Location_Form(forms.ModelForm):
@@ -87,12 +89,22 @@ class Room_Form(forms.ModelForm):
     class Meta:
         model = Room
         fields="__all__"
+        
+class Department_Form(forms.ModelForm):
+    class Meta:
+        model = Department
+        fields = ["name"]
 
 class Reserve_Form(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(Reserve_Form, self).__init__(*args, **kwargs)
     class Meta:
         model=Reserve
+        #exclude = ['is_complete',]
         widgets = {
             "date_res":DateInput(attrs = {"type":"date"}),
+            #'user': TextInput(),
         }
+        exclude = ['user','is_complete',]
         #fields="__all__"
-        exclude = ['is_complete', "user"]
