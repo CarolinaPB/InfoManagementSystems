@@ -45,11 +45,18 @@ class Location(models.Model):
     isorgminacid = models.BooleanField('is organic and mineral acid', default = False)
     isoxidacid = models.BooleanField('is oxidizing acid', default = False)
     ispois_vol = models.BooleanField('is poison - volatile', default = False)
+    def is_valid(self, Product):
+        if (self.ispois_vol == Product.ispoison_nonvol and self.ispoison_nonvol == Product.ispoison_nonvol and self.issolid == Product.issolid):
+            return True
+        else:
+            return False
     def __str__(self):
         return self.name
 
 class Department(models.Model):
-    users = models.ForeignKey(User, default = 1, on_delete=models.CASCADE)
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
     name = models.CharField(max_length=255)
     def __str__(self):
         return self.name
@@ -62,21 +69,31 @@ class Product_Unit(models.Model):
     description = models.CharField(max_length=255)
     is_inactive = models.BooleanField('Archived', default = False)
     del_date = models.DateField('delivery date')
-    open_date = models.DateField('date opened', null=True, blank = True)
-    exp_date = models.DateField('expiration date', null=True, blank = True)
-    ret_date = models.DateField('retest date', null=True, blank = True)
-    purity = models.CharField('purity/percentage', max_length = 255, null=True, blank = True)
-    init_amount = models.DecimalField('initial amount', validators=[MinValueValidator(0)],max_digits=10, decimal_places=4, default = 0)
-    used_amount = models.DecimalField('amount used', max_digits=10, decimal_places=4, default=0)
-    curr_amount = models.DecimalField('current amount', max_digits=10, validators=[MinValueValidator(0)], decimal_places=4, default=0)
+
     company = models.CharField(max_length=255)
     cat_num = models.CharField('catalog number', max_length=255, blank = True)
-    m_unit = models.CharField('measuring units', max_length=4, null=True, blank = True)
+    description = models.CharField(max_length=255)
     batch = models.CharField('Batch Number', max_length=255, blank = True )
-    in_house_no = models.CharField('In House ID', max_length=255, blank = True )
+    init_amount = models.DecimalField('initial amount', max_digits=10, decimal_places=4, default = 0, validators = [MinValueValidator(0.0000)])
+    m_unit = models.CharField('measuring units', max_length=4, null=True, blank = True)
+    purity = models.CharField('purity/percentage', max_length = 255, null=True, blank = True)
+    exp_date = models.DateField('expiration date', null=True, blank = True)
+    ret_date = models.DateField('retest date', null=True, blank = True)
+    open_date = models.DateField('date opened', null=True, blank = True)
+    used_amount = models.DecimalField('amount used', max_digits=10, decimal_places=4, default=0, validators = [MinValueValidator(0.0000)])
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    reservation = models.ManyToManyField(User, through='Reserve')
+    is_inactive = models.BooleanField('Archived', default = False)
+    curr_amount = models.DecimalField('current amount', max_digits=10, decimal_places=4, default=0, blank = True, validators = [MinValueValidator(0.0000)])
+    watch = models.ManyToManyField(Department, through='Watching')
+    def curr_am(self):
+        init = float(self.init_amount)
+        used = float(self.used_amount)
+        return init - used
     @property
     def perc_left(self):
         return self.curr_amount/self.init_amount
+
     def __str__(self):
         return self.description
 

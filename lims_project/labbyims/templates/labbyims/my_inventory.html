@@ -11,6 +11,9 @@
         <br><br>
     </head>
     <body>
+        <a href="{% url 'update_item' %}">Update item</a>
+        <input type="button" value="Go back" onClick="javascript:history.go(-1)" />
+        <br><br>
         {% render_table table_my_inv %}
     </body>
     <br><br>

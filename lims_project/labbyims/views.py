@@ -1,25 +1,33 @@
+# Create your views here.
+
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from labbyims.forms import SignUpForm
-from django.http import HttpResponseRedirect
+
+from django.template import Context, Template
+
+
 from django.db.models import F,Q, FloatField
 from django.db.models.functions import Cast
 from django.views import View
+
 from .forms import AdvancedSearch, Product_UnitForm, Product_Form, \
-                    Location_Form, Room_Form, Reserve_Form
+                    Location_Form, Room_Form, Reserve_Form, Update_item_Form
 from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, \
                     FP_Product_UnitTable, Product_Unit_MyTable, FP_ReserveTable\
                     , ReserveTable, FP_Running_LowTable, Running_LowTable
 from .models import Product_Unit, Product, Location, Room, Reserve, User,\
                     Watching, Department
+
 from django_tables2 import RequestConfig
 import datetime
 from datetime import datetime, timedelta
 from django.utils import timezone
+
 from .filters import ProductFilter, LocationFilter, Prod_ResFilter, UserFilter,\
-                    DeptFilter
+                DeptFilter
 from decimal import Decimal
 
 
@@ -204,15 +212,59 @@ def running_low(request):
 def about(request):
     return render(request, 'labbyims/about.html')
 
+
 def user_info(request):
     if request.user.is_authenticated:
 
         userprofile = User.objects.filter(id= request.user.id)
         user_filter = UserFilter(request.GET, queryset=userprofile)
 
-        user_dept = Department.objects.filter(users = request.user.id)
+
+        user_dept = Department.objects.filter(user = request.user.id)
         dept_filter = UserFilter(request.GET, queryset=user_dept)
 
         return render(request, 'labbyims/user_info.html', {'filter':user_filter}, {'filter':dept_filter})
     else:
         return render(request, 'labbyims/home_afterlogin.html')
+
+def update_item(request):
+    if request.method == "POST":
+        form = Update_item_Form(request.POST)
+        edit = form.save(commit=False)
+
+        prod_units = form.cleaned_data["prod_units"]
+        used_amount = form.cleaned_data["used_amount"]
+        retest_date = form.cleaned_data["ret_date"]
+        opened = form.cleaned_data["open_date"]
+        loc = form.cleaned_data["location"]
+        print(prod_units)
+        print(used_amount)
+        print(retest_date)
+        unit = Product_Unit.objects.get(description=prod_units)
+        change_prod_unit = Product_Unit.objects.get(id=unit.id)
+
+        if used_amount:
+            if used_amount > change_prod_unit.curr_amount:
+                pass
+            else:
+                change_prod_unit.curr_amount = change_prod_unit.curr_amount - used_amount
+                print(change_prod_unit.curr_amount)
+                #change_prod_unit.save()
+        if retest_date:
+            change_prod_unit.ret_date = retest_date
+
+        if opened:
+            change_prod_unit.open_date = opened
+        if loc:
+            change_prod_unit.location = loc
+
+        change_prod_unit.save()
+
+
+
+        return HttpResponseRedirect('.')
+    else:
+        form = Update_item_Form()
+
+
+    return render(request, 'labbyims/update_item.html', {"form":form})
