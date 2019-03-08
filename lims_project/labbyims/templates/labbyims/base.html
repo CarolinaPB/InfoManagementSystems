@@ -1,6 +1,7 @@
 {% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html>
+
 <head>
 
     <!-- Required meta tags -->
@@ -13,28 +14,25 @@
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
 
     {% if title %}
-        <title>Labby - {{ title }}</title>
+    <title>Labby - {{ title }}</title>
     {% else %}
-        <title>Labby</title>
+    <title>Labby</title>
     {% endif %}
 </head>
+
 <body>
     <header class="site-header">
         <nav class="navbar navbar-expand navbar-dark bg-dark fixed-top">
             <div class="container-fluid">
                 <a class="navbar-brand mr-4" href="{% url 'home' %}">Labby</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                    <span class="navbar-toggler-icon"></span>
                 </button>
                 <!-- Navbar Right Side -->
                 <div class="navbar-nav">
                     {% if user.is_authenticated %}
                     <form action='/search/' class="form-inline my-2 my-lg-1">
-                        <input
-                        class="form-control mr-sm-2"
-                        type="search"
-                        placeholder="Search unit"
-                        name='description'>
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search unit" name='description'>
                         <button class="btn my-2 my-sm-0" type="submit">Search</button>
                     </form>
                     <a class="nav-item nav-link" href="{% url 'add_product' %}">Add product</a>
@@ -42,37 +40,36 @@
                     <a class="nav-item nav-link" href="{% url 'update_item' %}">Update item</a>
                     <li class="nav-item dropdown hidden-md-down">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <strong>User</strong>
+                            <strong>User</strong>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                          <a href="{% url 'reservations' %}" class="dropdown-item">My Reservations</a>
-                          <a href="{% url 'my_inventory' %}" class="dropdown-item">My Inventory</a>
-                          <a href="{% url 'running_low' %}" class="dropdown-item">Running Low</a>
-                          <a href="{% url 'inventory' %}" class="dropdown-item"> General Inventory</a>
-                          <a href="{% url 'locations' %}" class="dropdown-item">Locations</a>
-                          <a href="{% url 'add_department' %}" class="dropdown-item"> Add department</a>
-                          <a href="{% url 'add_association' %}" class="dropdown-item"> Add department association</a>
-                          <a href="{% url 'user_info' %}" class="dropdown-item"> User Info</a>
-                          <a href="{% url 'logout' %}" class="dropdown-item">
-                          <div class="dropdown-divider"></div>
-                            <strong>Logout</strong>
-                          </a>
+                            <a href="{% url 'reservations' %}" class="dropdown-item">My Reservations</a>
+                            <a href="{% url 'my_inventory' %}" class="dropdown-item">My Inventory</a>
+                            <a href="{% url 'running_low' %}" class="dropdown-item">Running Low</a>
+                            <a href="{% url 'inventory' %}" class="dropdown-item"> General Inventory</a>
+                            <a href="{% url 'locations' %}" class="dropdown-item">Locations</a>
+                            <a href="{% url 'add_department' %}" class="dropdown-item"> Add department</a>
+                            <a href="{% url 'user_info' %}" class="dropdown-item"> User Info</a>
+                            <a href="{% url 'logout' %}" class="dropdown-item">
+                                <div class="dropdown-divider"></div>
+                                <strong>Logout</strong>
+                            </a>
                         </div>
-                      </li>
-                    </div>
-                    {% else %}
-                        <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
-                        <a class="nav-item nav-link" href="{% url 'django_registration_register' %}">Register</a>
-                    {% endif %}
+                    </li>
                 </div>
+                {% else %}
+                <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                <a class="nav-item nav-link" href="{% url 'django_registration_register' %}">Register</a>
+                {% endif %}
+            </div>
             </div>
         </nav>
     </header>
     <div class="container-fluid">
         {% if user.is_authenticated %}
-            {% block content %}{% endblock %}
+        {% block content %}{% endblock %}
         {% else %}
-            {% block login %}{% endblock %}
+        {% block login %}{% endblock %}
         {% endif %}
     </div>
 
@@ -80,7 +77,7 @@
         <p>LABBY
             <a href="https://github.com/CarolinaPB/InfoManagementSystems">GitHub</a>
             <a href="{% url 'about' %}">About</a>
-             Help
+            Help
             <a href="mailto:labbyims@gmail.com">Contact</a>
 
         </p>
@@ -88,27 +85,27 @@
 
 </body>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-    <script type="text/javascript">
+<script type="text/javascript">
     "Shows pop-up window asking the user to confirm if they really want to delete the item from the database"
     "If the user cancels, the checkbox becomes unchecked"
-    function cTrig(clickedid) {
-      if (document.getElementById(clickedid).checked == false) {
-        return false;
-      } else {
-        var box= confirm("Are you sure you want to remove this item from the database? This action is irreversible");
-        if (box==true)
-            return true;
-        else
-           document.getElementById(clickedid).checked = false;
-      }
-    }
 
-    </script>
+    function cTrig(clickedid) {
+        if (document.getElementById(clickedid).checked == false) {
+            return false;
+        } else {
+            var box = confirm("Are you sure you want to remove this item from the database? This action is irreversible");
+            if (box == true)
+                return true;
+            else
+                document.getElementById(clickedid).checked = false;
+        }
+    }
+</script>
 
 </html>

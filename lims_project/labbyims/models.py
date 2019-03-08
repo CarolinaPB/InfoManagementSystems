@@ -65,7 +65,6 @@ class Department(models.Model):
 
 class Product_Unit(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-
     in_house_no = models.CharField('In House ID', max_length=255, blank = True )
     del_date = models.DateField('delivery date')
     company = models.CharField(max_length=255)
@@ -103,6 +102,8 @@ class Reserve(models.Model):
     amount_res = models.DecimalField('amount to reserve', max_digits=10, decimal_places=4)
     date_res = models.DateField('reservation date')
     is_complete = models.BooleanField(null=True)
+    def _str_(self):
+        return self.prod_un
 
 class Uses(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
