@@ -7,15 +7,14 @@ from django.db.models import F, Q, FloatField
 from django.db.models.functions import Cast
 from django.views import View
 from .forms import AdvancedSearch, Product_UnitForm, Product_Form, \
-    Location_Form, Room_Form, Reserve_Form, Update_item_Form, \
-    Department_Form, Association_Form, Update_reservation_Form
-from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, \
-    FP_Product_UnitTable, Product_Unit_MyTable, FP_ReserveTable,\
-    ReserveTable, FP_Running_LowTable, Running_LowTable
+                    Location_Form, Room_Form, Reserve_Form, Update_item_Form, \
+                    Department_Form, Association_Form, Update_reservation_Form
+from .tables import Product_UnitTable,Product_Table,LocationTable, \
+                    Product_Unit_ExpTable, FP_Product_UnitTable, \
+                    Product_Unit_MyTable, FP_ReserveTable, ReserveTable, \
+                    FP_Running_LowTable, Running_LowTable, User_DeptTable
 from .models import Product_Unit, Product, Location, Room, Reserve, User,\
-    Watching, Department, Association
-
-
+                    Watching, Department, Association
 from django_tables2 import RequestConfig
 import datetime
 from datetime import datetime, timedelta
@@ -30,11 +29,16 @@ def home(request):
         if request.method == 'POST':
             form = AdvancedSearch(request.POST)
             if form.is_valid():
-                search_res = form.cleaned_data["search"]
+                search = form.cleaned_data["search"]
+                advanced_search=form.cleaned_data["advanced_search"]
+                form=AdvancedSearch()
+                print(search)
             else:
                 print(form.errors)
 
-            return HttpResponseRedirect('/search/?description={}'.format(search_res))
+            c={'form':form,'search': search,'advanced_search':advanced_search}
+
+            return render(request, "labbyims/search.html", c)
 
         else:
             form = AdvancedSearch(initial=request.GET)
@@ -294,11 +298,13 @@ def user_info(request):
 
         userprofile = User.objects.filter(id=request.user.id)
         user_filter = UserFilter(request.GET, queryset=userprofile)
-        user_dept = Department.objects.filter(user=request.user.id)
-        dept_filter = UserFilter(request.GET, queryset=user_dept)
-        print(type(dept_filter))
 
-        return render(request, 'labbyims/user_info.html', {'filter': user_filter}, {'filter_dept': dept_filter})
+        dept_list =Association.objects.filter(user = request.user.id)
+        table_dept = User_DeptTable(dept_list)
+        RequestConfig(request).configure(table_dept)
+
+        return render(request, 'labbyims/user_info.html', \
+                    {'filter':user_filter, 'table_dept':table_dept})
     else:
         return render(request, 'labbyims/home_afterlogin.html')
 
@@ -389,3 +395,43 @@ def update_reservation(request):
         form.fields['prod_un'].queryset = Product_Unit.objects.filter(id__in=prod_ids)
 
     return render(request, 'labbyims/update_reservation.html', {"form": form})
+
+def search_advance(request):
+    search = request.GET.get('search', None)
+    choice=request.GET.get('advanced_search',None)
+    if search is not None:
+        if choice=='location':
+            location_list = Location.objects.all()
+            location_list = location_list.filter(name__contains=search)
+            table_se = LocationTable(location_list)
+            RequestConfig(request).configure(table_se)
+            return render(request, 'labbyims/search_location.html', {'table_se': table_se,}, )
+
+        if choice is None:
+            product_list = Product_Unit.objects.all()
+            product_list = product_list.filter(description__icontains=search)
+            table_se = Product_Unit_MyTable(product_list)
+            RequestConfig(request).configure(table_se)
+            return render(request, 'labbyims/search_list.html', {'table_se': table_se,},)
+
+
+        if choice=='unit':
+            product_list = Product_Unit.objects.all()
+            product_list = product_list.filter(description__icontains=search)
+            table_se = Product_Unit_MyTable(product_list)
+            RequestConfig(request).configure(table_se)
+            return render(request, 'labbyims/search_list.html', {'table_se': table_se,},)
+
+        if choice == 'product':
+            product = Product.objects.all()
+            product= product.filter(name__icontains=search)
+            table = Product_Table(product)
+            RequestConfig(request).configure(table)
+            return render(request, 'labbyims/search_product.html', {'table': table, },)
+
+def archive(request):
+    amount=Product_Unit.objects.all().annotate(amount=F('init_amount')-F('used_amount'))
+    amount=amount.filter(amount=0)
+    #amount.save(update_fields=['curr_amount'])
+    table_arch=Product_Unit_MyTable(amount)
+    return render(request, 'labbyims/archive.html', {'table_arch': table_arch, },)

@@ -37,4 +37,6 @@ urlpatterns = [
     path('add_department/',views.add_department, name='add_department'),
     path('add_association/', views.add_association, name='add_association'),
     path('update_reservation/', views.update_reservation, name='update_reservation'),
+    path('archive/', views.archive, name='archive'),
+    path('search_advance/', views.search_advance, name='search_advance'),
 ]

@@ -31,8 +31,12 @@
                 <!-- Navbar Right Side -->
                 <div class="navbar-nav">
                     {% if user.is_authenticated %}
-                    <form action='/search/' class="form-inline my-2 my-lg-1">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search unit" name='description'>
+                    <form action='/search_advance/' class="form-inline my-2 my-lg-1">
+                        <input
+                        class="form-control mr-sm-2"
+                        type="search"
+                        placeholder="Search unit"
+                        name='search'>
                         <button class="btn my-2 my-sm-0" type="submit">Search</button>
                     </form>
                     <a class="nav-item nav-link" href="{% url 'add_product' %}">Add product</a>
@@ -48,6 +52,7 @@
                             <a href="{% url 'running_low' %}" class="dropdown-item">Running Low</a>
                             <a href="{% url 'inventory' %}" class="dropdown-item"> General Inventory</a>
                             <a href="{% url 'locations' %}" class="dropdown-item">Locations</a>
+                            <a href="{% url 'archive' %}" class="dropdown-item">Archive</a>
                             <a href="{% url 'add_department' %}" class="dropdown-item"> Add department</a>
                             <a href="{% url 'user_info' %}" class="dropdown-item"> User Info</a>
                             <a href="{% url 'logout' %}" class="dropdown-item">

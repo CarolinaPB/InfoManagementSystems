@@ -13,7 +13,7 @@
                 <h2 id="Search_title">
                 <center >Search</center></h2>
                 <br>
-                <form action="" method="POST">
+                <form action="/search_advance/" method="get">
                 {% csrf_token %}
                 {% crispy form form.helper %}
                 </form>

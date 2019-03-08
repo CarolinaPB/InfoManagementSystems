@@ -124,4 +124,4 @@ class Watching(models.Model):
     #     return self.low_warn
 class Association(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    dept = models.ForeignKey(Department, on_delete=models.CASCADE)
+    dept = models.ForeignKey(Department, verbose_name = 'department', on_delete=models.CASCADE)
