@@ -6,16 +6,13 @@
 <TITLE>Update reservation</TITLE>
 <H1>Update Reservation</H1>
 <br><br>
-To Update your reservation, please choose the unit and the date
+Choose a reservation to complete
 <br><br>
 <form action="" method="POST">
 	{% csrf_token %}
     {{ form|crispy}}
     <br>
-    {% for reservation in reservations %}
-    <p> {{reservation}}
-    {% endfor %}
-    <br><br>
+    <br>
     <input type="submit" value="Submit" name="Submit">  <input type="reset" value="Reset" name="Reset">
     <input type="button" value="Go back" onClick="javascript:history.go(-1)" />
     <br><br>

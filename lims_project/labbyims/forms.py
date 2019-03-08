@@ -8,6 +8,7 @@ from django.db import models
 from .models import User, Product_Unit, Product, Location, Room, Reserve, Department, Association
 from django.forms.widgets import DateInput, TextInput, Select, NumberInput, CheckboxInput
 from captcha.fields import ReCaptchaField
+from django.db.models import F, Q, FloatField
 
 
 class SignUpForm(RegistrationForm):
@@ -120,12 +121,11 @@ class Reserve_Form(forms.ModelForm):
             "date_res": DateInput(attrs={"type": "date"}),
             # 'user': TextInput(),
         }
-        exclude = ['user', ]
+        exclude = ['user','is_complete', ]
         # fields="__all__"
 
 
 class Update_item_Form(forms.ModelForm):
-
     prod_units = forms.ModelChoiceField(
         queryset=Product_Unit.objects.all(), label="Select a unit")
 
@@ -153,28 +153,27 @@ class Department_Form(forms.ModelForm):
 
 
 class Update_reservation_Form(forms.ModelForm):
-
     #dorms = Reserve.objects.filter(user = 1)
     #reservation = forms.ModelChoiceField(Reserve.objects.none(), label="Select a reservation")
-    all_res = Reserve.objects.all()
-    for el in all_res:
-        print(el.id)
-        print(el.prod_un)
-        print(el.user.id)
-        print(el.date_res)
-    #reservation = forms.ModelChoiceField(queryset=None, label="Select a reservation")
 
+    # all_res = Reserve.objects.all()
+    # for el in all_res:
+    #     print(el.id)
+    #     print(el.prod_un)
+    #     print(el.user.id)
+    #     print(el.date_res)
+    #reservation = forms.ModelChoiceField(queryset=None, label="Select a reservation")
+    #res=forms.ModelChoiceField(Reserve.objects.filter("res_name"))
+    res = forms.ModelChoiceField(
+        queryset=Reserve.objects.none(), label="Reservation")
     class Meta:
         model = Reserve
-        fields = ["prod_un", "date_res", "is_complete"]
-        widgets = {
-            "date_res": DateInput(attrs={"type": "date"}),
-            "is_complete":CheckboxInput(attrs={'checked' : ''})
-        }
+        fields = ["res"]
+        # widgets = {
+        #     "is_complete":CheckboxInput(attrs={'checked' : ''}),
+        # }
 
         def __init__(self, *args, **kwargs):
             super(Update_reservation_Form, self).__init__(*args, **kwargs)
             self.user = kwargs.pop('user', None)
-            self.fields['is_complete'].required = True
-            #self.fields['reservation'].queryset = Reserve.objects.filter(user=self.user)
-            #self.fields['reservation'].widget.choices = self.fields['reservation'].choices
+            # self.fields['is_complete'].required = True

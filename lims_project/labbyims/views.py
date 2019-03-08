@@ -241,11 +241,15 @@ def add_association(request):
 def add_reservation(request):
     if request.method == "POST":
         form = Reserve_Form(request.POST)
-        add_res = form.save(commit=False)
-        # print(request.user)
-        add_res.user = request.user
-        add_res.save()
-        return HttpResponseRedirect('.')
+        if form.is_valid():
+            add_res = form.save(commit=False)
+            # print(request.user)
+            add_res.user = request.user
+            add_res.save()
+            return HttpResponseRedirect('.')
+        else:
+            print(form.errors)
+
     else:
         form = Reserve_Form()
 
@@ -257,6 +261,7 @@ def reservations(request):
     current_date = timezone.now()
     warning = current_date + timedelta(days=27)
     res_list = Reserve.objects.filter(Q(user_id=request.user),
+                                      Q(is_complete=None),
                                       Q(date_res__range=[current_date, warning])).select_related()
     table_res = ReserveTable(res_list)
     RequestConfig(request).configure(table_res)
@@ -372,31 +377,48 @@ def add_department(request):
 def update_reservation(request):
     if request.method == "POST":
         form = Update_reservation_Form(request.POST)
-        form.save(commit=False)
-        prod_unit = form.cleaned_data["prod_un"]
+        #edit = form.save(commit=False)
+        #prod_unit = form.cleaned_data["prod_un"]
         #prod_unit = request.POST.getlist("prod_un")
-        res_date = form.cleaned_data["date_res"]
-        complete = request.POST.getlist("is_complete")
-        print(complete)
-        print(prod_unit)
-        print(res_date)
-
+        #res_date = form.cleaned_data["date_res"]
+        name = request.POST.get("res")
+        #complete = request.POST.get("is_complete")
+        #print(complete)
+        print (name)
+        # print(prod_unit)
+        # print(res_date)
+        #print(Reserve.objects.get(res_name=name))
         try:
-            change_res = Reserve.objects.get(date_res=res_date, prod_un_id = prod_unit.id)
+            change_res = Reserve.objects.get(res_name=name)
+            print (change_res)
             if change_res:
-                if complete:
-                    change_res.is_complete = True
-            change_res.save()
+                change_res.is_complete = True
+                change_res.save()
+                return HttpResponseRedirect('.')
         except Exception as e:
             print(e)
-        return HttpResponseRedirect('.')
+
+
+
+        # try:
+        #     change_res = Reserve.objects.get(date_res=res_date, prod_un_id = prod_unit.id)
+        #     if change_res:
+        #         if complete:
+        #             change_res.is_complete = True
+        #     change_res.save()
+        # except Exception as e:
+            #print(e)
+        #return HttpResponseRedirect('.')
     else:
         form = Update_reservation_Form()
-        user_reservations= Reserve.objects.filter(user=request.user)
-        prod_ids =[]
-        for res in user_reservations:
-            prod_ids.append(res.prod_un.id)
-        form.fields['prod_un'].queryset = Product_Unit.objects.filter(id__in=prod_ids)
+        # user_reservations= Reserve.objects.filter(user=request.user)
+        # res_names =[]
+        # for res in user_reservations:
+        #     res_names.append(res.res_name)
+        # print(res_names)
+        # print(Reserve.objects.filter(is_complete = True))
+        # print(Reserve.objects.filter(Q(is_complete=None)))
+        form.fields['res'].queryset = Reserve.objects.filter(Q(is_complete = None), Q(user=request.user)).values_list('res_name', flat=True)
 
     return render(request, 'labbyims/update_reservation.html', {"form": form})
 
