@@ -5,53 +5,57 @@
 
 <div class="row">
     <div class="first-column col-sm-9 col-lg-9">
-        <br><br><br><br>
         <div class="row">
             <div class="col-md-4">
             </div>
-            <div class="col-md-4">
-                <br><br>
-                <br><br>
-                <br><br>
-                <br><br>
-                <br>
+            <div id="center_search" class="col-md-4">
+                <br><br><br><br><br><br><br><br><br><br><br><br><br>
                 <h2 id="Search_title">
                 <center >Search</center></h2>
                 <br>
-                <form action="" method="POST">
+                <form action="/search_advance/" method="get">
                 {% csrf_token %}
                 {% crispy form form.helper %}
                 </form>
             </div>
-        </div>
+            </div>
 
     </div>
-        <div class="second-column col-sm-3 col-lg-3" style="background-color:#f2f2f2">
-            <div class="container-fluid"
-                <br><br><br><br><br>
-                <h2>Reminders</h2>
-                <div>
-                  <style>
-                    table{
-                      font-size: 12px;
-                      white-space: nowrap;
-                      width: 100%;
-                        }
-                  </style>
-                  <tr>
-                    <body>
-                        <table>
-                          <a href="{% url 'reservations' %}">My Reservations</a><br>
-                          {% render_table table_res %}
-                          <br><br>
-                          <a href="{% url 'my_inventory' %}">Expiration/re-test</a>
-                          {%  render_table table_exp %}
-                          <br><br>
-                          <a href="{% url 'running_low' %}">Running Low</a>
-                          {%  render_table table_low %}
-                        </table>
-                        <br>
-                    </body>
-                  </tr>
-                </div>
+    <div class="second-column col-sm-3 col-lg-3" style="background-color:#f2f2f2">
+        <div id="remove_padding" class="container-fluid">
+            <br><br><br><br><br>
+            <h2>Reminders</h2>
+
+            <div>
+
+              <style>
+                table{
+                  font-size: 12px;
+                  white-space: nowrap;
+                  width: 100%;
+                    }
+              </style>
+
+
+              <tr>
+
+                <body>
+                  <table>
+                   <a href="{% url 'reservations' %}">My Reservations</a><br>
+                   {% render_table table_res %}
+                   <br><br>
+                   <a href="{% url 'my_inventory' %}">Expiration/re-test</a>
+                   {%  render_table table_exp %}
+                   <br><br>
+                   <a href="{% url 'running_low' %}">Running Low</a>
+                   {%  render_table table_low %}
+                 </table>
+                    <br>
+                </body>
+
+              </tr>
+
+            </div>
+        </div>
+    </div>
   {% endblock %}
