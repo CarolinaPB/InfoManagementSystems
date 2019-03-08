@@ -377,48 +377,38 @@ def add_department(request):
 def update_reservation(request):
     if request.method == "POST":
         form = Update_reservation_Form(request.POST)
-        #edit = form.save(commit=False)
-        #prod_unit = form.cleaned_data["prod_un"]
-        #prod_unit = request.POST.getlist("prod_un")
-        #res_date = form.cleaned_data["date_res"]
         name = request.POST.get("res")
-        #complete = request.POST.get("is_complete")
-        #print(complete)
-        print (name)
-        # print(prod_unit)
-        # print(res_date)
-        #print(Reserve.objects.get(res_name=name))
+        amount = request.POST.get("amount_res")
+        print(amount)
+
         try:
             change_res = Reserve.objects.get(res_name=name)
-            print (change_res)
+            print (change_res.prod_un.id)
             if change_res:
                 change_res.is_complete = True
                 change_res.save()
-                return HttpResponseRedirect('.')
+                #curr_ = Reserve.objects.get(res_name=name)
+                if amount:
+                    change_curr_amount = Product_Unit.objects.get(id=change_res.prod_un.id)
+                    change_curr_amount.curr_amount = change_curr_amount.curr_amount - int(amount)
+                    change_curr_amount.save()
+                    return HttpResponseRedirect('.')
+                else:
+                    change_curr_amount = Product_Unit.objects.get(id=change_res.prod_un.id)
+                    change_curr_amount.curr_amount = change_curr_amount.curr_amount - change_res.amount_res
+                    change_curr_amount.save()
+                    return HttpResponseRedirect('.')
         except Exception as e:
             print(e)
 
-
-
-        # try:
-        #     change_res = Reserve.objects.get(date_res=res_date, prod_un_id = prod_unit.id)
-        #     if change_res:
-        #         if complete:
-        #             change_res.is_complete = True
-        #     change_res.save()
-        # except Exception as e:
-            #print(e)
-        #return HttpResponseRedirect('.')
     else:
         form = Update_reservation_Form()
-        # user_reservations= Reserve.objects.filter(user=request.user)
-        # res_names =[]
-        # for res in user_reservations:
-        #     res_names.append(res.res_name)
-        # print(res_names)
-        # print(Reserve.objects.filter(is_complete = True))
-        # print(Reserve.objects.filter(Q(is_complete=None)))
+
         form.fields['res'].queryset = Reserve.objects.filter(Q(is_complete = None), Q(user=request.user)).values_list('res_name', flat=True)
+        form.fields["amount_res"].label = "Amount used (if left blank it is the same as the reserved amount)"
+        form.fields["amount_res"].required = False
+        #form.fields["amount_res"].default = Reserve.objects.get()
+
 
     return render(request, 'labbyims/update_reservation.html', {"form": form})
 

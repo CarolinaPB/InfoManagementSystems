@@ -153,22 +153,12 @@ class Department_Form(forms.ModelForm):
 
 
 class Update_reservation_Form(forms.ModelForm):
-    #dorms = Reserve.objects.filter(user = 1)
-    #reservation = forms.ModelChoiceField(Reserve.objects.none(), label="Select a reservation")
 
-    # all_res = Reserve.objects.all()
-    # for el in all_res:
-    #     print(el.id)
-    #     print(el.prod_un)
-    #     print(el.user.id)
-    #     print(el.date_res)
-    #reservation = forms.ModelChoiceField(queryset=None, label="Select a reservation")
-    #res=forms.ModelChoiceField(Reserve.objects.filter("res_name"))
     res = forms.ModelChoiceField(
         queryset=Reserve.objects.none(), label="Reservation")
     class Meta:
         model = Reserve
-        fields = ["res"]
+        fields = ["res", "amount_res"]
         # widgets = {
         #     "is_complete":CheckboxInput(attrs={'checked' : ''}),
         # }
