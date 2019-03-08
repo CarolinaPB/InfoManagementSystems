@@ -57,15 +57,8 @@ class Location(models.Model):
     def __str__(self):
         return self.name
 
-class Department(models.Model):
-    user = models.ManyToManyField(User, through="Watching")
-    name = models.CharField(max_length=255)
-    def __str__(self):
-        return self.name
-
 class Product_Unit(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-
     in_house_no = models.CharField('In House ID', max_length=255, blank = True )
     del_date = models.DateField('delivery date')
     company = models.CharField(max_length=255)
@@ -88,12 +81,9 @@ class Product_Unit(models.Model):
         init = float(self.init_amount)
         used = float(self.used_amount)
         return init - used
-
     @property
     def perc_left(self):
         return (self.curr_amount/self.init_amount)*100
-
-
     def __str__(self):
         return self.description
 
@@ -121,6 +111,7 @@ class Watching(models.Model):
         super(Watching, self).save(*args, **kwargs)
     # def __str__(self):
     #     return self.low_warn
+
 class Association(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     dept = models.ForeignKey(Department, verbose_name = 'department', on_delete=models.CASCADE)

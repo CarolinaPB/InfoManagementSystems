@@ -1,4 +1,3 @@
-
 from labbyims.models import Product_Unit, Location, Room, Reserve, User, Product, Department
 import django_filters
 

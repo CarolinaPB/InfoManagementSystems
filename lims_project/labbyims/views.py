@@ -73,8 +73,6 @@ def home(request):
     else:
         return render(request, 'labbyims/home_afterlogin.html')
 
-
-
 def no_login(request):
     return render(request, 'labbyims/no_login.html')
 
@@ -248,27 +246,6 @@ def reservations(request):
     RequestConfig(request).configure(table_res)
     return render(request, 'labbyims/reservations.html', {'table_res': table_res,}, )
 
-def running_low(request):
-    if request.user.is_authenticated:
-        run_low = F('init_amount')/2
-
-        ##prod = Product_Unit.object.get(curr_amount__lte =Cast(\
-                    #F('init_amount')/2, FloatField()))[0]
-
-
-
-
-        #prod = Product_Unit.objects.get()
-        watch_list = Watching.objects.filter(Q(),Q(user_id= request.user),\
-                    Q(low_warn = True),Q()).select_related()
-
-
-        table_watch = Running_LowTable(watch_list)
-        RequestConfig(request).configure(table_watch)
-        return render(request, 'labbyims/running_low.html', {'table_watch':table_watch,},)
-    else:
-        return render(request, 'labbyims/home_afterlogin.html')
-
 def about(request):
     return render(request, 'labbyims/about.html')
 
@@ -288,10 +265,8 @@ def running_low(request):
 
 def user_info(request):
     if request.user.is_authenticated:
-
         userprofile = User.objects.filter(id= request.user.id)
         user_filter = UserFilter(request.GET, queryset=userprofile)
-
         dept_list =Association.objects.filter(user = request.user.id)
         table_dept = User_DeptTable(dept_list)
         RequestConfig(request).configure(table_dept)
@@ -343,22 +318,6 @@ def update_item(request):
 
 
     return render(request, 'labbyims/update_item.html', {"form":form})
-
-
-
-
-def add_department(request):
-    if request.method == "POST":
-        form = Department_Form(request.POST)
-        if form.is_valid():
-            form.save(commit=True)
-            return HttpResponseRedirect('.')
-        else:
-            print(form.errors)
-    else:
-        form = Department_Form()
-    context = {'form': form}
-    return render(request, 'labbyims/add_department.html', context)
 
 
 def search_advance(request):

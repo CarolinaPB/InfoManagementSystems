@@ -15,7 +15,6 @@ class SignUpForm(RegistrationForm):
     first_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
     last_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
     email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
-    department = forms.ModelChoiceField(queryset=Department.objects.all(), empty_label='Department')
     class Meta(RegistrationForm.Meta):
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
@@ -129,8 +128,3 @@ class Update_item_Form(forms.ModelForm):
         super(Update_item_Form, self).__init__(*args, **kwargs)
         self.fields['location'].required = False
         self.fields['used_amount'].required = False
-
-class Department_Form(forms.ModelForm):
-    class Meta:
-        model = Department
-        fields = ["name"]
