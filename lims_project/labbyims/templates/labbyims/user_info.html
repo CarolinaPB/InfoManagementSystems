@@ -19,7 +19,10 @@
   <p><strong>Last Login:</strong> {{User.last_login}}
   <br>
   <br>
-
+  <strong>Departments:</strong>
+  {% for d in dept %}
+  {{d}}
+  {% endfor d %} <br><br>
     <a href="{% url 'add_association' %}"> Add department association</a>
   <br>
   <p></p><a href="{% url 'password_change' %}">Change password</a>

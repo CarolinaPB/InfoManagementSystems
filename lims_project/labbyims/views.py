@@ -310,10 +310,17 @@ def user_info(request):
         user_filter = UserFilter(request.GET, queryset=userprofile)
         dept_list =Association.objects.filter(user = request.user.id)
         table_dept = User_DeptTable(dept_list)
+        user_department = Department.objects.all()
+        dept_list=[]
+        for el in user_department:
+            dept_list.append(el.name)
+        print(dept_list)
+        #user_department = user_department.name
+        #print(user_department)
         RequestConfig(request).configure(table_dept)
 
         return render(request, 'labbyims/user_info.html', \
-                    {'filter':user_filter, 'table_dept':table_dept})
+                    {'filter':user_filter, 'table_dept':table_dept, 'dept':dept_list})
     else:
         return render(request, 'labbyims/home_afterlogin.html')
 
