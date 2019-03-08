@@ -22,6 +22,8 @@ from django.utils import timezone
 from .filters import ProductFilter, LocationFilter, Prod_ResFilter, UserFilter,\
     DeptFilter, ProductCASFilter
 from decimal import Decimal
+from django.db import IntegrityError
+from django.shortcuts import render_to_response
 
 
 def home(request):
@@ -219,14 +221,17 @@ def add_department(request):
 
 def add_association(request):
     if request.method == "POST":
-        form = Association_Form(request.POST)
-        if form.is_valid():
-            assoc = form.save(commit=False)
-            assoc.user = request.user
-            assoc.save()
-            return HttpResponseRedirect('.')
-        else:
-            print(form.errors)
+        try:
+            form = Association_Form(request.POST)
+            if form.is_valid():
+                assoc = form.save(commit=False)
+                assoc.user = request.user
+                assoc.save()
+                return HttpResponseRedirect('.')
+            else:
+                print(form.errors)
+        except IntegrityError:
+            return render(request, "labbyims/assoc_error.html", {'form': form})
     else:
         form = Association_Form()
     context = {'form': form}
@@ -298,7 +303,6 @@ def user_info(request):
 
         userprofile = User.objects.filter(id=request.user.id)
         user_filter = UserFilter(request.GET, queryset=userprofile)
-
         dept_list =Association.objects.filter(user = request.user.id)
         table_dept = User_DeptTable(dept_list)
         RequestConfig(request).configure(table_dept)
