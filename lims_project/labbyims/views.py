@@ -380,7 +380,7 @@ def update_item(request):
                 messages.success(request, 'Unit updated!')
                 return HttpResponseRedirect('.')
             else:
-                #messages.warning(request, 'Error: the unit was not updated!')
+                messages.error(request, 'Error: please choose a field to update!')
                 return HttpResponseRedirect('.')
 
 

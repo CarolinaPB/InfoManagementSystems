@@ -121,9 +121,11 @@ h1, h2 {
 }
 
 
-.messages {
-    background-color: #b3ffd9;
-    padding: 15px;
-    border-radius: 25px;
+.messages{
     list-style-type: none;
+}
+
+ul.messages {
+
+    padding: 0;
 }
