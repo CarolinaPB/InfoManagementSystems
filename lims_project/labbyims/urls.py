@@ -39,4 +39,5 @@ urlpatterns = [
     path('update_reservation/', views.update_reservation, name='update_reservation'),
     path('archive/', views.archive, name='archive'),
     path('search_advance/', views.search_advance, name='search_advance'),
+    path('update_location/', views.update_location, name='update_location'),
 ]

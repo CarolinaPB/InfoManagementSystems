@@ -159,11 +159,14 @@ class Update_reservation_Form(forms.ModelForm):
     class Meta:
         model = Reserve
         fields = ["res", "amount_res"]
-        # widgets = {
-        #     "is_complete":CheckboxInput(attrs={'checked' : ''}),
-        # }
-
         def __init__(self, *args, **kwargs):
             super(Update_reservation_Form, self).__init__(*args, **kwargs)
             self.user = kwargs.pop('user', None)
-            # self.fields['is_complete'].required = True
+
+class Update_Location_Form(forms.ModelForm):
+    loc = forms.ModelChoiceField(
+        queryset=Location.objects.all(), label="Location to change")
+    class Meta:
+        model = Location
+        fields=["loc", "room", "description"]
+        #fields=["loc", "room", "description", "ispoison_nonvol", "isreactive", "issolid", "isoxidliq", "isflammable", "isbaseliq", "isorgminacid", "isoxidacid", "ispois_vol"]

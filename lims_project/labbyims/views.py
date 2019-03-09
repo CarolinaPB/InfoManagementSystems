@@ -7,14 +7,15 @@ from django.db.models import F, Q, FloatField
 from django.db.models.functions import Cast
 from django.views import View
 from .forms import AdvancedSearch, Product_UnitForm, Product_Form, \
-                    Location_Form, Room_Form, Reserve_Form, Update_item_Form, \
-                    Department_Form, Association_Form, Update_reservation_Form
-from .tables import Product_UnitTable,Product_Table,LocationTable, \
-                    Product_Unit_ExpTable, FP_Product_UnitTable, \
-                    Product_Unit_MyTable, FP_ReserveTable, ReserveTable, \
-                    FP_Running_LowTable, Running_LowTable, User_DeptTable
+    Location_Form, Room_Form, Reserve_Form, Update_item_Form, \
+    Department_Form, Association_Form, Update_reservation_Form, \
+    Update_Location_Form
+from .tables import Product_UnitTable, Product_Table, LocationTable, \
+    Product_Unit_ExpTable, FP_Product_UnitTable, \
+    Product_Unit_MyTable, FP_ReserveTable, ReserveTable, \
+    FP_Running_LowTable, Running_LowTable, User_DeptTable
 from .models import Product_Unit, Product, Location, Room, Reserve, User,\
-                    Watching, Department, Association
+    Watching, Department, Association
 from django_tables2 import RequestConfig
 import datetime
 from datetime import datetime, timedelta
@@ -32,13 +33,14 @@ def home(request):
             form = AdvancedSearch(request.POST)
             if form.is_valid():
                 search = form.cleaned_data["search"]
-                advanced_search=form.cleaned_data["advanced_search"]
-                form=AdvancedSearch()
+                advanced_search = form.cleaned_data["advanced_search"]
+                form = AdvancedSearch()
                 print(search)
             else:
                 print(form.errors)
 
-            c={'form':form,'search': search,'advanced_search':advanced_search}
+            c = {'form': form, 'search': search,
+                 'advanced_search': advanced_search}
 
             return render(request, "labbyims/search.html", c)
 
@@ -49,8 +51,8 @@ def home(request):
         warning = current_date + timedelta(days=27)
 
         exp_filter = Product_Unit.objects.filter(Q(is_inactive=False),
-                                                 Q(exp_date__range=[current_date, warning]) |
-                                                 Q(ret_date__range =[current_date, warning]) )
+                                                 Q(exp_date__range=[current_date, warning])
+                                                 | Q(ret_date__range =[current_date, warning]) )
         table_exp = FP_Product_UnitTable(exp_filter, prefix="1-")
         RequestConfig(request, paginate={'per_page': 3}).configure(table_exp)
 
@@ -308,19 +310,19 @@ def user_info(request):
 
         userprofile = User.objects.filter(id=request.user.id)
         user_filter = UserFilter(request.GET, queryset=userprofile)
-        dept_list =Association.objects.filter(user = request.user.id)
+        dept_list = Association.objects.filter(user=request.user.id)
         table_dept = User_DeptTable(dept_list)
         user_department = Department.objects.all()
-        dept_list=[]
+        dept_list = []
         for el in user_department:
             dept_list.append(el.name)
         print(dept_list)
         #user_department = user_department.name
-        #print(user_department)
+        # print(user_department)
         RequestConfig(request).configure(table_dept)
 
-        return render(request, 'labbyims/user_info.html', \
-                    {'filter':user_filter, 'table_dept':table_dept, 'dept':dept_list})
+        return render(request, 'labbyims/user_info.html',
+                      {'filter': user_filter, 'table_dept': table_dept, 'dept': dept_list})
     else:
         return render(request, 'labbyims/home_afterlogin.html')
 
@@ -390,18 +392,20 @@ def update_reservation(request):
 
         try:
             change_res = Reserve.objects.get(res_name=name)
-            print (change_res.prod_un.id)
+            print(change_res.prod_un.id)
             if change_res:
                 change_res.is_complete = True
                 change_res.save()
-                #curr_ = Reserve.objects.get(res_name=name)
                 if amount:
-                    change_curr_amount = Product_Unit.objects.get(id=change_res.prod_un.id)
-                    change_curr_amount.curr_amount = change_curr_amount.curr_amount - int(amount)
+                    change_curr_amount = Product_Unit.objects.get(
+                        id=change_res.prod_un.id)
+                    change_curr_amount.curr_amount = change_curr_amount.curr_amount - \
+                        int(amount)
                     change_curr_amount.save()
                     return HttpResponseRedirect('.')
                 else:
-                    change_curr_amount = Product_Unit.objects.get(id=change_res.prod_un.id)
+                    change_curr_amount = Product_Unit.objects.get(
+                        id=change_res.prod_un.id)
                     change_curr_amount.curr_amount = change_curr_amount.curr_amount - change_res.amount_res
                     change_curr_amount.save()
                     return HttpResponseRedirect('.')
@@ -411,50 +415,79 @@ def update_reservation(request):
     else:
         form = Update_reservation_Form()
 
-        form.fields['res'].queryset = Reserve.objects.filter(Q(is_complete = None), Q(user=request.user)).values_list('res_name', flat=True)
+        form.fields['res'].queryset = Reserve.objects.filter(
+            Q(is_complete=None), Q(user=request.user)).values_list('res_name', flat=True)
         form.fields["amount_res"].label = "Amount used (if left blank it is the same as the reserved amount)"
         form.fields["amount_res"].required = False
         #form.fields["amount_res"].default = Reserve.objects.get()
 
-
     return render(request, 'labbyims/update_reservation.html', {"form": form})
+
 
 def search_advance(request):
     search = request.GET.get('search', None)
-    choice=request.GET.get('advanced_search',None)
+    choice = request.GET.get('advanced_search', None)
     if search is not None:
-        if choice=='location':
+        if choice == 'location':
             location_list = Location.objects.all()
             location_list = location_list.filter(name__contains=search)
             table_se = LocationTable(location_list)
             RequestConfig(request).configure(table_se)
-            return render(request, 'labbyims/search_location.html', {'table_se': table_se,}, )
+            return render(request, 'labbyims/search_location.html', {'table_se': table_se, }, )
 
         if choice is None:
             product_list = Product_Unit.objects.all()
             product_list = product_list.filter(description__icontains=search)
             table_se = Product_Unit_MyTable(product_list)
             RequestConfig(request).configure(table_se)
-            return render(request, 'labbyims/search_list.html', {'table_se': table_se,},)
+            return render(request, 'labbyims/search_list.html', {'table_se': table_se, },)
 
-
-        if choice=='unit':
+        if choice == 'unit':
             product_list = Product_Unit.objects.all()
             product_list = product_list.filter(description__icontains=search)
             table_se = Product_Unit_MyTable(product_list)
             RequestConfig(request).configure(table_se)
-            return render(request, 'labbyims/search_list.html', {'table_se': table_se,},)
+            return render(request, 'labbyims/search_list.html', {'table_se': table_se, },)
 
         if choice == 'product':
             product = Product.objects.all()
-            product= product.filter(name__icontains=search)
+            product = product.filter(name__icontains=search)
             table = Product_Table(product)
             RequestConfig(request).configure(table)
             return render(request, 'labbyims/search_product.html', {'table': table, },)
 
+
 def archive(request):
-    amount=Product_Unit.objects.all().annotate(amount=F('init_amount')-F('used_amount'))
-    amount=amount.filter(amount=0)
-    #amount.save(update_fields=['curr_amount'])
-    table_arch=Product_Unit_MyTable(amount)
+    amount = Product_Unit.objects.all().annotate(
+        amount=F('init_amount') - F('used_amount'))
+    amount = amount.filter(amount=0)
+    # amount.save(update_fields=['curr_amount'])
+    table_arch = Product_Unit_MyTable(amount)
     return render(request, 'labbyims/archive.html', {'table_arch': table_arch, },)
+
+
+def update_location(request):
+    if request.method == "POST":
+        form = Update_Location_Form(request.POST)
+        if form.is_valid():
+            form.save(commit=False)
+            loc = request.POST.get("loc")
+            new_room = request.POST.get("room")
+            descr = request.POST.get("description")
+
+            try:
+                n_room = Location.objects.get(id=loc)
+                n_room.room = Room.objects.get(id=new_room)
+                if descr:
+                    n_room.description = descr
+                n_room.save()
+            except Exception as e:
+                print(e)
+            return HttpResponseRedirect('.')
+        else:
+            print(form.errors)
+
+    else:
+        form = Update_Location_Form()
+
+    return render(request, 'labbyims/update_location.html', {"form": form})
