@@ -19,6 +19,8 @@ class FP_ReserveTable(tables.Table):
         model = Reserve
         fields = ('date_res', 'prod_un', 'amount_res')
 
+
+
 class FP_Running_LowTable(tables.Table):
     prod_res = tables.Column(accessor='prod_un.description')
     prod_perc = tables.Column(accessor='prod_un.perc_left',\
@@ -29,7 +31,7 @@ class FP_Running_LowTable(tables.Table):
 class Running_LowTable(tables.Table):
         prod_res = tables.Column(accessor='prod_un.description')
         prod_perc = tables.Column(accessor='prod_un.perc_left', \
-                    verbose_name = '% left')
+                    verbose_name = '% left', orderable=True)
         department = tables.Column(accessor = 'dept', \
                     verbose_name = 'Department')
         location = tables.Column(accessor = 'prod_un.location')
@@ -37,6 +39,7 @@ class Running_LowTable(tables.Table):
         date_ret = tables.Column(accessor = 'prod_un.ret_date')
         perc_left = tables.Column(accessor = 'prod_un.in_house_no')
         class Meta:
+
             template_name = 'django_tables2/bootstrap.html'
 
 class ReserveTable(tables.Table):

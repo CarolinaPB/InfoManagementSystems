@@ -65,7 +65,6 @@ class Department(models.Model):
 
 class Product_Unit(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-
     in_house_no = models.CharField('In House ID', max_length=255, blank = True )
     del_date = models.DateField('delivery date')
     company = models.CharField(max_length=255)
@@ -87,7 +86,7 @@ class Product_Unit(models.Model):
     def curr_am(self):
         init = float(self.init_amount)
         used = float(self.used_amount)
-        return init - used
+        return round((init - used), 3)
 
     @property
     def perc_left(self):

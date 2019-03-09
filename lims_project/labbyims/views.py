@@ -60,8 +60,8 @@ def home(request):
 
         watch_list = Watching.objects.filter(Q(prod_un__is_inactive = False), \
                     Q(user_id= request.user), \
-                    #Q(prod_un__prod_perc__lte = 50),\
-                    Q(low_warn = True)).select_related()
+                    Q(low_warn = True)).order_by(\
+                    -F('prod_un__init_amount')/F('prod_un__curr_amount'))
         table_low = FP_Running_LowTable(watch_list, prefix='3-')
         RequestConfig(request,paginate = {'per_page': 3}).configure(table_low)
 
@@ -238,31 +238,12 @@ def reservations(request):
     current_date = timezone.now()
     warning = current_date + timedelta(days=27)
     res_list=Reserve.objects.filter(Q(user_id= request.user),\
-                    Q(date_res__range = [current_date, warning ])).select_related()
+                    Q(date_res__range = [current_date, warning ]),\
+                    Q(prod_un__is_inactive = False)).select_related()
     table_res = ReserveTable(res_list)
     RequestConfig(request).configure(table_res)
     return render(request, 'labbyims/reservations.html', {'table_res': table_res,}, )
 
-def running_low(request):
-    if request.user.is_authenticated:
-        run_low = F('init_amount')/2
-
-        ##prod = Product_Unit.object.get(curr_amount__lte =Cast(\
-                    #F('init_amount')/2, FloatField()))[0]
-
-
-
-
-        #prod = Product_Unit.objects.get()
-        watch_list = Watching.objects.filter(Q(),Q(user_id= request.user),\
-                    Q(low_warn = True),Q()).select_related()
-
-
-        table_watch = Running_LowTable(watch_list)
-        RequestConfig(request).configure(table_watch)
-        return render(request, 'labbyims/running_low.html', {'table_watch':table_watch,},)
-    else:
-        return render(request, 'labbyims/home_afterlogin.html')
 
 def about(request):
     return render(request, 'labbyims/about.html')
@@ -272,7 +253,8 @@ def running_low(request):
     if request.user.is_authenticated:
         watch_list = Watching.objects.filter(Q(prod_un__is_inactive = False), \
                     Q(user_id= request.user), \
-                    Q(low_warn = True)).select_related()
+                    Q(low_warn = True)).order_by(\
+                    -F('prod_un__init_amount')/F('prod_un__curr_amount'))
         table_watch = Running_LowTable(watch_list)
         RequestConfig(request).configure(table_watch)
         return render(request, 'labbyims/running_low.html', \
