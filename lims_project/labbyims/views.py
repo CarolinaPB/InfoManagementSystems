@@ -240,7 +240,9 @@ def add_association(request):
             else:
                 print(form.errors)
         except IntegrityError:
-            return render(request, "labbyims/assoc_error.html", {'form': form})
+            #messages.warning(request, 'You are already associated!')
+            return HttpResponseRedirect('.')
+            #return render(request, "labbyims/assoc_error.html", {'form': form})
     else:
         form = Association_Form()
     context = {'form': form}
@@ -347,28 +349,41 @@ def update_item(request):
         delete = request.POST.getlist("delete_entry")
         archived = request.POST.getlist("is_inactive")
         change_prod_unit = Product_Unit.objects.get(id=prod_units.id)
-
+        changed = False
         if delete:
             change_prod_unit.delete()
         else:
             if used_amount:
+                changed = True
                 if used_amount > change_prod_unit.curr_amount:
                     pass
                 else:
                     change_prod_unit.curr_amount = change_prod_unit.curr_amount - used_amount
                     print(change_prod_unit.curr_amount)
             if retest_date:
+                changed = True
                 change_prod_unit.ret_date = retest_date
             if opened:
+                changed = True
                 change_prod_unit.open_date = opened
             if loc:
+                changed = True
                 change_prod_unit.location = loc
             if expi_date:
+                changed = True
                 change_prod_unit.exp_date = expi_date
             if archived:
+                changed = True
                 change_prod_unit.is_inactive = True
-            change_prod_unit.save()
-            messages.success(request, 'Unit updated!')
+            if changed == True:
+                change_prod_unit.save()
+                messages.success(request, 'Unit updated!')
+                return HttpResponseRedirect('.')
+            else:
+                #messages.warning(request, 'Error: the unit was not updated!')
+                return HttpResponseRedirect('.')
+
+
         return HttpResponseRedirect('.')
     else:
         form = Update_item_Form()
