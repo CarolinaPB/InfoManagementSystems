@@ -119,3 +119,11 @@ h1, h2 {
 #remove_padding {
     overflow-x: scroll;
 }
+
+
+.messages {
+    background-color: #b3ffd9;
+    padding: 15px;
+    border-radius: 25px;
+    list-style-type: none;
+}

@@ -1,4 +1,5 @@
 from django.contrib.auth import login, authenticate
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from labbyims.forms import SignUpForm
@@ -84,6 +85,7 @@ def add_product(request):
         form = Product_Form(request.POST)
         if form.is_valid():
             form.save(commit=True)
+            messages.success(request, 'Product added!')
             return HttpResponseRedirect('.')
         else:
             print(form.errors)
@@ -118,6 +120,7 @@ def add_item(request):
                                      dept=dep, low_warn=low_warn_form)
                         w.save()
                         j += 1
+            messages.success(request, 'Unit added!')
             return redirect("/home/")
         else:
             print(form.errors)
@@ -154,6 +157,7 @@ def add_location(request):
         form = Location_Form(request.POST)
         if form.is_valid():
             form.save(commit=True)
+            messages.success(request, 'Location added!')
             return HttpResponseRedirect('.')
             # return render(request, 'labbyims/home_afterlogin.html')
         else:
@@ -197,6 +201,7 @@ def add_room(request):
         form = Room_Form(request.POST)
         if form.is_valid():
             form.save(commit=True)
+            messages.success(request, 'Room added!')
             return HttpResponseRedirect('.')
         else:
             print(form.errors)
@@ -212,6 +217,7 @@ def add_department(request):
         form = Department_Form(request.POST)
         if form.is_valid():
             form.save(commit=True)
+            messages.success(request, 'Department added!')
             return HttpResponseRedirect('.')
         else:
             print(form.errors)
@@ -229,6 +235,7 @@ def add_association(request):
                 assoc = form.save(commit=False)
                 assoc.user = request.user
                 assoc.save()
+                messages.success(request, 'Successful association!')
                 return HttpResponseRedirect('.')
             else:
                 print(form.errors)
@@ -248,6 +255,7 @@ def add_reservation(request):
             # print(request.user)
             add_res.user = request.user
             add_res.save()
+            messages.success(request, 'Reservation added!')
             return HttpResponseRedirect('.')
         else:
             print(form.errors)
@@ -361,7 +369,7 @@ def update_item(request):
             if archived:
                 change_prod_unit.is_inactive = True
             change_prod_unit.save()
-
+            messages.success(request, 'Unit updated!')
         return HttpResponseRedirect('.')
     else:
         form = Update_item_Form()
@@ -374,6 +382,7 @@ def add_department(request):
         form = Department_Form(request.POST)
         if form.is_valid():
             form.save(commit=True)
+            messages.success(request, 'Department added!')
             return HttpResponseRedirect('.')
         else:
             print(form.errors)
@@ -408,6 +417,7 @@ def update_reservation(request):
                         id=change_res.prod_un.id)
                     change_curr_amount.curr_amount = change_curr_amount.curr_amount - change_res.amount_res
                     change_curr_amount.save()
+                    messages.success(request, 'Reservation updated!')
                     return HttpResponseRedirect('.')
         except Exception as e:
             print(e)
@@ -481,6 +491,7 @@ def update_location(request):
                 if descr:
                     n_room.description = descr
                 n_room.save()
+                messages.success(request, 'Location updated!')
             except Exception as e:
                 print(e)
             return HttpResponseRedirect('.')
