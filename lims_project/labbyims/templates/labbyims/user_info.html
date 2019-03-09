@@ -1,7 +1,7 @@
 {% extends "labbyims/base.html" %}
 {% load render_table from django_tables2 %}
 {% block content %}
-<br><br><br><br><br>
+<br><br><br>
 <TITLE>My Profile</TITLE>
 <br><br>
 <h2>My Profile</h2>
@@ -19,7 +19,14 @@
   <p><strong>Last Login:</strong> {{User.last_login}}
   <br>
   <br>
-  <a href="{% url 'password_change' %}">Change password</a>
+  <strong>Departments:</strong>
+  {% for d in dept %}
+  {{d}}
+  {% endfor d %} <br><br>
+    <a href="{% url 'add_association' %}"> Add department association</a>
+  <br>
+  <p></p><a href="{% url 'password_change' %}">Change password</a>
+
   <br><br>
   <input type="button" value="Go back" onClick="javascript:history.go(-1)" />
   <br>
@@ -29,7 +36,5 @@
   <table>
   {%  render_table table_dept %}
   </table>
-
-</ul>
 
   {% endblock %}

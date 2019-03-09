@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_registration',
     'composite_field',
-    'captcha'
+    'captcha',
 ]
 
 MIDDLEWARE = [

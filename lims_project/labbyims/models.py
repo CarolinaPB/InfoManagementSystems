@@ -93,6 +93,9 @@ class Reserve(models.Model):
     amount_res = models.DecimalField('amount to reserve', max_digits=10, decimal_places=4)
     date_res = models.DateField('reservation date')
     is_complete = models.BooleanField(null=True)
+    res_name = models.CharField('Reservation name', max_length=255, unique=True, default="Reservation")
+    def _str_(self):
+        return self.prod_un
 
 class Uses(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

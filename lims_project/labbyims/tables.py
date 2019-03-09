@@ -40,8 +40,8 @@ class Running_LowTable(tables.Table):
             template_name = 'django_tables2/bootstrap.html'
 
 class ReserveTable(tables.Table):
+    res_name = tables.Column()
     prod_res = tables.Column(accessor='prod_un.description')
-    res = tables.Column(accessor = 'user')
     date = tables.Column(accessor = 'date_res')
     meas_u = tables.Column(accessor = 'prod_un.m_unit')
     res_amount = tables.Column(accessor = 'amount_res')
