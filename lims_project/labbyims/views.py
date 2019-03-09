@@ -54,7 +54,8 @@ def home(request):
         RequestConfig(request,paginate={'per_page': 3} ).configure(table_exp)
 
         res_list=Reserve.objects.filter(Q(user_id= request.user),\
-                    Q(date_res__range = [current_date, warning ])).select_related()
+                    Q(prod_un__is_inactive=False),Q(date_res__range = \
+                    [current_date, warning ])).select_related()
         table_res = FP_ReserveTable(res_list, prefix="2-")
         RequestConfig(request, paginate = {'per_page': 3}).configure(table_res)
 
