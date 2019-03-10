@@ -113,6 +113,7 @@ h1, h2 {
 #center_search {
     align-content: center;
     display:inline-block;
+    /* vertical-align: middle; */
 
 }
 
@@ -130,6 +131,23 @@ ul.messages {
     padding: 0;
 }
 
-/* a {
+/* input[type=text], select {
+  width: 18%;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}*/
 
-} */
+input[type=search] {
+    /* width: 18%; */
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+#center_div {
+    margin: auto;
+    width: 60%;
+    padding: 10px;
+}

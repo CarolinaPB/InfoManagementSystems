@@ -125,7 +125,7 @@ class Reserve_Form(forms.ModelForm):
 
 class Update_item_Form(forms.ModelForm):
     prod_units = forms.ModelChoiceField(
-        queryset=Product_Unit.objects.filter(Q(is_inactive=False) , Q(curr_amount__gt=0)), label="Select a unit")
+        queryset=Product_Unit.objects.filter(Q(is_inactive=False)), label="Select a unit")
 
     class Meta:
         model = Product_Unit

@@ -340,6 +340,8 @@ def update_item(request):
                 else:
                     change_prod_unit.curr_amount = change_prod_unit.curr_amount - used_amount
                     print(change_prod_unit.curr_amount)
+                if change_prod_unit.curr_amount <= 0:
+                    change_prod_unit.is_inactive = True
             if retest_date:
                 changed = True
                 change_prod_unit.ret_date = retest_date
