@@ -17,9 +17,9 @@
 <FORM METHOD=GET ACTION="/add_item">
     {% csrf_token %}
     <P>Please enter the CAS of the chemical you wish to add: <br>
-    <input type="search" name="Search"> <button>Search</button><br>
-    <input type="reset" value="Reset" name="Reset">
-    <input type="button" value="Go back" onClick="javascript:history.go(-1)" />
+    <input type="search" name="Search"> <button class="btn btn-light" >Search</button><br>
+    <input type="reset" class="btn btn-light" value="Reset" name="Reset">
+    <input type="button"  class="btn btn-light" value="Go back" onClick="javascript:history.go(-1)" />
     <br><br>
     {{ text }}
 </FORM>

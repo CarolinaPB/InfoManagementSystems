@@ -24,14 +24,14 @@ class FP_ReserveTable(tables.Table):
 class FP_Running_LowTable(tables.Table):
     prod_res = tables.Column(accessor='prod_un.description')
     prod_perc = tables.Column(accessor='prod_un.perc_left',\
-                verbose_name = '% left')
+                verbose_name = '% left', orderable=False)
     perc_lhouse = tables.Column(accessor = 'prod_un.in_house_no')
 
 
 class Running_LowTable(tables.Table):
         prod_res = tables.Column(accessor='prod_un.description')
         prod_perc = tables.Column(accessor='prod_un.perc_left', \
-                    verbose_name = '% left', orderable=True)
+                    verbose_name = '% left', orderable=False)
         department = tables.Column(accessor = 'dept', \
                     verbose_name = 'Department')
         location = tables.Column(accessor = 'prod_un.location')

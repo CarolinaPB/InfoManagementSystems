@@ -1,9 +1,10 @@
 {% extends "labbyims/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<br><br><br><br><br>
+<br><br><br><br>
 
 <TITLE>Update Item</TITLE>
+<!-- <div class="container" id="center_div"> -->
 <H1>Update Item</H1>
 <br><br>
 {% if messages %}
@@ -23,11 +24,11 @@
     <label id="label_for_DELETE" for="delete_entry">DELETE entry from database?</label>
     <p id="label_for_DELETE">This change will be permanent!
     <br><br>
-    <input type="submit" value="Submit" name="Submit">  <input type="reset" value="Reset" name="Reset">
-    <input type="button" value="Go back" onClick="javascript:history.go(-1)" />
+    <input type="submit" class="btn btn-light" value="Submit" name="Submit">  <input class="btn btn-light" type="reset" value="Reset" name="Reset">
+    <input type="button" class="btn btn-light" value="Go back" onClick="javascript:history.go(-1)" />
     <br><br>
 
 </form>
 
-
+<!-- </div> -->
 {% endblock content %}

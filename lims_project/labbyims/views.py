@@ -260,9 +260,9 @@ def add_reservation(request):
 def reservations(request):
     current_date = timezone.now()
     warning = current_date + timedelta(days=27)
-    res_list = Reserve.objects.filter(Q(user_id=request.user),
-                                      Q(is_complete=None),
-                                      Q(date_res__range=[current_date, warning])).select_related()
+    res_list=Reserve.objects.filter(Q(user_id= request.user),\
+                    Q(date_res__range = [current_date, warning ]),\
+                    Q(prod_un__is_inactive = False), Q(is_complete = None)).select_related()
     table_res = ReserveTable(res_list)
     RequestConfig(request).configure(table_res)
     return render(request, 'labbyims/reservations.html', {'table_res': table_res, }, )
@@ -332,6 +332,8 @@ def update_item(request):
                 else:
                     change_prod_unit.curr_amount = change_prod_unit.curr_amount - used_amount
                     print(change_prod_unit.curr_amount)
+                if change_prod_unit.curr_amount <= 0:
+                    change_prod_unit.is_inactive = True
             if retest_date:
                 change_prod_unit.ret_date = retest_date
             if opened:
@@ -428,9 +430,10 @@ def search_advance(request):
 def archive(request):
     amount = Product_Unit.objects.all().annotate(
         amount=F('init_amount') - F('used_amount'))
-    amount = amount.filter(amount=0)
+    amount = amount.filter(Q(amount=0), Q(is_inactive = True))
+    info = Product_Unit.objects.filter(Q(curr_amount=0)| Q(is_inactive = True))
     # amount.save(update_fields=['curr_amount'])
-    table_arch = Product_Unit_MyTable(amount)
+    table_arch = Product_Unit_MyTable(info)
     return render(request, 'labbyims/archive.html', {'table_arch': table_arch, },)
 
 
