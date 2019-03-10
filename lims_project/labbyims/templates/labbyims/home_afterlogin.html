@@ -8,7 +8,17 @@
         <div class="row">
             <div class="col-md-4">
             </div>
+
             <div id="center_search" class="col-md-4">
+                {% if messages %}
+                <br><br><br><br><br>
+                <ul class="messages alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}> {{ message }} </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
                 <br><br><br><br><br><br><br><br><br><br><br><br><br>
                 <h2 id="Search_title">
                 <center >Search</center></h2>

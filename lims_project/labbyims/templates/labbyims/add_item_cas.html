@@ -6,6 +6,14 @@
 <TITLE>Add Item CAS</TITLE>
 <H1>Add Item CAS</H1>
 <br><br>
+{% if messages %}
+<ul class="messages alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}> {{ message }} </li>
+    {% endfor %}
+</ul>
+{% endif %}
 <FORM METHOD=GET ACTION="/add_item">
     {% csrf_token %}
     <P>Please enter the CAS of the chemical you wish to add: <br>

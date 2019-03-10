@@ -1,4 +1,5 @@
 from django.contrib.auth import login, authenticate
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from labbyims.forms import SignUpForm
@@ -80,6 +81,7 @@ def add_product(request):
         form = Product_Form(request.POST)
         if form.is_valid():
             form.save(commit=True)
+            messages.success(request, 'Product added!')
             return HttpResponseRedirect('.')
         else:
             print(form.errors)
@@ -114,6 +116,7 @@ def add_item(request):
                                      dept=dep, low_warn=low_warn_form)
                         w.save()
                         j += 1
+            messages.success(request, 'Unit added!')
             return redirect("/home/")
         else:
             print(form.errors)
@@ -150,6 +153,7 @@ def add_location(request):
         form = Location_Form(request.POST)
         if form.is_valid():
             form.save(commit=True)
+            messages.success(request, 'Location added!')
             return HttpResponseRedirect('.')
             # return render(request, 'labbyims/home_afterlogin.html')
         else:
@@ -193,6 +197,7 @@ def add_room(request):
         form = Room_Form(request.POST)
         if form.is_valid():
             form.save(commit=True)
+            messages.success(request, 'Room added!')
             return HttpResponseRedirect('.')
         else:
             print(form.errors)
@@ -208,6 +213,7 @@ def add_department(request):
         form = Department_Form(request.POST)
         if form.is_valid():
             form.save(commit=True)
+            messages.success(request, 'Department added!')
             return HttpResponseRedirect('.')
         else:
             print(form.errors)
@@ -225,11 +231,14 @@ def add_association(request):
                 assoc = form.save(commit=False)
                 assoc.user = request.user
                 assoc.save()
+                messages.success(request, 'Successful association!')
                 return HttpResponseRedirect('.')
             else:
                 print(form.errors)
         except IntegrityError:
-            return render(request, "labbyims/assoc_error.html", {'form': form})
+            #messages.warning(request, 'You are already associated!')
+            return HttpResponseRedirect('.')
+            #return render(request, "labbyims/assoc_error.html", {'form': form})
     else:
         form = Association_Form()
     context = {'form': form}
@@ -244,6 +253,7 @@ def add_reservation(request):
             # print(request.user)
             add_res.user = request.user
             add_res.save()
+            messages.success(request, 'Reservation added!')
             return HttpResponseRedirect('.')
         else:
             print(form.errors)
@@ -289,17 +299,16 @@ def user_info(request):
         user_filter = UserFilter(request.GET, queryset=userprofile)
         dept_list = Association.objects.filter(user=request.user.id)
         table_dept = User_DeptTable(dept_list)
-        user_department = Department.objects.all()
-        dept_list = []
-        for el in user_department:
-            dept_list.append(el.name)
-        print(dept_list)
-        #user_department = user_department.name
-        # print(user_department)
+
+        depts = []
+        for el in Association.objects.all():
+            if el.user == request.user:
+                depts.append(el.dept)
+
         RequestConfig(request).configure(table_dept)
 
         return render(request, 'labbyims/user_info.html',
-                      {'filter': user_filter, 'table_dept': table_dept, 'dept': dept_list})
+                      {'filter': user_filter, 'table_dept': table_dept, 'dept': depts})
     else:
         return render(request, 'labbyims/home_afterlogin.html')
 
@@ -317,27 +326,40 @@ def update_item(request):
         delete = request.POST.getlist("delete_entry")
         archived = request.POST.getlist("is_inactive")
         change_prod_unit = Product_Unit.objects.get(id=prod_units.id)
-
+        changed = False
         if delete:
             change_prod_unit.delete()
         else:
             if used_amount:
+                changed = True
                 if used_amount > change_prod_unit.curr_amount:
                     pass
                 else:
                     change_prod_unit.curr_amount = change_prod_unit.curr_amount - used_amount
                     print(change_prod_unit.curr_amount)
             if retest_date:
+                changed = True
                 change_prod_unit.ret_date = retest_date
             if opened:
+                changed = True
                 change_prod_unit.open_date = opened
             if loc:
+                changed = True
                 change_prod_unit.location = loc
             if expi_date:
+                changed = True
                 change_prod_unit.exp_date = expi_date
             if archived:
+                changed = True
                 change_prod_unit.is_inactive = True
-            change_prod_unit.save()
+            if changed == True:
+                change_prod_unit.save()
+                messages.success(request, 'Unit updated!')
+                return HttpResponseRedirect('.')
+            else:
+                messages.error(request, 'Error: please choose a field to update!')
+                return HttpResponseRedirect('.')
+
 
         return HttpResponseRedirect('.')
     else:
@@ -371,6 +393,7 @@ def update_reservation(request):
                         id=change_res.prod_un.id)
                     change_curr_amount.curr_amount = change_curr_amount.curr_amount - change_res.amount_res
                     change_curr_amount.save()
+                    messages.success(request, 'Reservation updated!')
                     return HttpResponseRedirect('.')
         except Exception as e:
             print(e)
@@ -444,6 +467,7 @@ def update_location(request):
                 if descr:
                     n_room.description = descr
                 n_room.save()
+                messages.success(request, 'Location updated!')
             except Exception as e:
                 print(e)
             return HttpResponseRedirect('.')

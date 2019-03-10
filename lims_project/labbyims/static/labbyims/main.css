@@ -119,3 +119,13 @@ h1, h2 {
 #remove_padding {
     overflow-x: scroll;
 }
+
+
+.messages{
+    list-style-type: none;
+}
+
+ul.messages {
+
+    padding: 0;
+}
