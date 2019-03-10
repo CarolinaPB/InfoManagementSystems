@@ -81,6 +81,7 @@ def add_product(request):
         form = Product_Form(request.POST)
         if form.is_valid():
             form.save(commit=True)
+            messages.success(request, 'Product added!')
             return HttpResponseRedirect('.')
         else:
             print(form.errors)
@@ -115,6 +116,7 @@ def add_item(request):
                                      dept=dep, low_warn=low_warn_form)
                         w.save()
                         j += 1
+            messages.success(request, 'Unit added!')
             return redirect("/home/")
         else:
             print(form.errors)
@@ -151,6 +153,7 @@ def add_location(request):
         form = Location_Form(request.POST)
         if form.is_valid():
             form.save(commit=True)
+            messages.success(request, 'Location added!')
             return HttpResponseRedirect('.')
             # return render(request, 'labbyims/home_afterlogin.html')
         else:
@@ -194,6 +197,7 @@ def add_room(request):
         form = Room_Form(request.POST)
         if form.is_valid():
             form.save(commit=True)
+            messages.success(request, 'Room added!')
             return HttpResponseRedirect('.')
         else:
             print(form.errors)
@@ -209,6 +213,7 @@ def add_department(request):
         form = Department_Form(request.POST)
         if form.is_valid():
             form.save(commit=True)
+            messages.success(request, 'Department added!')
             return HttpResponseRedirect('.')
         else:
             print(form.errors)
@@ -226,10 +231,12 @@ def add_association(request):
                 assoc = form.save(commit=False)
                 assoc.user = request.user
                 assoc.save()
+                messages.success(request, 'Successful association!')
                 return HttpResponseRedirect('.')
             else:
                 print(form.errors)
         except IntegrityError:
+            messages.warning(request, 'You are already associated!')
             return render(request, "labbyims/assoc_error.html", {'form': form})
     else:
         form = Association_Form()
@@ -298,7 +305,7 @@ def user_info(request):
         dept_list = []
         for el in user_department:
             dept_list.append(el.name)
-        print(dept_list)
+        #print(dept_list)
         #user_department = user_department.name
         # print(user_department)
         RequestConfig(request).configure(table_dept)
@@ -322,31 +329,48 @@ def update_item(request):
         delete = request.POST.getlist("delete_entry")
         archived = request.POST.getlist("is_inactive")
         change_prod_unit = Product_Unit.objects.get(id=prod_units.id)
+        changed = False
+
 
         if delete:
             change_prod_unit.delete()
         else:
-            if used_amount:
-                if used_amount > change_prod_unit.curr_amount:
-                    pass
+            if used_amount > 0:
+                if change_prod_unit.curr_amount < used_amount:
+                    messages.error(request, "The used amount can't be more than the current amount")
+                    return HttpResponseRedirect('.')
+                #if used_amount > change_prod_unit.curr_amount:
+                #    pass
                 else:
                     change_prod_unit.curr_amount = change_prod_unit.curr_amount - used_amount
-                    print(change_prod_unit.curr_amount)
-                if change_prod_unit.curr_amount <= 0:
-                    change_prod_unit.is_inactive = True
+                    changed = True
+            #print(change_prod_unit.curr_amount)
+            if change_prod_unit.curr_amount <= 0:
+                changed = True
+                change_prod_unit.is_inactive = True
             if retest_date:
+                changed = True
                 change_prod_unit.ret_date = retest_date
             if opened:
+                changed = True
                 change_prod_unit.open_date = opened
             if loc:
+                changed = True
                 change_prod_unit.location = loc
             if expi_date:
+                changed = True
                 change_prod_unit.exp_date = expi_date
             if archived:
+                changed = True
                 change_prod_unit.is_inactive = True
             change_prod_unit.save()
-
-        return HttpResponseRedirect('.')
+            if changed == True:
+                change_prod_unit.save()
+                messages.success(request, 'Unit updated!')
+                return HttpResponseRedirect('.')
+            else:
+                messages.error(request, 'Error: please choose a field to update!')
+                return HttpResponseRedirect('.')
     else:
         form = Update_item_Form()
 
@@ -372,12 +396,14 @@ def update_reservation(request):
                     change_curr_amount.curr_amount = change_curr_amount.curr_amount - \
                         int(amount)
                     change_curr_amount.save()
+                    messages.success(request, 'Reservation updated!')
                     return HttpResponseRedirect('.')
                 else:
                     change_curr_amount = Product_Unit.objects.get(
                         id=change_res.prod_un.id)
                     change_curr_amount.curr_amount = change_curr_amount.curr_amount - change_res.amount_res
                     change_curr_amount.save()
+                    messages.success(request, 'Reservation updated!')
                     return HttpResponseRedirect('.')
         except Exception as e:
             print(e)
