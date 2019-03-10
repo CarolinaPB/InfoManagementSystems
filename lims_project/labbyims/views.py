@@ -271,7 +271,7 @@ def reservations(request):
     warning = current_date + timedelta(days=27)
     res_list=Reserve.objects.filter(Q(user_id= request.user),\
                     Q(date_res__range = [current_date, warning ]),\
-                    Q(prod_un__is_inactive = False)).select_related()
+                    Q(prod_un__is_inactive = False), Q(is_complete = None)).select_related()
     table_res = ReserveTable(res_list)
     RequestConfig(request).configure(table_res)
     return render(request, 'labbyims/reservations.html', {'table_res': table_res, }, )
