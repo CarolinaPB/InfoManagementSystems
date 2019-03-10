@@ -23,14 +23,12 @@ class SignUpForm(RegistrationForm):
 
 
 class AdvancedSearch(forms.Form):
-    search = forms.CharField(widget=forms.TextInput(
-        attrs={'class': 'col-md-12 searchfield'}), label=False)
-    CHOICES = [
-        ('unit', 'Unit'),
-        ('location', 'Location'),
-        ('item_type', 'Item type'),
-        ('finished', 'Finished')
-    ]
+    search = forms.CharField(widget=forms.TextInput(attrs={'class': 'col-md-12 searchfield'}), label=False,required=False)
+    CHOICES=[
+             ('unit', 'Unit'),
+             ('location','Location'),
+             ('product','Product'),
+             ]
     advanced_search = forms.ChoiceField(choices=CHOICES, label=False)
     advanced_search.widget.attrs.update({'class': 'col-md-6'})
 
@@ -144,12 +142,6 @@ class Update_item_Form(forms.ModelForm):
         super(Update_item_Form, self).__init__(*args, **kwargs)
         self.fields['location'].required = False
         self.fields['used_amount'].required = False
-
-
-class Department_Form(forms.ModelForm):
-    class Meta:
-        model = Department
-        fields = ["name"]
 
 
 class Update_reservation_Form(forms.ModelForm):
