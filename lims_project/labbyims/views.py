@@ -259,6 +259,8 @@ def add_reservation(request):
 
     else:
         form = Reserve_Form()
+        form.fields['prod_un'].queryset = Product_Unit.objects.filter(
+            Q(is_inactive=False)).values_list('description', flat=True)
 
     context = {'form': form}
     return render(request, 'labbyims/add_reservation.html', context)
@@ -363,7 +365,7 @@ def update_item(request):
             if archived:
                 changed = True
                 change_prod_unit.is_inactive = True
-            change_prod_unit.save()
+                change_prod_unit.save()
             if changed == True:
                 change_prod_unit.save()
                 messages.success(request, 'Unit updated!')
