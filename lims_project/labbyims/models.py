@@ -80,7 +80,7 @@ class Product_Unit(models.Model):
     def curr_am(self):
         init = float(self.init_amount)
         used = float(self.used_amount)
-        return init - used
+        return round((init - used), 3)
     @property
     def perc_left(self):
         return (self.curr_amount/self.init_amount)*100

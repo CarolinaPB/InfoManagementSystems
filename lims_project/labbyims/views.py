@@ -57,15 +57,16 @@ def home(request):
         table_exp = FP_Product_UnitTable(exp_filter, prefix="1-")
         RequestConfig(request, paginate={'per_page': 3}).configure(table_exp)
 
-        res_list = Reserve.objects.filter(Q(user_id=request.user),
-                                          Q(date_res__range=[current_date, warning])).select_related()
+        res_list=Reserve.objects.filter(Q(user_id= request.user),\
+                    Q(prod_un__is_inactive=False),Q(date_res__range = \
+                    [current_date, warning ])).select_related()
         table_res = FP_ReserveTable(res_list, prefix="2-")
         RequestConfig(request, paginate={'per_page': 3}).configure(table_res)
 
-        watch_list = Watching.objects.filter(Q(prod_un__is_inactive=False),
-                                             Q(user_id=request.user), \
-                                             #Q(prod_un__prod_perc__lte = 50),\
-                                             Q(low_warn=True)).select_related()
+        watch_list = Watching.objects.filter(Q(prod_un__is_inactive = False), \
+                    Q(user_id= request.user), \
+                    Q(low_warn = True)).order_by(\
+                    -F('prod_un__init_amount')/F('prod_un__curr_amount'))
         table_low = FP_Running_LowTable(watch_list, prefix='3-')
         RequestConfig(request, paginate={'per_page': 3}).configure(table_low)
 
@@ -268,12 +269,13 @@ def add_reservation(request):
 def reservations(request):
     current_date = timezone.now()
     warning = current_date + timedelta(days=27)
-    res_list = Reserve.objects.filter(Q(user_id=request.user),
-                                      Q(is_complete=None),
-                                      Q(date_res__range=[current_date, warning])).select_related()
+    res_list=Reserve.objects.filter(Q(user_id= request.user),\
+                    Q(date_res__range = [current_date, warning ]),\
+                    Q(prod_un__is_inactive = False)).select_related()
     table_res = ReserveTable(res_list)
     RequestConfig(request).configure(table_res)
     return render(request, 'labbyims/reservations.html', {'table_res': table_res, }, )
+
 
 def about(request):
     return render(request, 'labbyims/about.html')
@@ -281,9 +283,10 @@ def about(request):
 
 def running_low(request):
     if request.user.is_authenticated:
-        watch_list = Watching.objects.filter(Q(prod_un__is_inactive=False),
-                                             Q(user_id=request.user),
-                                             Q(low_warn=True)).select_related()
+        watch_list = Watching.objects.filter(Q(prod_un__is_inactive = False), \
+                    Q(user_id= request.user), \
+                    Q(low_warn = True)).order_by(\
+                    -F('prod_un__init_amount')/F('prod_un__curr_amount'))
         table_watch = Running_LowTable(watch_list)
         RequestConfig(request).configure(table_watch)
         return render(request, 'labbyims/running_low.html',
