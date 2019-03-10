@@ -449,9 +449,10 @@ def search_advance(request):
 def archive(request):
     amount = Product_Unit.objects.all().annotate(
         amount=F('init_amount') - F('used_amount'))
-    amount = amount.filter(amount=0)
+    amount = amount.filter(Q(amount=0), Q(is_inactive = True))
+    info = Product_Unit.objects.filter(Q(curr_amount=0)| Q(is_inactive = True))
     # amount.save(update_fields=['curr_amount'])
-    table_arch = Product_Unit_MyTable(amount)
+    table_arch = Product_Unit_MyTable(info)
     return render(request, 'labbyims/archive.html', {'table_arch': table_arch, },)
 
 
