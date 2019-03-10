@@ -40,4 +40,5 @@ urlpatterns = [
     path('archive/', views.archive, name='archive'),
     path('search_advance/', views.search_advance, name='search_advance'),
     path('update_location/', views.update_location, name='update_location'),
+    path('tutorial/', views.tutorial, name='tutorial'),
 ]
