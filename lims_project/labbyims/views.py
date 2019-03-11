@@ -1,36 +1,43 @@
-# Create your views here.
-
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from labbyims.forms import SignUpForm
-
+from django.template import Context, Template
 from django.db.models import F,Q, FloatField
 from django.db.models.functions import Cast
-
 from django.views import View
-from .forms import AdvancedSearch, Product_UnitForm, Product_Form, Location_Form, Room_Form, Reserve_Form, Department_Form
-from .tables import Product_UnitTable, LocationTable, Product_Unit_ExpTable, FP_Product_UnitTable, Product_Unit_MyTable, FP_ReserveTable, ReserveTable, FP_Running_LowTable, Running_LowTable
-from .models import Product_Unit, Product, Location, Room, Reserve, User, Watching, Department
+from .forms import AdvancedSearch, Product_UnitForm, Product_Form, \
+                    Location_Form, Room_Form, Reserve_Form, Update_item_Form, \
+                    Department_Form, Association_Form
+from .tables import Product_UnitTable,Product_Table,LocationTable, \
+                    Product_Unit_ExpTable, FP_Product_UnitTable, \
+                    Product_Unit_MyTable, FP_ReserveTable, ReserveTable, \
+                    FP_Running_LowTable, Running_LowTable, User_DeptTable
+from .models import Product_Unit, Product, Location, Room, Reserve, User,\
+                    Watching, Department, Association
 from django_tables2 import RequestConfig
 import datetime
 from datetime import datetime, timedelta
 from django.utils import timezone
-from .filters import ProductFilter, LocationFilter, Prod_ResFilter, ProductCASFilter
+from .filters import ProductFilter, LocationFilter, Prod_ResFilter, UserFilter,\
+                DeptFilter, ProductCASFilter
 from decimal import Decimal
-
-n = []
 
 def home(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             form = AdvancedSearch(request.POST)
             if form.is_valid():
-                search_res = form.cleaned_data["search"]
+                search = form.cleaned_data["search"]
+                advanced_search=form.cleaned_data["advanced_search"]
+                form=AdvancedSearch()
+                print(search)
             else:
                 print(form.errors)
 
-            return HttpResponseRedirect('/search/?description={}'.format(search_res))
+            c={'form':form,'search': search,'advanced_search':advanced_search}
+
+            return render(request, "labbyims/search.html", c)
 
         else:
             form = AdvancedSearch(initial=request.GET)
@@ -47,10 +54,18 @@ def home(request):
         res_list=Reserve.objects.filter(Q(user_id= request.user),\
                     Q(date_res__range = [current_date, warning ])).select_related()
         table_res = FP_ReserveTable(res_list, prefix="2-")
-        RequestConfig(request).configure(table_res)
+        RequestConfig(request, paginate = {'per_page': 3}).configure(table_res)
+
+        watch_list = Watching.objects.filter(Q(prod_un__is_inactive = False), \
+                    Q(user_id= request.user), \
+                    #Q(prod_un__prod_perc__lte = 50),\
+                    Q(low_warn = True)).select_related()
+        table_low = FP_Running_LowTable(watch_list, prefix='3-')
+        RequestConfig(request,paginate = {'per_page': 3}).configure(table_low)
 
         return render(request, 'labbyims/home_afterlogin.html',{'form':form, \
-                    'table_res':table_res, 'table_exp': table_exp,},)
+                    'table_res':table_res, 'table_exp': table_exp, \
+                    'table_low':table_low},)
     else:
         return render(request, 'labbyims/home_afterlogin.html')
 
@@ -76,28 +91,51 @@ def add_product(request):
 
 def add_item(request):
     if request.method == "POST" and 'Submit' in request.POST:
-        print("getting to POST")
         form = Product_UnitForm(request.POST)
         if form.is_valid():
+        
+            product = form.cleaned_data['product']
+            #print(product)
+            location = form.cleaned_data['location']
+            #print(location)
+            constraints_list_product = [product.isreactive, product.issolid, product.isoxidliq, product.isflammable, \
+                                        product.isbaseliq, product.isorgminacid, product.isoxidacid, product.ispois_vol]
+            #print(constraints_list_product)
+            constraints_list_location = [location.isreactive, location.issolid, location.isoxidliq, location.isflammable, \
+                                         location.isbaseliq, location.isorgminacid, location.isoxidacid, location.ispois_vol]
+            #print(constraints_list_location)
+            i = 0
+            for constraint in constraints_list_product:
+                if constraint is True and constraints_list_location[i] is not True:
+                    return render(request, 'labbyims/add_item.html', {'form': form, 'text': \
+                    'WARNING: Because of safety restrictions you can\'t store the product unit in the the selected location. \
+                    Please choose a new one.'})
+                else: 
+                    pass
+                i += 1
             number = int(request.POST.get('number', False))
             low_warn_form = form.cleaned_data['low_warn_form']
             dep_id_list = list(request.POST.getlist('department'))
-            print(dep_id_list)
             instance = form.save(commit=False)
-            for i in range(0, number):
-                instance.pk = None
-                instance.save()
-                j = 0
-                if dep_id_list != False:
-                    for j in range(0, len(dep_id_list)):
-                        dep_id = dep_id_list[j]
-                        #print(dep_id)
-                        dep = Department.objects.get(pk=dep_id)
-                        #print(dep)
-                        w = Watching(user = request.user, prod_un=instance, dept=dep, low_warn=low_warn_form)
-                        w.save()
-                        j += 1
-            return redirect("/home/")
+            if instance.used_amount > instance.init_amount:
+                return render(request, 'labbyims/add_item.html', {'form': form, 'text': 'WARNING: Used amount can\'t be higher than used amount.'})
+            elif instance.init_amount == 0:
+                return render(request, 'labbyims/add_item.html', {'form': form, 'text': 'WARNING: Initial amount can\'t be set to 0.'})
+            
+            else:
+                instance.curr_amount = instance.init_amount - instance.used_amount
+                for i in range(0, number):
+                    instance.pk = None
+                    instance.save()
+                    j = 0
+                    if dep_id_list != False:
+                        for j in range(0, len(dep_id_list)):
+                            dep_id = dep_id_list[j]
+                            dep = Department.objects.get(pk=dep_id)
+                            w = Watching(user = request.user, prod_un=instance, dept=dep, low_warn=low_warn_form)
+                            w.save()
+                            j += 1
+                return redirect("/home/")
         else:
             print(form.errors)
 
@@ -113,17 +151,21 @@ def add_item(request):
                 prod_name = prod.name
                 prod_id = prod.id
             form = Product_UnitForm(initial={'product': Product.objects.get(pk=prod_id)})
+            
+            
+            #self.fields['answer'].queryset = Choice.objects.filter(question=kwargs['instance'])
+            
+            #form.location.queryset = Location.objects.filter()
 
     return render(request, 'labbyims/add_item.html', {'form': form, 'cas': cas_search, 'name':prod_name})
 
-def add_item_cas(request):   
+def add_item_cas(request):
     return render(request, 'labbyims/add_item_cas.html')
 
 def inventory(request):
     table = Product_UnitTable(Product_Unit.objects.all())
     RequestConfig(request).configure(table)
     return render(request, 'labbyims/inventory.html', {'table': table})
-
 
 def add_location(request):
     if request.method == "POST":
@@ -139,7 +181,6 @@ def add_location(request):
 
     context = {'form': form}
     return render(request, 'labbyims/add_location.html', context,)
-
 
 def locations(request):
     table_1 = LocationTable(Location.objects.all())
@@ -189,12 +230,27 @@ def add_department(request):
         form = Department_Form()
     context = {'form': form}
     return render(request, 'labbyims/add_department.html', context)
-    
+
+def add_association(request):
+    if request.method == "POST":
+        form = Association_Form(request.POST)
+        if form.is_valid():
+            assoc = form.save(commit=False)
+            assoc.user = request.user
+            assoc.save()
+            return HttpResponseRedirect('.')
+        else:
+            print(form.errors)
+    else:
+        form = Association_Form()
+    context = {'form': form}
+    return render(request, 'labbyims/add_association.html', context)
+
 def add_reservation(request):
     if request.method == "POST":
         form = Reserve_Form(request.POST)
         add_res = form.save(commit=False)
-        print(request.user)
+        #print(request.user)
         add_res.user = request.user
         add_res.save()
         return HttpResponseRedirect('.')
@@ -237,14 +293,131 @@ def running_low(request):
 def about(request):
     return render(request, 'labbyims/about.html')
 
-def user_page(request):
 
-    model = User
-    template_name = 'labbyims/user_page.html'
-    def get_queryset():
-        return User.objects.all()
-    u = get_queryset()
-    print (u)
-    context={'user':u}
+def running_low(request):
+    if request.user.is_authenticated:
+        watch_list = Watching.objects.filter(Q(prod_un__is_inactive = False), \
+                    Q(user_id= request.user), \
+                    Q(low_warn = True)).select_related()
+        table_watch = Running_LowTable(watch_list)
+        RequestConfig(request).configure(table_watch)
+        return render(request, 'labbyims/running_low.html', \
+                    {'table_watch':table_watch,},)
+    else:
+        return render(request, 'labbyims/home_afterlogin.html')
 
-    return render(request, 'labbyims/user_page.html', context)
+
+def user_info(request):
+    if request.user.is_authenticated:
+
+        userprofile = User.objects.filter(id= request.user.id)
+        user_filter = UserFilter(request.GET, queryset=userprofile)
+
+        dept_list =Association.objects.filter(user = request.user.id)
+        table_dept = User_DeptTable(dept_list)
+        RequestConfig(request).configure(table_dept)
+
+        return render(request, 'labbyims/user_info.html', \
+                    {'filter':user_filter, 'table_dept':table_dept})
+    else:
+        return render(request, 'labbyims/home_afterlogin.html')
+
+
+def update_item(request):
+    if request.method == "POST":
+        form = Update_item_Form(request.POST)
+        edit = form.save(commit=False)
+        prod_units = form.cleaned_data["prod_units"]
+        used_amount = form.cleaned_data["used_amount"]
+        retest_date = form.cleaned_data["ret_date"]
+        opened = form.cleaned_data["open_date"]
+        loc = form.cleaned_data["location"]
+        expi_date = form.cleaned_data["exp_date"]
+        delete=request.POST.getlist("delete_entry")
+        archived = request.POST.getlist("is_inactive")
+        change_prod_unit = Product_Unit.objects.get(id=prod_units.id)
+
+        if delete:
+            change_prod_unit.delete()
+        else:
+            if used_amount:
+                if used_amount > change_prod_unit.curr_amount:
+                    pass
+                else:
+                    change_prod_unit.curr_amount = change_prod_unit.curr_amount - used_amount
+                    print(change_prod_unit.curr_amount)
+            if retest_date:
+                change_prod_unit.ret_date = retest_date
+            if opened:
+                change_prod_unit.open_date = opened
+            if loc:
+                change_prod_unit.location = loc
+            if expi_date:
+                change_prod_unit.exp_date = expi_date
+            if archived:
+                change_prod_unit.is_inactive = True
+            change_prod_unit.save()
+
+        return HttpResponseRedirect('.')
+    else:
+        form = Update_item_Form()
+
+
+    return render(request, 'labbyims/update_item.html', {"form":form})
+
+
+
+
+def add_department(request):
+    if request.method == "POST":
+        form = Department_Form(request.POST)
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponseRedirect('.')
+        else:
+            print(form.errors)
+    else:
+        form = Department_Form()
+    context = {'form': form}
+    return render(request, 'labbyims/add_department.html', context)
+
+
+def search_advance(request):
+    search = request.GET.get('search', None)
+    choice=request.GET.get('advanced_search',None)
+    if search is not None:
+        if choice=='location':
+            location_list = Location.objects.all()
+            location_list = location_list.filter(name__contains=search)
+            table_se = LocationTable(location_list)
+            RequestConfig(request).configure(table_se)
+            return render(request, 'labbyims/search_location.html', {'table_se': table_se,}, )
+
+        if choice is None:
+            product_list = Product_Unit.objects.all()
+            product_list = product_list.filter(description__icontains=search)
+            table_se = Product_Unit_MyTable(product_list)
+            RequestConfig(request).configure(table_se)
+            return render(request, 'labbyims/search_list.html', {'table_se': table_se,},)
+
+
+        if choice=='unit':
+            product_list = Product_Unit.objects.all()
+            product_list = product_list.filter(description__icontains=search)
+            table_se = Product_Unit_MyTable(product_list)
+            RequestConfig(request).configure(table_se)
+            return render(request, 'labbyims/search_list.html', {'table_se': table_se,},)
+
+        if choice == 'product':
+            product = Product.objects.all()
+            product= product.filter(name__icontains=search)
+            table = Product_Table(product)
+            RequestConfig(request).configure(table)
+            return render(request, 'labbyims/search_product.html', {'table': table, },)
+
+def archive(request):
+    amount=Product_Unit.objects.all().annotate(amount=F('init_amount')-F('used_amount'))
+    amount=amount.filter(amount=0)
+    #amount.save(update_fields=['curr_amount'])
+    table_arch=Product_Unit_MyTable(amount)
+    return render(request, 'labbyims/archive.html', {'table_arch': table_arch, },)
