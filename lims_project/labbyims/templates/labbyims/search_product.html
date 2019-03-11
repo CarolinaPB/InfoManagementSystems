@@ -1,26 +1,19 @@
 {% extends "labbyims/base.html" %}
 {% load render_table from django_tables2 %}
-{% load widget_tweaks %}
 
 {% block content %}
 
-<br><br><br><br>
-<br><br><br><br>
-  <form method="get">
-    <div class="well">
-      <h4 style="margin-top: 0">Product</h4>
+<br><br><br><br><br>
 
 
-<main>
+<h1>Product</h1>
 
-    <head>
-        <br><br>
+<br><br>
+<input type="button" class="btn btn-light" value="Go back" onClick="javascript:history.go(-1)" />
+<br><br>
 
-    <body>
 
-        {% render_table table %}
-    </body>
+{% render_table table %}
 
-</main>
 <br><br><br>
 {% endblock %}

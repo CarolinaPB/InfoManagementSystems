@@ -24,7 +24,6 @@
                 <center >Search</center></h2>
                 <br>
                 <form action="/search_advance/" method="get">
-                {% csrf_token %}
                 {% crispy form form.helper %}
                 </form>
             </div>
