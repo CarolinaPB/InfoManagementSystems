@@ -153,7 +153,7 @@ def add_item(request):
             for prod in prod_set:
                 prod_name = prod.name
                 prod_id = prod.id
-            form = Product_UnitForm(
+            form = Product_UnitForm()
 
     return render(request, 'labbyims/add_item.html', {'form': form, 'cas': cas_search, 'name': prod_name})
 

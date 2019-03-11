@@ -43,3 +43,45 @@
 </div>
 
 {% endblock %}
+{% block login %}
+<div class="container">
+    <br><br><br><br>
+    <div class="container-fluid" align="justify">
+        
+        <h1>Labby tutorial</h1>
+        <br><br>
+        <p>Welcome to the Labby tutorial.  Here we will explain how Labby works and how you can best use it to improve your laboratory management!</p>
+        <br><br><br><br>
+
+        <h2>The front page</h2>
+        <img src="{% static 'labbyims/front_page.jpg' %}" alt="Front page" style="width:1400px;height:720px;">
+        <br><br>
+        <p>Above is the front page.  The numbered parts are as follows:</p>
+        <br>
+        <ol>
+            <li>The search bar.  Using the drop-down menu, you can choose between searching for a particular product unit, a location or product.</li>
+            <li>The reminders.  Here you will see reminders about reservations you have made, product units that are about to expire or need to be retested and product units that are running out.</li>
+            <li>The top bar.  It has several options and is accessible from every page of the site.  First is a simple search bar, this one only allows searches for product units.  Second are three buttons: Add product, Add item and Update item.  These link to their respective pages, see below.  Third is the user drop down menu.  Here you can find links to various other sites, see below.</li>
+        </ol>
+        <br><br>
+        <img src="{% static 'labbyims/drop_down.jpg' %}" alt="Drop down menu">
+        <br><br>
+        <p>Above is the content of the drop-down menu.  The links lead to different parts of the site as well as allowing the user to log out.</p>
+        <br><br><br><br>
+
+        <h2>The add product page</h2>
+        <img src="{% static 'labbyims/add_product.jpg' %}" alt="Add product" style="width:1400px;height:720px;">
+        <br><br>
+        <p>
+            On this page, you can add new products to the database.  A product must have a CAS number and a (descriptive) name.  You must also define the temperature range in which it should be kept and any constraints it might have, such as it being flammable, to ensure it is only stored in a compatible location.<br>
+            You can also head straight to the add product unit page by clicking the "Add unit" link.
+        </p>
+        <br><br><br><br>
+
+        <h2>The add item CAS page</h2>
+        <img src="{% static 'labbyims/add_item_cas.jpg' %}" alt="Add item cas" style="width:1400px;height:720px;">
+
+        <br><br><br><br><br><br><br><br><br><br><br><br>
+    </div>
+</div>
+{% endblock %}
