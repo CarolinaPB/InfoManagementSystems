@@ -15,12 +15,13 @@
 </ul>
 {% endif %}
 <P>Please fill out this form to add new items to the database:
+{{ text }}<br><br>
 
+<P>Please fill out this form to add new items to the database:
 <br>{{ cas }}
 
 <form action="" method=POST>
-
-	{% csrf_token %}
+    {% csrf_token %}
     {{ form|crispy}}
     <br><br>
     <input type="submit" class="btn btn-light" value="Submit" name="Submit">  <input type="reset" value="Reset" name="Reset">

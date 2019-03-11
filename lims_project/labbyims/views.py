@@ -94,30 +94,51 @@ def add_product(request):
 
 def add_item(request):
     if request.method == "POST" and 'Submit' in request.POST:
-        print("getting to POST")
         form = Product_UnitForm(request.POST)
         if form.is_valid():
+
+            product = form.cleaned_data['product']
+            #print(product)
+            location = form.cleaned_data['location']
+            #print(location)
+            constraints_list_product = [product.isreactive, product.issolid, product.isoxidliq, product.isflammable, \
+                                        product.isbaseliq, product.isorgminacid, product.isoxidacid, product.ispois_vol]
+            #print(constraints_list_product)
+            constraints_list_location = [location.isreactive, location.issolid, location.isoxidliq, location.isflammable, \
+                                         location.isbaseliq, location.isorgminacid, location.isoxidacid, location.ispois_vol]
+            #print(constraints_list_location)
+            i = 0
+            for constraint in constraints_list_product:
+                if constraint is True and constraints_list_location[i] is not True:
+                    return render(request, 'labbyims/add_item.html', {'form': form, 'text': \
+                    'WARNING: Because of safety restrictions you can\'t store the product unit in the the selected location. \
+                    Please choose a new one.'})
+                else:
+                    pass
+                i += 1
             number = int(request.POST.get('number', False))
             low_warn_form = form.cleaned_data['low_warn_form']
             dep_id_list = list(request.POST.getlist('department'))
-            print(dep_id_list)
             instance = form.save(commit=False)
-            for i in range(0, number):
-                instance.pk = None
-                instance.save()
-                j = 0
-                if dep_id_list != False:
-                    for j in range(0, len(dep_id_list)):
-                        dep_id = dep_id_list[j]
-                        # print(dep_id)
-                        dep = Department.objects.get(pk=dep_id)
-                        # print(dep)
-                        w = Watching(user=request.user, prod_un=instance,
-                                     dept=dep, low_warn=low_warn_form)
-                        w.save()
-                        j += 1
-            messages.success(request, 'Unit added!')
-            return redirect("/home/")
+            if instance.used_amount > instance.init_amount:
+                return render(request, 'labbyims/add_item.html', {'form': form, 'text': 'WARNING: Used amount can\'t be higher than used amount.'})
+            elif instance.init_amount == 0:
+                return render(request, 'labbyims/add_item.html', {'form': form, 'text': 'WARNING: Initial amount can\'t be set to 0.'})
+
+            else:
+                instance.curr_amount = instance.init_amount - instance.used_amount
+                for i in range(0, number):
+                    instance.pk = None
+                    instance.save()
+                    j = 0
+                    if dep_id_list != False:
+                        for j in range(0, len(dep_id_list)):
+                            dep_id = dep_id_list[j]
+                            dep = Department.objects.get(pk=dep_id)
+                            w = Watching(user = request.user, prod_un=instance, dept=dep, low_warn=low_warn_form)
+                            w.save()
+                            j += 1
+                return redirect("/home/")
         else:
             print(form.errors)
 
