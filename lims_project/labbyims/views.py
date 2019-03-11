@@ -138,7 +138,8 @@ def add_item_cas(request):
     return render(request, 'labbyims/add_item_cas.html')
 
 def inventory(request):
-    table = Product_UnitTable(Product_Unit.objects.all())
+    inv_list = Product_Unit.objects.filter(is_inactive=False)
+    table = Product_UnitTable(inv_list)
     RequestConfig(request).configure(table)
     return render(request, 'labbyims/inventory.html', {'table': table})
 
@@ -163,7 +164,8 @@ def locations(request):
     return render(request, 'labbyims/locations.html', {'table_1': table_1})
 
 def my_inventory(request):
-    table_my_inv = Product_Unit_MyTable(Product_Unit.objects.all())
+    my_inv_list = Product_Unit.objects.filter(is_inactive=False)
+    table_my_inv = Product_Unit_MyTable(my_inv_list)
     RequestConfig(request).configure(table_my_inv)
     return render(request, 'labbyims/my_inventory.html', {'table_my_inv': table_my_inv})
 
