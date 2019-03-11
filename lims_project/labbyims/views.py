@@ -247,15 +247,19 @@ def add_association(request):
 def add_reservation(request):
     if request.method == "POST":
         form = Reserve_Form(request.POST)
-        if form.is_valid():
-            add_res = form.save(commit=False)
-            # print(request.user)
-            add_res.user = request.user
-            add_res.save()
-            messages.success(request, 'Reservation added!')
-            return HttpResponseRedirect('.')
-        else:
-            print(form.errors)
+        #if form.is_valid():
+        add_res = form.save(commit=False)
+        # print(request.user)
+        add_res.user = request.user
+        unit = request.POST.get("prod_un")
+        print(unit)
+        print(Product_Unit.prod_un.get(description=unit).id)
+        #add_res.prod_un= Product_Unit.prod_un.get(description=unit).id
+        add_res.save()
+        messages.success(request, 'Reservation added!')
+        return HttpResponseRedirect('.')
+        # else:
+        #     print(form.errors)
 
     else:
         form = Reserve_Form()
@@ -305,15 +309,17 @@ def user_info(request):
         table_dept = User_DeptTable(dept_list)
         user_department = Department.objects.all()
         dept_list = []
-        for el in user_department:
-            dept_list.append(el.name)
+        depts = []
+        for el in Association.objects.all():
+            if el.user == request.user:
+                depts.append(el.dept)
         #print(dept_list)
         #user_department = user_department.name
         # print(user_department)
         RequestConfig(request).configure(table_dept)
 
         return render(request, 'labbyims/user_info.html',
-                      {'filter': user_filter, 'table_dept': table_dept, 'dept': dept_list})
+                      {'filter': user_filter, 'table_dept': table_dept, 'dept': depts})
     else:
         return render(request, 'labbyims/home_afterlogin.html')
 
