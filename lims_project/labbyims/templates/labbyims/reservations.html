@@ -7,21 +7,10 @@
 <br>
 <a href="{% url 'add_reservation' %}"class="btn btn-light">Add reservation</a>
 <a href="{% url 'update_reservation' %}"class="btn btn-light">Update reservation</a>
-<br>
-<br><input type="button" class="btn btn-light" value="Go back" onClick="javascript:history.go(-1)" />
+<input type="button" class="btn btn-light" value="Go back" onClick="javascript:history.go(-1)" />
+<br><br>
 
-
-
-<main>
-
-    <head>
-        <br><br>
-
-    <body>
         {% render_table table_res %}
-    </body>
-
-</main>
 <br><br>
 
 {% endblock %}
