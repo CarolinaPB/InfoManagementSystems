@@ -96,7 +96,7 @@ def add_item(request):
     if request.method == "POST" and 'Submit' in request.POST:
         form = Product_UnitForm(request.POST)
         if form.is_valid():
-        
+
             product = form.cleaned_data['product']
             #print(product)
             location = form.cleaned_data['location']
@@ -113,7 +113,7 @@ def add_item(request):
                     return render(request, 'labbyims/add_item.html', {'form': form, 'text': \
                     'WARNING: Because of safety restrictions you can\'t store the product unit in the the selected location. \
                     Please choose a new one.'})
-                else: 
+                else:
                     pass
                 i += 1
             number = int(request.POST.get('number', False))
@@ -124,7 +124,7 @@ def add_item(request):
                 return render(request, 'labbyims/add_item.html', {'form': form, 'text': 'WARNING: Used amount can\'t be higher than used amount.'})
             elif instance.init_amount == 0:
                 return render(request, 'labbyims/add_item.html', {'form': form, 'text': 'WARNING: Initial amount can\'t be set to 0.'})
-            
+
             else:
                 instance.curr_amount = instance.init_amount - instance.used_amount
                 for i in range(0, number):
@@ -153,9 +153,11 @@ def add_item(request):
             for prod in prod_set:
                 prod_name = prod.name
                 prod_id = prod.id
-            form = Product_UnitForm()
+            form = Product_UnitForm(
+                initial={'product': Product.objects.get(pk=prod_id)})
 
     return render(request, 'labbyims/add_item.html', {'form': form, 'cas': cas_search, 'name': prod_name})
+
 
 def add_item_cas(request):
     return render(request, 'labbyims/add_item_cas.html')
@@ -165,6 +167,7 @@ def inventory(request):
     table = Product_UnitTable(Product_Unit.objects.all())
     RequestConfig(request).configure(table)
     return render(request, 'labbyims/inventory.html', {'table': table})
+
 
 def add_location(request):
     if request.method == "POST":
@@ -181,6 +184,7 @@ def add_location(request):
 
     context = {'form': form}
     return render(request, 'labbyims/add_location.html', context,)
+
 
 def locations(request):
     table_1 = LocationTable(Location.objects.all())
