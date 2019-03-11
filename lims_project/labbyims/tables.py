@@ -58,9 +58,9 @@ class ReserveTable(tables.Table):
 class Product_Unit_MyTable(tables.Table):
     class Meta:
         model = Product_Unit
-        fields = ('description', 'product', 'purity', 'curr_amount', \
+        fields = ('in_house_no','description', 'product', 'purity', 'curr_amount', \
                 'm_unit', 'location', 'room', 'exp_date', 'ret_date',  'batch', \
-                 'in_house_no' 'del_date', 'open_date', 'company', 'cat_num')
+                 'del_date', 'open_date', 'company', 'cat_num')
 
         template_name = 'django_tables2/bootstrap.html'
 
