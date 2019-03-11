@@ -268,17 +268,17 @@ def add_association(request):
 def add_reservation(request):
     if request.method == "POST":
         form = Reserve_Form(request.POST)
-        #if form.is_valid():
-        add_res = form.save(commit=False)
-        # print(request.user)
-        add_res.user = request.user
-        unit = request.POST.get("prod_un")
-        print(unit)
-        print(Product_Unit.prod_un.get(description=unit).id)
-        #add_res.prod_un= Product_Unit.prod_un.get(description=unit).id
-        add_res.save()
-        messages.success(request, 'Reservation added!')
-        return HttpResponseRedirect('.')
+        if form.is_valid():
+            add_res = form.save(commit=False)
+            # print(request.user)
+            add_res.user = request.user
+            unit = request.POST.get("prod_un")
+            print(unit)
+            print(Product_Unit.prod_un.get(description=unit).id)
+            #add_res.prod_un= Product_Unit.prod_un.get(description=unit).id
+            add_res.save()
+            messages.success(request, 'Reservation added!')
+            return HttpResponseRedirect('.')
         # else:
         #     print(form.errors)
 

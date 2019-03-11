@@ -17,7 +17,7 @@
         <br>
         <ol>
             <li>The search bar.  Using the drop-down menu, you can choose between searching for a particular product unit, a location or product.</li>
-            <li>The reminders.  Here you will see reminders about reservations you have made, product units that are about to expire or need to be retested and product units that are running out.</li>
+            <li>The reminders.  Here you will see reminders about reservations you have made, product units that are about to expire or need to be retested and product units that are running out.  Every blue column title can be clicked to sort by that attribute.</li>
             <li>The top bar.  It has several options and is accessible from every page of the site.  First is a simple search bar, this one only allows searches for product units.  Second are three buttons: Add product, Add item and Update item.  These link to their respective pages, see below.  Third is the user drop down menu.  Here you can find links to various other sites, see below.</li>
         </ol>
         <br><br>
@@ -37,13 +37,35 @@
 
         <h2>The add item CAS page</h2>
         <img src="{% static 'labbyims/add_item_cas.jpg' %}" alt="Add item cas" style="width:1400px;height:720px;">
+        <br><br>
+        <p>
+            When the add item button is clicked, it redirects you to this page.  Here you must enter the CAS number of a product in the database.  It will then take you to the add product unit where you can add a unit of that product to the database.
+        </p>
+        <br><br><br><br>
 
+        <h2>The add product unit page</h2>
+        <img src="{% static 'labbyims/add_item_1.jpg' %}" alt="Add item 1" style="width:1400px;height:720px;">
+        <br> <br>
+        <img src="{% static 'labbyims/add_item_2.jpg' %}" alt="Add item 2" style="width:1400px;height:720px;">
+        <br><br>
+        <p>
+            Once the CAS number has been chosen, you get to the add product unit page.  On this page you can add a new container of a particular chemical.  You can change the product this unit is a part of, in case you chose the wrong CAS number.  In order to create a new unit, you must input a description (we recommend something descriptive), a delivery date, a company that produced it, an initial amount as well as the measurement unit and finally a location.<br>
+            All other attributes on this page are optional or have defaults but we recommend that you associate any product unit with at least one department.  This allows users associated with this department to watch it's status, getting reminders if it is close to finished.  If you intend to add several units with exactly the same attribute values, this is also possible.  Simply input the number of units to add at the bottom field.
+        </p>
+        <br><br><br><br>
+
+        <h2>The add product unit page</h2>
+        <img src="{% static 'labbyims/update_unit.jpg' %}" alt="Update unit" style="width:1400px;height:720px;">
+        <br> <br>
+        <p>
+            If a product unit has been moved, it has been opened or some amount used, you can use the update product unit page to update the information for that unit.
+        </p>
+        <br><br><br><br>
         <br><br><br><br><br><br><br><br><br><br><br><br>
     </div>
 </div>
 
 {% endblock %}
-<<<<<<< HEAD
 {% block login %}
 <div class="container">
     <br><br><br><br>
@@ -86,5 +108,3 @@
     </div>
 </div>
 {% endblock %}
-=======
->>>>>>> carolina
