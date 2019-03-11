@@ -1,67 +1,18 @@
-{% extends 'labbyims/base.html' %}
+{% extends "labbyims/base.html" %}
+{% load crispy_forms_tags %}
+{% load render_table from django_tables2 %}
+
 
 {% block content %}
 
 <br><br><br><br><br>
-  <form method="get">
-    {{ filter.form.as_p }}
-    <button type="submit" class="btn btn-light">Search</button>
-      <br><br><br>
-      <p>*Restricted to be safe for</p>
-  </form>
 
+<h1>Location</h1>
 
-      <table class="table table-bordered" >
+<br>
+<input type="button" class="btn btn-light" value="Go back" onClick="javascript:history.go(-1)" />
+<br><br>
+{% render_table table_se %}
 
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Location Name</th>
-            <th>Description</th>
-            <th>Room ID</th>
-            <th>*Poisons-non-volatile</th>
-            <th>*Reactives</th>
-            <th>*Solids</th>
-            <th>*Oxidizing Liquids</th>
-            <th>*Flammables</th>
-            <th>*Basic Liquids</th>
-            <th>*Organic and Mineral Acid</th>
-            <th>*Oxidizing Acids</th>
-            <th>*Poisons-Volatile</th>
-
-
-
-      </tr>
-        </thead>
-          <tbody>
-  {% for Location in filter.qs %}
-
-            <tr>
-          <td {
-  font-size: 24px;
-}>{{ Location.id }}</td>
-          <td>{{ Location.name }}</td>
-          <td>{{ Location.description }}</td>
-          <td>{{ Location.room_id }}</td>
-          <td>{{ Location.ispoison_nonvol }}</td>
-          <td>{{ Location.isreactive }}</td>
-          <td>{{ Location.issolid }}</td>
-          <td>{{ Location.isoxidliq }}</td>
-          <td>{{ Location.isflammable }}</td>
-          <td>{{ Location.isbaseliq }}</td>
-          <td>{{ Location.isorgminacid }}</td>
-          <td>{{ Location.isoxidacid }}</td>
-          <td>{{ Location.ispois_vol }}</td>
-
-
-
-
-
-
-        </tr>
-  {% endfor %}
-
-              </tbody>
-  </table>
-
+<br><br><br>
 {% endblock %}

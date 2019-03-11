@@ -43,7 +43,7 @@ def home(request):
             c = {'form': form, 'search': search,
                  'advanced_search': advanced_search}
 
-            return render(request, "labbyims/search.html", c)
+            return render(request,"labbyims/search_advance.html", c)
 
         else:
             form = AdvancedSearch(initial=request.GET)
@@ -164,7 +164,8 @@ def add_item_cas(request):
 
 
 def inventory(request):
-    table = Product_UnitTable(Product_Unit.objects.all())
+    inv_list = Product_Unit.objects.filter(is_inactive=False)
+    table = Product_UnitTable(inv_list)
     RequestConfig(request).configure(table)
     return render(request, 'labbyims/inventory.html', {'table': table})
 
@@ -193,7 +194,8 @@ def locations(request):
 
 
 def my_inventory(request):
-    table_my_inv = Product_Unit_MyTable(Product_Unit.objects.all())
+    my_inv_list = Product_Unit.objects.filter(is_inactive=False)
+    table_my_inv = Product_Unit_MyTable(my_inv_list)
     RequestConfig(request).configure(table_my_inv)
     return render(request, 'labbyims/my_inventory.html', {'table_my_inv': table_my_inv})
 
@@ -272,20 +274,23 @@ def add_reservation(request):
             add_res = form.save(commit=False)
             # print(request.user)
             add_res.user = request.user
-            unit = request.POST.get("prod_un")
-            print(unit)
-            print(Product_Unit.prod_un.get(description=unit).id)
+            #unit = request.POST.get("prod_un")
+            #add_res.is_complete =False
+            #print(unit)
+            #print(Product_Unit.prod_un.get(description=unit).id)
             #add_res.prod_un= Product_Unit.prod_un.get(description=unit).id
             add_res.save()
             messages.success(request, 'Reservation added!')
             return HttpResponseRedirect('.')
-        # else:
-        #     print(form.errors)
+        else:
+            print(form.errors)
 
     else:
         form = Reserve_Form()
-        form.fields['prod_un'].queryset = Product_Unit.objects.filter(
-            Q(is_inactive=False)).values_list('description', flat=True)
+        #form.fields['prod_un'].queryset = Product_Unit.objects.filter(
+        #    Q(is_inactive=False)).values_list('description', flat=True)
+        #form.fields['prod_un'].queryset = Reserve.objects.filter(
+        #    Q(is_complete=None)).values_list('prod_un', flat=True)
 
     context = {'form': form}
     return render(request, 'labbyims/add_reservation.html', context)
@@ -465,21 +470,22 @@ def search_advance(request):
             product_list = product_list.filter(description__icontains=search)
             table_se = Product_Unit_MyTable(product_list)
             RequestConfig(request).configure(table_se)
-            return render(request, 'labbyims/search_list.html', {'table_se': table_se, },)
+            return render(request, 'labbyims/search_list.html', {'table_se': table_se,}, )
 
-        if choice == 'unit':
+        if choice=='unit':
             product_list = Product_Unit.objects.all()
             product_list = product_list.filter(description__icontains=search)
             table_se = Product_Unit_MyTable(product_list)
             RequestConfig(request).configure(table_se)
-            return render(request, 'labbyims/search_list.html', {'table_se': table_se, },)
+            return render(request, 'labbyims/search_list.html', {'table_se': table_se,}, )
 
         if choice == 'product':
             product = Product.objects.all()
             product = product.filter(name__icontains=search)
             table = Product_Table(product)
             RequestConfig(request).configure(table)
-            return render(request, 'labbyims/search_product.html', {'table': table, },)
+            return render(request, 'labbyims/search_product.html', {'table': table, }, )
+
 
 
 def archive(request):
