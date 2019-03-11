@@ -30,14 +30,15 @@ class AdvancedSearch(forms.Form):
     advanced_search = forms.ChoiceField(choices=CHOICES, label=False)
     advanced_search.widget.attrs.update({'class': 'col-md-6'})
 
-    search.widget.attrs.update({'name': 'description'})
-    search.widget.attrs.update({'type': 'search'})
+    #search.widget.attrs.update({'name': 'description'})
+    #search.widget.attrs.update({'type': 'search'})
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(AdvancedSearch,self).__init__(*args, **kwargs)
 
-        self.helper = FormHelper
+        self.helper = FormHelper(self)
         self.helper.form_show_labels = False
+        self.helper.form.method='GET'
 
 
         self.helper.layout = Layout(
