@@ -60,8 +60,7 @@ class Product_Unit_MyTable(tables.Table):
         model = Product_Unit
         fields = ('in_house_no','description', 'product', 'purity', \
                 'curr_amount', 'm_unit', 'location', 'room', 'exp_date', \
-                'ret_date',  'batch', 'del_date', 'open_date', 'company', \
-                'cat_num')
+                'ret_date', 'open_date', 'company', 'cat_num', 'batch',)
 
         template_name = 'django_tables2/bootstrap.html'
 
