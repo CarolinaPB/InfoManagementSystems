@@ -1,0 +1,19 @@
+{% extends "labbyims/base.html" %}
+{% load crispy_forms_tags %}
+{% load render_table from django_tables2 %}
+
+
+{% block content %}
+
+<br><br><br><br>
+<br><br><br><br>
+  <form method="GET">
+
+      <h4 style="margin-top: 0">Location</h4>
+
+
+        {% render_table table_se %}
+
+  </form>
+<br><br><br>
+{% endblock %}
