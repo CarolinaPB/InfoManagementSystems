@@ -43,7 +43,7 @@ def home(request):
             c = {'form': form, 'search': search,
                  'advanced_search': advanced_search}
 
-            return render(request, "labbyims/search.html", c)
+            return render(request,"labbyims/search_advance.html", c)
 
         else:
             form = AdvancedSearch(initial=request.GET)
@@ -470,21 +470,22 @@ def search_advance(request):
             product_list = product_list.filter(description__icontains=search)
             table_se = Product_Unit_MyTable(product_list)
             RequestConfig(request).configure(table_se)
-            return render(request, 'labbyims/search_list.html', {'table_se': table_se, },)
+            return render(request, 'labbyims/search_list.html', {'table_se': table_se,}, )
 
-        if choice == 'unit':
+        if choice=='unit':
             product_list = Product_Unit.objects.all()
             product_list = product_list.filter(description__icontains=search)
             table_se = Product_Unit_MyTable(product_list)
             RequestConfig(request).configure(table_se)
-            return render(request, 'labbyims/search_list.html', {'table_se': table_se, },)
+            return render(request, 'labbyims/search_list.html', {'table_se': table_se,}, )
 
         if choice == 'product':
             product = Product.objects.all()
             product = product.filter(name__icontains=search)
             table = Product_Table(product)
             RequestConfig(request).configure(table)
-            return render(request, 'labbyims/search_product.html', {'table': table, },)
+            return render(request, 'labbyims/search_product.html', {'table': table, }, )
+
 
 
 def archive(request):
