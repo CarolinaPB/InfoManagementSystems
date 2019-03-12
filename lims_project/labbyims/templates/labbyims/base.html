@@ -40,8 +40,8 @@
                         <button class="btn my-2 my-sm-0" type="submit">Search</button>
                     </form>
                     <a class="nav-item nav-link" href="{% url 'add_product' %}">Add product</a>
-                    <a class="nav-item nav-link" href="{% url 'add_item_cas' %}">Add item</a>
-                    <a class="nav-item nav-link" href="{% url 'update_item' %}">Update item</a>
+                    <a class="nav-item nav-link" href="{% url 'add_item_cas' %}">Add unit</a>
+                    <a class="nav-item nav-link" href="{% url 'update_item' %}">Update unit</a>
                     <li class="nav-item dropdown hidden-md-down">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <strong>User</strong>
@@ -97,14 +97,14 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 <script type="text/javascript">
-    "Shows pop-up window asking the user to confirm if they really want to delete the item from the database"
+    "Shows pop-up window asking the user to confirm if they really want to delete the unit from the database"
     "If the user cancels, the checkbox becomes unchecked"
 
     function cTrig(clickedid) {
         if (document.getElementById(clickedid).checked == false) {
             return false;
         } else {
-            var box = confirm("Are you sure you want to remove this item from the database? This action is irreversible");
+            var box = confirm("Are you sure you want to remove this unit from the database? This action is irreversible");
             if (box == true)
                 return true;
             else
