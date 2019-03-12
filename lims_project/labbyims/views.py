@@ -247,6 +247,7 @@ def add_association(request):
             if form.is_valid():
                 assoc = form.save(commit=False)
                 assoc.user = request.user
+
                 assoc.save()
                 messages.success(request, 'Successful association!')
                 return HttpResponseRedirect('.')
@@ -257,6 +258,10 @@ def add_association(request):
             return render(request, "labbyims/add_association.html", {'form': form})
     else:
         form = Association_Form()
+        depts = Department.objects.all()
+        depts_user = depts.filter(~Q(user=request.user))
+        print(depts_user)
+        form.fields['dept'].queryset = depts_user
     context = {'form': form}
     return render(request, 'labbyims/add_association.html', context)
 
