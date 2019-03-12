@@ -386,6 +386,11 @@ def update_item(request):
                 changed = True
                 change_prod_unit.is_inactive = True
                 change_prod_unit.save()
+            changed_dept_list=[]
+            if changed:
+                fields_changed=True
+            else:
+                fields_changed=False
             if dept:
                 changed=True
                 for d in dept:
@@ -394,28 +399,59 @@ def update_item(request):
                         print("will create a new one")
                         w = Watching(user=request.user, prod_un=change_prod_unit, dept=Department.objects.get(pk=d),low_warn=low_warn_form)
                         w.save()
+                        changed_dept_list.append(True)
+                        messages.success(request, 'Association with department {} added!'.format(w.dept))
                     else:
                         if low_warn_form is False:
                             low_w = None
                         else:
                             low_w = True
                         w = Watching.objects.get(user=request.user, prod_un=change_prod_unit, dept=Department.objects.get(pk=d))
-                        w.low_warn = low_warn_form
-                        w.save()
+
                         if low_warn_form:
                             warning =""
                         else:
                             warning="not"
-
-                        messages.success(request, 'You will {} get a warning when this item is running low!'.format(warning))
-                # return HttpResponseRedirect('.')
+                        if w.dept.id ==int(d):
+                            print("same dept")
+                            if w.low_warn==low_w:
+                                same_dept = True
+                                changed_dept_list.append(False)
+                                messages.error(request, 'Couldn''t associate with department: the association with department {} already exists'.format(w.dept))
+                            else:
+                                print("different warning")
+                                w.low_warn = low_warn_form
+                                w.save()
+                                changed_dept_list.append(True)
+                                messages.success(request, 'You will {} get a warning when this unit is running low!'.format(warning))
+                        else:
+                            w.low_warn = low_w
+                            w.save()
+                            changed_dept_list.append(True)
+                            messages.success(request, 'You will {} get a warning when this unit is running low!'.format(warning))
             elif low_warn_form:
                 messages.error(request, 'Error: to get a running low warning you need to choose a department!')
 
             if changed:
-                change_prod_unit.save()
-                messages.success(request, 'Unit updated!')
-                return HttpResponseRedirect('.')
+                if changed_dept_list:
+                    if sum(changed_dept_list)>0:
+                        change_prod_unit.save()
+                        messages.success(request, 'Unit updated!')
+                        return HttpResponseRedirect('.')
+                    elif same_dept:
+                        if fields_changed:
+                            change_prod_unit.save()
+                            messages.success(request, 'Unit updated!')
+                            return HttpResponseRedirect('.')
+                    else:
+                        change_prod_unit.save()
+                        messages.success(request, 'Unit updated!')
+                        return HttpResponseRedirect('.')
+                else:
+                    change_prod_unit.save()
+                    messages.success(request, 'Unit updated!')
+                    return HttpResponseRedirect('.')
+
             else:
                 messages.error(
                     request, 'Error: please choose a field to update!')
