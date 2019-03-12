@@ -179,3 +179,17 @@ input[type=search] {
     text-align-last:center;
 
 }
+
+/* Color of the <a> --> link buttons */
+#remove_padding a {
+  color: black;
+}
+a {
+  color: black;
+}
+footer a{
+  color: white;
+}
+.dropdown-menu a{
+    color:black;
+}

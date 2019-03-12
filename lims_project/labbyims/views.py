@@ -351,11 +351,13 @@ def update_item(request):
         archived = request.POST.getlist("is_inactive")
         dept = request.POST.getlist("department")
         low_warn_form = form.cleaned_data["low_warn_form"]
-        print(low_warn_form)
-        print(dept)
+        print(loc)
         change_prod_unit = Product_Unit.objects.get(id=prod_units.id)
         changed = False
-
+        parent_product = change_prod_unit.product
+        print("parent")
+        print(parent_product.isreactive)
+        restrictions_list=["ispoison_nonvol","isreactive","issolid","isoxidliq","isflammable","isbaseliq","isorgminacid","isoxidacid","ispois_vol"]
         if delete:
             change_prod_unit.delete()
         else:
@@ -377,8 +379,13 @@ def update_item(request):
                 changed = True
                 change_prod_unit.open_date = opened
             if loc:
-                changed = True
-                change_prod_unit.location = loc
+                l = Location.objects.get(name=loc)
+                if parent_product.ispoison_nonvol == l.ispoison_nonvol and parent_product.isreactive==l.isreactive and parent_product.issolid ==l.issolid and parent_product.isoxidliq == parent_product.isoxidliq and parent_product.isflammable == l.isflammable and parent_product.isbaseliq == l.isbaseliq and parent_product.isorgminacid ==l.isorgminacid and parent_product.isoxidacid ==l.isoxidacid and parent_product.ispois_vol ==l.ispois_vol:
+                    changed = True
+                    change_prod_unit.location = loc
+                else:
+                    messages.error(request,"The location {} is incompatible with {}".format(loc, prod_units))
+
             if expi_date:
                 changed = True
                 change_prod_unit.exp_date = expi_date
