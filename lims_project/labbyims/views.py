@@ -105,9 +105,8 @@ def add_item(request):
             i = 0
             for constraint in constraints_list_product:
                 if constraint is True and constraints_list_location[i] is not True:
-                    return render(request, 'labbyims/add_item.html', {'form': form, 'text':
-                                                                      'WARNING: Because of safety restrictions you can\'t store the product unit in the the selected location. \
-                    Please choose a new one.'})
+                    messages.error(request,'WARNING: Because of safety restrictions you can\'t store {} in the the selected location {}. Please choose a new one.'.format(product, location))
+                    return render(request, 'labbyims/add_item.html', {'form': form,})
                 else:
                     pass
                 i += 1
@@ -116,9 +115,11 @@ def add_item(request):
             dep_id_list = list(request.POST.getlist('department'))
             instance = form.save(commit=False)
             if instance.used_amount > instance.init_amount:
-                return render(request, 'labbyims/add_item.html', {'form': form, 'text': 'WARNING: Used amount can\'t be higher than used amount.'})
+                messages.error(request,'WARNING: Used amount can\'t be higher than initial amount.')
+                return render(request, 'labbyims/add_item.html', {'form': form,})
             elif instance.init_amount == 0:
-                return render(request, 'labbyims/add_item.html', {'form': form, 'text': 'WARNING: Initial amount can\'t be set to 0.'})
+                messages.error(request, 'WARNING: Initial amount can\'t be set to 0.')
+                return render(request, 'labbyims/add_item.html', {'form': form,})
 
             else:
                 instance.curr_amount = instance.init_amount - instance.used_amount
@@ -267,23 +268,26 @@ def add_reservation(request):
             add_res = form.save(commit=False)
 
             add_res.user = request.user
-            #unit = request.POST.get("prod_un")
-            #add_res.is_complete =False
-            # print(unit)
-            # print(Product_Unit.prod_un.get(description=unit).id)
-            #add_res.prod_un= Product_Unit.prod_un.get(description=unit).id
-            add_res.save()
-            messages.success(request, 'Reservation added!')
+            res_amount = form.cleaned_data["amount_res"]
+            res = int(res_amount)
+            print(res)
+            unit = request.POST.get("prod_un")
+            unit_to_compare = Product_Unit.objects.get(id=unit)
+            print(unit_to_compare.curr_amount)
+            if res_amount > unit_to_compare.curr_amount:
+                messages.error(request, "The amount you want to reserve can't be larger than the item's current amount")
+            else:
+                add_res.save()
+                messages.success(request, 'Reservation added!')
             return HttpResponseRedirect('.')
         else:
             print(form.errors)
+            form.fields['prod_un'].queryset = Product_Unit.objects.filter(is_inactive=False)
 
     else:
         form = Reserve_Form()
-        # form.fields['prod_un'].queryset = Product_Unit.objects.filter(
-        #    Q(is_inactive=False)).values_list('description', flat=True)
-        # form.fields['prod_un'].queryset = Reserve.objects.filter(
-        #    Q(is_complete=None)).values_list('prod_un', flat=True)
+        form.fields['prod_un'].queryset = Product_Unit.objects.filter(is_inactive=False)
+
 
     context = {'form': form}
     return render(request, 'labbyims/add_reservation.html', context)
@@ -357,7 +361,6 @@ def update_item(request):
         parent_product = change_prod_unit.product
         print("parent")
         print(parent_product.isreactive)
-        restrictions_list=["ispoison_nonvol","isreactive","issolid","isoxidliq","isflammable","isbaseliq","isorgminacid","isoxidacid","ispois_vol"]
         if delete:
             change_prod_unit.delete()
         else:
