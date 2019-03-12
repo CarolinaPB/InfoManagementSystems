@@ -111,9 +111,17 @@ h1, h2 {
 }
 
 #center_search {
-    align-content: center;
-    display:inline-block;
+    /* align-content: center; */
+    /* display:inline-block; */
+    /* display: grid; */
+    /* place-content: center; */
     /* vertical-align: middle; */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 80%;
 
 }
 
@@ -150,4 +158,24 @@ input[type=search] {
     margin: auto;
     width: 60%;
     padding: 10px;
+}
+
+.center_fields{
+    display: block;
+    margin : 0 auto;
+    width: 100%;
+    margin-left: 10%;
+}
+
+#id_search{
+    width: 80%;
+}
+#id_advanced_search{
+    float: right;
+    clear: both;
+    margin-right: 10%;
+    margin-left: 10%;
+    width: 80%;
+    text-align-last:center;
+
 }
