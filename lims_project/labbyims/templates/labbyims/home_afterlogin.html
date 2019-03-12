@@ -6,10 +6,11 @@
 <div class="row">
     <div class="first-column col-sm-8 col-lg-8">
         <div class="row">
-            <div class="col-md-4">
-            </div>
+            <!-- <div class="col-md-4">
+            </div> -->
 
-            <div id="center_search" class="col-md-4">
+            <!-- <div id="center_search" class="col-md-4"> -->
+            <div id="center_search" >
                 {% if messages %}
                 <br><br><br><br><br>
                 <ul class="messages alert-dismissable">
@@ -19,12 +20,20 @@
                     {% endfor %}
                 </ul>
                 {% endif %}
-                <br><br><br><br><br><br><br><br><br><br><br><br><br>
+                <!-- <br><br><br><br><br><br><br><br><br><br><br><br><br> -->
                 <h2 id="Search_title">
                 <center >Search</center></h2>
                 <br>
                 <form action="/search_advance/" method="get">
-                {% crispy form form.helper %}
+                <!-- {% crispy form form.helper %} -->
+                <div class="center_fields">
+                    <span><input type="text" name="search" class="searchfield textinput textInput" id="id_search"></span>
+                    <span><input type="submit" name="submit" value="search" class="btn btn-light btn" id="submit-id-submit"></span>
+                </div>
+                <div class="center_select">
+                    <select name="advanced_search" class="select" id="id_advanced_search"> <option value="unit">Unit</option> <option value="location">Location</option> <option value="product">Product</option>
+                    </select>
+                </div>
                 </form>
             </div>
             </div>
