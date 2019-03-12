@@ -129,11 +129,15 @@ class Reserve_Form(forms.ModelForm):
 class Update_item_Form(forms.ModelForm):
     prod_units = forms.ModelChoiceField(
         queryset=Product_Unit.objects.filter(Q(is_inactive=False)), label="Select a unit")
+    low_warn_form = forms.BooleanField(
+        widget=CheckboxInput, label='Running Low Warning (only possible if you choose a department)', initial=False, required=False)
+    # add_department = forms.ModelChoiceField(widget=forms.SelectMultiple,
+    #     queryset=Product_Unit.objects.filter(Q(department=None)), label="Associate a department with this unit")
 
     class Meta:
         model = Product_Unit
         fields = ("prod_units", "used_amount", "open_date",
-                  "ret_date", "exp_date", "location", "is_inactive")
+                  "ret_date", "exp_date", "location","department","low_warn_form" ,"is_inactive")
 
         widgets = {
             "open_date": DateInput(attrs={"type": "date"}),
@@ -145,6 +149,7 @@ class Update_item_Form(forms.ModelForm):
         super(Update_item_Form, self).__init__(*args, **kwargs)
         self.fields['location'].required = False
         self.fields['used_amount'].required = False
+        #self.fields['add_department'].required =False
 
 
 class Update_reservation_Form(forms.ModelForm):
