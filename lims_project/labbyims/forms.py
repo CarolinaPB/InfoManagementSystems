@@ -84,8 +84,8 @@ class Product_Form(forms.ModelForm):
 
 
 class Association_Form(forms.ModelForm):
-    #department = forms.ModelChoiceField(queryset=Department.objects.all())
-
+    #department = forms.ModelChoiceField(
+    #    queryset=Association.objects.filter(Q(user=)), label="Select a department")
     class Meta:
         model = Association
         exclude = ['user', ]
