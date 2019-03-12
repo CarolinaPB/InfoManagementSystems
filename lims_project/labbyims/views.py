@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from labbyims.forms import SignUpForm
 from django.template import Context, Template
-from django.db.models import F,Q, FloatField
+from django.db.models import F, Q, FloatField
 from django.db.models.functions import Cast
 from django.views import View
 from django.contrib import messages
@@ -36,14 +36,13 @@ def home(request):
                 search = form.cleaned_data["search"]
                 advanced_search = form.cleaned_data["advanced_search"]
                 form = AdvancedSearch()
-                print(search)
             else:
                 print(form.errors)
 
             c = {'form': form, 'search': search,
                  'advanced_search': advanced_search}
 
-            return render(request,"labbyims/search_advance.html", c)
+            return render(request, "labbyims/search_advance.html", c)
 
         else:
             form = AdvancedSearch(initial=request.GET)
@@ -98,20 +97,16 @@ def add_item(request):
         if form.is_valid():
 
             product = form.cleaned_data['product']
-            #print(product)
             location = form.cleaned_data['location']
-            #print(location)
-            constraints_list_product = [product.isreactive, product.issolid, product.isoxidliq, product.isflammable, \
+            constraints_list_product = [product.isreactive, product.issolid, product.isoxidliq, product.isflammable,
                                         product.isbaseliq, product.isorgminacid, product.isoxidacid, product.ispois_vol]
-            #print(constraints_list_product)
-            constraints_list_location = [location.isreactive, location.issolid, location.isoxidliq, location.isflammable, \
+            constraints_list_location = [location.isreactive, location.issolid, location.isoxidliq, location.isflammable,
                                          location.isbaseliq, location.isorgminacid, location.isoxidacid, location.ispois_vol]
-            #print(constraints_list_location)
             i = 0
             for constraint in constraints_list_product:
                 if constraint is True and constraints_list_location[i] is not True:
-                    return render(request, 'labbyims/add_item.html', {'form': form, 'text': \
-                    'WARNING: Because of safety restrictions you can\'t store the product unit in the the selected location. \
+                    return render(request, 'labbyims/add_item.html', {'form': form, 'text':
+                                                                      'WARNING: Because of safety restrictions you can\'t store the product unit in the the selected location. \
                     Please choose a new one.'})
                 else:
                     pass
@@ -135,7 +130,7 @@ def add_item(request):
                         for j in range(0, len(dep_id_list)):
                             dep_id = dep_id_list[j]
                             dep = Department.objects.get(pk=dep_id)
-                            w = Watching(user = request.user, prod_un=instance, dept=dep, low_warn=low_warn_form)
+                            w = Watching(user=request.user, prod_un=instance, dept=dep, low_warn=low_warn_form)
                             w.save()
                             j += 1
                 return redirect("/home/")
@@ -144,9 +139,7 @@ def add_item(request):
 
     else:
         cas_search = request.GET.get('Search', None)
-        print(cas_search)
         prod_set = Product.objects.filter(cas=cas_search)
-        print(prod_set)
         if not prod_set:
             return render(request, 'labbyims/add_item_cas.html', {'text': "No product with this CAS number was found. Please try again."})
         else:
@@ -272,12 +265,12 @@ def add_reservation(request):
         form = Reserve_Form(request.POST)
         if form.is_valid():
             add_res = form.save(commit=False)
-            # print(request.user)
+
             add_res.user = request.user
             #unit = request.POST.get("prod_un")
             #add_res.is_complete =False
-            #print(unit)
-            #print(Product_Unit.prod_un.get(description=unit).id)
+            # print(unit)
+            # print(Product_Unit.prod_un.get(description=unit).id)
             #add_res.prod_un= Product_Unit.prod_un.get(description=unit).id
             add_res.save()
             messages.success(request, 'Reservation added!')
@@ -287,9 +280,9 @@ def add_reservation(request):
 
     else:
         form = Reserve_Form()
-        #form.fields['prod_un'].queryset = Product_Unit.objects.filter(
+        # form.fields['prod_un'].queryset = Product_Unit.objects.filter(
         #    Q(is_inactive=False)).values_list('description', flat=True)
-        #form.fields['prod_un'].queryset = Reserve.objects.filter(
+        # form.fields['prod_un'].queryset = Reserve.objects.filter(
         #    Q(is_complete=None)).values_list('prod_un', flat=True)
 
     context = {'form': form}
@@ -299,15 +292,17 @@ def add_reservation(request):
 def reservations(request):
     current_date = timezone.now()
     warning = current_date + timedelta(days=27)
-    res_list=Reserve.objects.filter(Q(user_id= request.user),\
-                    Q(date_res__range = [current_date, warning ]),\
-                    Q(prod_un__is_inactive = False), Q(is_complete = None)).select_related()
+    res_list = Reserve.objects.filter(Q(user_id=request.user),
+                                      Q(date_res__range=[current_date, warning]),
+                                      Q(prod_un__is_inactive=False), Q(is_complete=None)).select_related()
     table_res = ReserveTable(res_list)
     RequestConfig(request).configure(table_res)
     return render(request, 'labbyims/reservations.html', {'table_res': table_res, }, )
 
+
 def about(request):
     return render(request, 'labbyims/about.html')
+
 
 def tutorial(request):
     return render(request, 'labbyims/tutorial.html')
@@ -331,21 +326,13 @@ def user_info(request):
 
         userprofile = User.objects.filter(id=request.user.id)
         user_filter = UserFilter(request.GET, queryset=userprofile)
-        dept_list = Association.objects.filter(user=request.user.id)
-        table_dept = User_DeptTable(dept_list)
-        user_department = Department.objects.all()
-        dept_list = []
         depts = []
         for el in Association.objects.all():
             if el.user == request.user:
                 depts.append(el.dept)
-        #print(dept_list)
-        #user_department = user_department.name
-        # print(user_department)
-        RequestConfig(request).configure(table_dept)
 
         return render(request, 'labbyims/user_info.html',
-                      {'filter': user_filter, 'table_dept': table_dept, 'dept': depts})
+                      {'filter': user_filter, 'dept': depts})
     else:
         return render(request, 'labbyims/home_afterlogin.html')
 
@@ -362,23 +349,24 @@ def update_item(request):
         expi_date = form.cleaned_data["exp_date"]
         delete = request.POST.getlist("delete_entry")
         archived = request.POST.getlist("is_inactive")
+        dept = request.POST.getlist("department")
+        low_warn_form = form.cleaned_data["low_warn_form"]
+        print(low_warn_form)
+        print(dept)
         change_prod_unit = Product_Unit.objects.get(id=prod_units.id)
         changed = False
-
 
         if delete:
             change_prod_unit.delete()
         else:
             if used_amount > 0:
                 if change_prod_unit.curr_amount < used_amount:
-                    messages.error(request, "The used amount can't be more than the current amount")
+                    messages.error(
+                        request, "The used amount can't be more than the current amount")
                     return HttpResponseRedirect('.')
-                #if used_amount > change_prod_unit.curr_amount:
-                #    pass
                 else:
                     change_prod_unit.curr_amount = change_prod_unit.curr_amount - used_amount
                     changed = True
-            #print(change_prod_unit.curr_amount)
             if change_prod_unit.curr_amount <= 0:
                 changed = True
                 change_prod_unit.is_inactive = True
@@ -402,8 +390,37 @@ def update_item(request):
                 change_prod_unit.save()
                 messages.success(request, 'Unit updated!')
                 return HttpResponseRedirect('.')
+            if dept:
+                for d in dept:
+                    # if there is no watching with this user, prod_un and dept:
+                    if not Watching.objects.filter(Q(user=request.user), Q(prod_un=change_prod_unit), Q(dept=Department.objects.get(pk=d))):
+                        print("will create a new one")
+                        w = Watching(user=request.user, prod_un=change_prod_unit, dept=Department.objects.get(pk=d),low_warn=low_warn_form)
+                        w.save()
+                        messages.success(request, 'Unit updated!')
+                    else:
+                        if low_warn_form is False:
+                            low_w = None
+                        else:
+                            low_w = True
+                        w = Watching.objects.get(user=request.user, prod_un=change_prod_unit, dept=Department.objects.get(pk=d))
+                        w.low_warn = low_warn_form
+                        w.save()
+                        if low_warn_form:
+                            warning =""
+                        else:
+                            warning="not"
+
+                        messages.success(request, 'You will {} get a warning when this item is running low!'.format(warning))
+                return HttpResponseRedirect('.')
+
+
+            elif low_warn_form:
+                messages.error(request, 'Error: to get a running low warning you need to choose a department!')
+
             else:
-                messages.error(request, 'Error: please choose a field to update!')
+                messages.error(
+                    request, 'Error: please choose a field to update!')
                 return HttpResponseRedirect('.')
     else:
         form = Update_item_Form()
@@ -470,14 +487,14 @@ def search_advance(request):
             product_list = product_list.filter(description__icontains=search)
             table_se = Product_Unit_MyTable(product_list)
             RequestConfig(request).configure(table_se)
-            return render(request, 'labbyims/search_list.html', {'table_se': table_se,}, )
+            return render(request, 'labbyims/search_list.html', {'table_se': table_se, }, )
 
-        if choice=='unit':
+        if choice == 'unit':
             product_list = Product_Unit.objects.all()
             product_list = product_list.filter(description__icontains=search)
             table_se = Product_Unit_MyTable(product_list)
             RequestConfig(request).configure(table_se)
-            return render(request, 'labbyims/search_list.html', {'table_se': table_se,}, )
+            return render(request, 'labbyims/search_list.html', {'table_se': table_se, }, )
 
         if choice == 'product':
             product = Product.objects.all()
@@ -487,12 +504,11 @@ def search_advance(request):
             return render(request, 'labbyims/search_product.html', {'table': table, }, )
 
 
-
 def archive(request):
     amount = Product_Unit.objects.all().annotate(
         amount=F('init_amount') - F('used_amount'))
-    amount = amount.filter(Q(amount=0), Q(is_inactive = True))
-    info = Product_Unit.objects.filter(Q(curr_amount=0)| Q(is_inactive = True))
+    amount = amount.filter(Q(amount=0), Q(is_inactive=True))
+    info = Product_Unit.objects.filter(Q(curr_amount=0) | Q(is_inactive=True))
     # amount.save(update_fields=['curr_amount'])
     table_arch = Product_Unit_MyTable(info)
     return render(request, 'labbyims/archive.html', {'table_arch': table_arch, },)
