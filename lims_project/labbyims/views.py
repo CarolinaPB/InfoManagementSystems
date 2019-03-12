@@ -386,18 +386,14 @@ def update_item(request):
                 changed = True
                 change_prod_unit.is_inactive = True
                 change_prod_unit.save()
-            if changed == True:
-                change_prod_unit.save()
-                messages.success(request, 'Unit updated!')
-                return HttpResponseRedirect('.')
             if dept:
+                changed=True
                 for d in dept:
                     # if there is no watching with this user, prod_un and dept:
                     if not Watching.objects.filter(Q(user=request.user), Q(prod_un=change_prod_unit), Q(dept=Department.objects.get(pk=d))):
                         print("will create a new one")
                         w = Watching(user=request.user, prod_un=change_prod_unit, dept=Department.objects.get(pk=d),low_warn=low_warn_form)
                         w.save()
-                        messages.success(request, 'Unit updated!')
                     else:
                         if low_warn_form is False:
                             low_w = None
@@ -412,12 +408,14 @@ def update_item(request):
                             warning="not"
 
                         messages.success(request, 'You will {} get a warning when this item is running low!'.format(warning))
-                return HttpResponseRedirect('.')
-
-
+                # return HttpResponseRedirect('.')
             elif low_warn_form:
                 messages.error(request, 'Error: to get a running low warning you need to choose a department!')
 
+            if changed:
+                change_prod_unit.save()
+                messages.success(request, 'Unit updated!')
+                return HttpResponseRedirect('.')
             else:
                 messages.error(
                     request, 'Error: please choose a field to update!')
