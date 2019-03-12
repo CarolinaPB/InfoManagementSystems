@@ -90,7 +90,7 @@ class Product_Unit(models.Model):
 
     @property
     def perc_left(self):
-        return (self.curr_amount/self.init_amount)*100
+        return round((self.curr_amount/self.init_amount)*100, 3)
 
     def __str__(self):
         return self.description
@@ -113,7 +113,7 @@ class Watching(models.Model):
     prod_un = models.ForeignKey(Product_Unit, on_delete=models.CASCADE)
     dept = models.ForeignKey(Department, on_delete=models.CASCADE)
     low_warn = models.BooleanField('Running Low Warning')
-    prod_perc = models.DecimalField('Percent left', default = 100, max_digits=10, decimal_places=4)
+    #prod_perc = models.DecimalField('Percent left', default = 100, max_digits=10, decimal_places=4)
     def save(self, *args, **kwargs):
         self.prod_perc = (self.prod_un.curr_amount/self.prod_un.init_amount)*100
         super(Watching, self).save(*args, **kwargs)
