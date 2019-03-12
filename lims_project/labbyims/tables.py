@@ -5,13 +5,22 @@ from .models import Product_Unit, Location, Reserve, Watching, Product, \
 from django_tables2.utils import A
 
 class Product_UnitTable(tables.Table):
+    desc = tables.Column(accessor='description')
+    prod = tables.Column(accessor='product')
+    house_id = tables.Column(accessor='in_house_no')
+    curr_am = tables.Column(accessor='curr_amount')
+    meas_u = tables.Column(accessor='m_unit')
+    pur_perc = tables.Column(accessor='purity')
+    Loc = tables.Column(accessor='location')
+    room = tables.Column(accessor='location.room')
+    exp = tables.Column(accessor='exp_date')
+    ret = tables.Column(accessor='ret_date')
+    open = tables.Column(accessor='open_date')
+    deliv = tables.Column(accessor='del_date')
+    cat_no = tables.Column(accessor='cat_num')
+    company = tables.Column(accessor='company')
+    batch_no = tables.Column(accessor='batch')
     class Meta:
-        model = Product_Unit
-        fields = ('description', 'product', 'purity', 'curr_amount', \
-                'm_unit', 'location', 'room', 'exp_date', 'ret_date', \
-                'del_date', 'open_date', 'company', 'cat_num', 'batch', \
-                'in_house_no')
-
         template_name = 'django_tables2/bootstrap.html'
 
 class FP_ReserveTable(tables.Table):
@@ -35,9 +44,13 @@ class Running_LowTable(tables.Table):
         department = tables.Column(accessor = 'dept', \
                     verbose_name = 'Department')
         location = tables.Column(accessor = 'prod_un.location')
+        room = tables.Column(accessor = 'prod_un.location.room')
         date_exp = tables.Column(accessor = 'prod_un.exp_date')
         date_ret = tables.Column(accessor = 'prod_un.ret_date')
         perc_left = tables.Column(accessor = 'prod_un.in_house_no')
+        comp = tables.Column(accessor = 'prod_un.company')
+        cat_no = tables.Column(accessor = 'prod_un.cat_num')
+        batch = tables.Column(accessor = 'prod_un.batch')
         class Meta:
 
             template_name = 'django_tables2/bootstrap.html'
@@ -56,12 +69,21 @@ class ReserveTable(tables.Table):
         template_name = 'django_tables2/bootstrap.html'
 
 class Product_Unit_MyTable(tables.Table):
+    house_id = tables.Column(accessor='in_house_no')
+    desc = tables.Column(accessor='description')
+    prod = tables.Column(accessor='product')
+    batch_no = tables.Column(accessor='batch')
+    curr_am = tables.Column(accessor='curr_amount')
+    meas_u = tables.Column(accessor='m_unit')
+    Loc = tables.Column(accessor='location')
+    room = tables.Column(accessor='location.room')
+    exp = tables.Column(accessor='exp_date')
+    ret = tables.Column(accessor='ret_date')
+    open= tables.Column(accessor='open_date')
+    company = tables.Column(accessor='company')
+    cat_no = tables.Column(accessor='cat_num')
+    pur_perc = tables.Column(accessor='purity')
     class Meta:
-        model = Product_Unit
-        fields = ('in_house_no','description', 'product', 'purity', \
-                'curr_amount', 'm_unit', 'location', 'room', 'exp_date', \
-                'ret_date', 'open_date', 'company', 'cat_num', 'batch',)
-
         template_name = 'django_tables2/bootstrap.html'
 
 class LocationTable(tables.Table):
@@ -92,7 +114,7 @@ class Product_Unit_ExpTable(tables.Table):
 class Product_Table(tables.Table):
     class Meta:
         model = Product
-        fields = ('name', 'cas')
+        fields = ('name', 'cas', 'min_temp', 'max_temp')
         template_name = 'django_tables2/bootstrap.html'
 
 
