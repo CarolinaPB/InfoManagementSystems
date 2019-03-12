@@ -50,14 +50,16 @@ def home(request):
         current_date = timezone.now()
         warning = current_date + timedelta(days=27)
 
-        exp_filter = Product_Unit.objects.filter(Q(is_inactive=False),
-                                                 Q(exp_date__range=[current_date, warning])
-                                                 | Q(ret_date__range =[current_date, warning]) )
+        exp_filter = Product_Unit.objects.filter(Q(is_inactive=False), \
+                    Q(exp_date__range = [current_date, warning ]) | \
+                    Q(ret_date__range =[current_date, warning ]) ).order_by(\
+                    'exp_date', 'ret_date')
         table_exp = FP_Product_UnitTable(exp_filter, prefix="1-")
         RequestConfig(request, paginate={'per_page': 3}).configure(table_exp)
 
-        res_list = Reserve.objects.filter(Q(user_id=request.user),
-                                          Q(date_res__range=[current_date, warning])).select_related()
+        res_list=Reserve.objects.filter(Q(user_id= request.user),\
+                    Q(prod_un__is_inactive=False),Q(date_res__range = \
+                    [current_date, warning ])).order_by('date_res')
         table_res = FP_ReserveTable(res_list, prefix="2-")
         RequestConfig(request, paginate={'per_page': 3}).configure(table_res)
 
