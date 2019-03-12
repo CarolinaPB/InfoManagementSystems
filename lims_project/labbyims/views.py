@@ -252,8 +252,8 @@ def add_association(request):
             else:
                 print(form.errors)
         except IntegrityError:
-            messages.warning(request, 'You are already associated!')
-            return render(request, "labbyims/assoc_error.html", {'form': form})
+            messages.warning(request, 'You are already associated with this department!')
+            return render(request, "labbyims/add_association.html", {'form': form})
     else:
         form = Association_Form()
     context = {'form': form}
