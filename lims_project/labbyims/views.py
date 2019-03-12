@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from labbyims.forms import SignUpForm
 from django.template import Context, Template
-from django.db.models import F, Q, FloatField
+from django.db.models import F,Q, FloatField
 from django.db.models.functions import Cast
 from django.views import View
 from django.contrib import messages
