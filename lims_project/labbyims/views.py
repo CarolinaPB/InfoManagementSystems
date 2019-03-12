@@ -113,12 +113,17 @@ def add_item(request):
                 else: 
                     pass
                 i += 1
+            temp = location.temperature
+            if temp < product.min_temp or temp > product.max_temp:
+                 return render(request, 'labbyims/add_item.html', {'form': form, 'text': \
+                 'WARNING: You can\'t store the product unit in the the selected location because of the required temperature. \
+                 Please choose a new one.'})
             number = int(request.POST.get('number', False))
             low_warn_form = form.cleaned_data['low_warn_form']
             dep_id_list = list(request.POST.getlist('department'))
             instance = form.save(commit=False)
             if instance.used_amount > instance.init_amount:
-                return render(request, 'labbyims/add_item.html', {'form': form, 'text': 'WARNING: Used amount can\'t be higher than used amount.'})
+                return render(request, 'labbyims/add_item.html', {'form': form, 'text': 'WARNING: Used amount can\'t be higher than initial amount.'})
             elif instance.init_amount == 0:
                 return render(request, 'labbyims/add_item.html', {'form': form, 'text': 'WARNING: Initial amount can\'t be set to 0.'})
             
