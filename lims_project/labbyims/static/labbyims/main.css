@@ -111,11 +111,85 @@ h1, h2 {
 }
 
 #center_search {
-    align-content: center;
-    display:inline-block;
+    /* align-content: center; */
+    /* display:inline-block; */
+    /* display: grid; */
+    /* place-content: center; */
+    /* vertical-align: middle; */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 80%;
 
 }
 
 #remove_padding {
     overflow-x: scroll;
+}
+
+
+.messages{
+    list-style-type: none;
+}
+
+ul.messages {
+
+    padding: 0;
+}
+
+/* input[type=text], select {
+  width: 18%;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}*/
+
+input[type=search] {
+    /* width: 18%; */
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+#center_div {
+    margin: auto;
+    width: 60%;
+    padding: 10px;
+}
+
+.center_fields{
+    display: block;
+    margin : 0 auto;
+    width: 100%;
+    margin-left: 10%;
+}
+
+#id_search{
+    width: 80%;
+}
+#id_advanced_search{
+    float: right;
+    clear: both;
+    margin-right: 10%;
+    margin-left: 10%;
+    width: 80%;
+    text-align-last:center;
+
+}
+
+/* Color of the <a> --> link buttons */
+#remove_padding a {
+  color: black;
+}
+a {
+  color: black;
+}
+footer a{
+  color: white;
+}
+.dropdown-menu a{
+    color:black;
 }

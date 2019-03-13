@@ -56,8 +56,8 @@ class Running_LowTable(tables.Table):
             template_name = 'django_tables2/bootstrap.html'
 
 class ReserveTable(tables.Table):
+    res_name = tables.Column()
     prod_res = tables.Column(accessor='prod_un.description')
-    res = tables.Column(accessor = 'user')
     date = tables.Column(accessor = 'date_res')
     meas_u = tables.Column(accessor = 'prod_un.m_unit')
     res_amount = tables.Column(accessor = 'amount_res')
@@ -91,16 +91,12 @@ class LocationTable(tables.Table):
 	        model = Location
 	        template_name = 'django_tables2/bootstrap.html'
 
-
-
 class FP_Product_UnitTable(tables.Table):
     #product_table = NotificationColumn()
     #attrs = {'width':'20%'}
     class Meta:
         model = Product_Unit
         fields = ('description', 'exp_date', 'ret_date')
-
-
 
 class Product_Unit_ExpTable(tables.Table):
     class Meta:
@@ -109,15 +105,11 @@ class Product_Unit_ExpTable(tables.Table):
         exclude = ('id', ' is_inactive')
         template_name = 'django_tables2/bootstrap-responsive.html'
 
-
-
 class Product_Table(tables.Table):
     class Meta:
         model = Product
         fields = ('name', 'cas', 'min_temp', 'max_temp')
         template_name = 'django_tables2/bootstrap.html'
-
-
 
 class User_DeptTable(tables.Table):
     class Meta:

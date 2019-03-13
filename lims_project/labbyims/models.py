@@ -8,7 +8,7 @@ class User(AbstractUser):
 
 class Department(models.Model):
     user = models.ManyToManyField(User, through='Association')
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique = True)
     def __str__(self):
         return self.name
 
@@ -39,6 +39,7 @@ class Location(models.Model):
     # product = models.ManyToManyField(Product)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
+    temperature = models.DecimalField('Temperature', max_digits=10, decimal_places=4, default = 25)
     description = models.TextField(blank=True)
     ispoison_nonvol = models.BooleanField('poison - non-volatile', default = False)
     isreactive = models.BooleanField('reactive', default = False)
@@ -54,14 +55,14 @@ class Location(models.Model):
             return True
         else:
             return False
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
 
-class Department(models.Model):
-    user = models.ManyToManyField(User, through="Watching")
-    name = models.CharField(max_length=255)
-    def __str__(self):
-        return self.name
+# class Department(models.Model):
+#     user = models.ManyToManyField(User, through="Watching")
+#     name = models.CharField(max_length=255)
+#     def __str__(self):
+#         return self.name
 
 class Product_Unit(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -72,7 +73,7 @@ class Product_Unit(models.Model):
     description = models.CharField(max_length=255)
     batch = models.CharField('Batch Number', max_length=255, blank = True )
     init_amount = models.DecimalField('initial amount', max_digits=10, decimal_places=4, default = 0, validators = [MinValueValidator(0.0000)])
-    m_unit = models.CharField('measurement units', max_length=4, null=True, blank = True)
+    m_unit = models.CharField('measuring units', max_length=4, null=True, blank = True)
     purity = models.CharField('purity/percentage', max_length = 255, null=True, blank = True)
     exp_date = models.DateField('expiration date', null=True, blank = True)
     ret_date = models.DateField('retest date', null=True, blank = True)
@@ -87,7 +88,6 @@ class Product_Unit(models.Model):
         init = float(self.init_amount)
         used = float(self.used_amount)
         return round((init - used), 3)
-
     @property
     def perc_left(self):
         return round((self.curr_amount/self.init_amount)*100, 3)
@@ -101,6 +101,9 @@ class Reserve(models.Model):
     amount_res = models.DecimalField('amount to reserve', max_digits=10, decimal_places=4)
     date_res = models.DateField('reservation date')
     is_complete = models.BooleanField(null=True)
+    res_name = models.CharField('Reservation name', max_length=255, unique=True, default="Reservation")
+    def _str_(self):
+        return self.prod_un
 
 class Uses(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -119,6 +122,9 @@ class Watching(models.Model):
         super(Watching, self).save(*args, **kwargs)
     # def __str__(self):
     #     return self.low_warn
+
 class Association(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     dept = models.ForeignKey(Department, verbose_name = 'department', on_delete=models.CASCADE)
+    class Meta:
+        unique_together = ('user', 'dept',)

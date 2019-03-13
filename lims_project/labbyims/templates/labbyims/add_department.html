@@ -6,14 +6,22 @@
 <TITLE>Add Department</TITLE>
 <H1>Add Department</H1>
 <br><br>
+{% if messages %}
+<ul class="messages alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}> {{ message }} </li>
+    {% endfor %}
+</ul>
+{% endif %}
 <P>Please choose a name for the new department:
 
 <form action="" method="POST">
 	{% csrf_token %}
     {{ form|crispy}}
     <br><br>
-    <input type="submit" value="Submit" name="Submit">  <input type="reset" value="Reset" name="Reset">
-    <input type="button" value="Go back" onClick="javascript:history.go(-1)" />
+    <input type="submit" class="btn btn-light" value="Submit" name="Submit">  <input class="btn btn-light" type="reset" value="Reset" name="Reset">
+    <input type="button" class="btn btn-light" value="Go back" onClick="javascript:history.go(-1)" />
     <br><br><br>
 
 </form>

@@ -6,14 +6,22 @@
 <TITLE>Add Association</TITLE>
 <H1>Add Association</H1>
 <br><br>
+{% if messages %}
+<ul class="messages alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}> {{ message }} </li>
+    {% endfor %}
+</ul>
+{% endif %}
 <P>Please associate with a department:
 
 <form action="" method="POST">
 	{% csrf_token %}
     {{ form|crispy}}
     <br><br>
-    <input type="submit" value="Submit" name="Submit">
-    <input type="button" value="Go back" onClick="javascript:history.go(-1)" />
+    <input type="submit" class="btn btn-light" value="Submit" name="Submit">
+    <input type="button" class="btn btn-light" value="Go back" onClick="javascript:history.go(-1)" />
     <br><br><br>
 
 </form>

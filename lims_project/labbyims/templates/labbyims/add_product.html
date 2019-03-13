@@ -4,17 +4,22 @@
 {% block content %}
 <br><br><br><br><br>
 
-<TITLE>Add Chemical</TITLE>
-<H1>Add Chemical</H1>
+<TITLE>Add Product</TITLE>
+<H1>Add Product</H1>
 <br><br>
+{% if messages %}
+<ul class="messages alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}> {{ message }} </li>
+    {% endfor %}
+</ul>
+{% endif %}
 <form method="POST", action="">
     {% csrf_token %}
     {{ form|crispy}}
-    <input type="submit" value="Submit">  <input type="reset" value="Reset">
-
-    <br><br>
-    <p><a class="btn" href ='{% url "add_item" %}'>Add unit</a> to the database</p>
-    <input type="button" value="Go back" onClick="javascript:history.go(-1)" />
+    <input type="submit" class="btn btn-light" value="Submit">  <input class="btn btn-light" type="reset" value="Reset">
+    <input type="button" class="btn btn-light" value="Go back" onClick="javascript:history.go(-1)" />
 </form>
 <br><br><br>
 

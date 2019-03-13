@@ -1,27 +1,53 @@
 {% extends "labbyims/base.html" %}
 {% load crispy_forms_tags %}
+{% load static %}
 {% load render_table from django_tables2 %}
 {% block content %}
 
 <div class="row">
-    <div class="first-column col-sm-9 col-lg-9">
+    <div class="first-column col-sm-8 col-lg-8">
         <div class="row">
             <div class="col-md-4">
             </div>
-            <div id="center_search" class="col-md-4">
-                <br><br><br><br><br><br><br><br><br><br><br><br><br>
-                <h2 id="Search_title">
-                <center >Search</center></h2>
+
+            <!-- <div id="center_search" class="col-md-4"> -->
+            <div id="center_search" >
+
+
+                {% if messages %}
+
+                <ul class="messages alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}> {{ message }} </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+                <div class="text-center img-responsive">
+                    <img src="{% static 'labbyims/logo.png' %}" alt="Logo" width="300" height="auto">
+                    </div>
+
+
                 <br>
                 <form action="/search_advance/" method="get">
-                {% csrf_token %}
-                {% crispy form form.helper %}
+
+                <div class="center_fields">
+                    <span><input type="text" name="search" class="searchfield textinput textInput" id="id_search"></span>
+                    <span><input type="submit" name="submit" value="search" class="btn btn-light btn" id="submit-id-submit"></span>
+                </div>
+                <div class="center_select">
+                    <select name="advanced_search" class="select" id="id_advanced_search"> <option value="unit">Unit</option> <option value="location">Location</option> <option value="product">CAS</option><option value="product">Product</option>
+                    </select>
+                    <br><br><br><br><br><br><br>
+                </div>
                 </form>
             </div>
+
             </div>
 
     </div>
-    <div class="second-column col-sm-3 col-lg-3" style="background-color:#f2f2f2">
+    <div class="second-column col-sm-4 col-lg-4" style="background-color:#f2f2f2">
         <div id="remove_padding" class="container-fluid">
             <br><br><br><br><br>
             <h2>Reminders</h2>

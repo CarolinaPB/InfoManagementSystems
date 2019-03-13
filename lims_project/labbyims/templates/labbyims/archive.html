@@ -1,24 +1,16 @@
 {% extends "labbyims/base.html" %}
 {% load render_table from django_tables2 %}
-
-
 {% block content %}
-<br><br><br><br>
-  <form method="get">
-    <div class="well">
 
-<main>
+<br><br><br><br><br>
+<h1>Archived Product Units </h1>
+<br>
+<input type="button" class="btn btn-light" value="Go back" onClick="javascript:history.go(-1)" />
+<br><br>
 
-    <head>
-        <br><br><br><br><br>
-        <h1>Archive Product Units </h1>
-        <br><br>
-    </head>
-    <body>
-        {% render_table table_arch %}
-    </body>
-    <br><br>
-</main>
+{% render_table table_arch %}
 
- <br><br>
+
+
+<br><br>
 {% endblock %}
