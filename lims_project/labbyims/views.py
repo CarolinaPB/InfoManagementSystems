@@ -47,33 +47,22 @@ def home(request):
         table_res = FP_ReserveTable(res_list, prefix="2-")
         RequestConfig(request, paginate={'per_page': 3}).configure(table_res)
         print("TEST")
-        depts = []   #Association.objects.get(user = request.user)
+        depts = []
         for el in Association.objects.all():
             if el.user ==request.user:
                 depts.append(el.dept)
-        print(request.user)
-        print(depts)
-        #watch_list = []
+
         watch_list=""
         for a in depts:
             print(a.id)
-            list= Watching.objects.filter(\
-                            Q(user_id=request.user), \
-                            #Q(dept = a.id)\
-                            )
+            list= Watching.objects.filter(Q(user_id=request.user),)
 
             for el in list:
-                print("made it to el")
-                print(el.dept.id)
-                print(a.id)
                 if el.dept.id == a.id:
-                    print("it works")
-            #                .order_by(-F('prod_un__init_amount')/F('prod_un__curr_amount')))
-                    #watch_list.append(Product_Unit.objects.filter(department= a))
-                    print(Watching.objects.filter(Q(prod_un__is_inactive=False),\
-                                        Q(dept=a.id), Q(low_warn = True)))
                     watch_list=Watching.objects.filter(Q(prod_un__is_inactive=False),\
-                                        Q(dept=a.id), Q(low_warn = True))
+                                        Q(dept=a.id), Q(low_warn = True)\
+                                        ).order_by(-F('prod_un__init_amount'\
+                                        )/F('prod_un__curr_amount'))
 
         table_low = FP_Running_LowTable(watch_list, prefix='3-')
         RequestConfig(request, paginate={'per_page': 3}).configure(table_low)
@@ -332,9 +321,23 @@ def tutorial(request):
 
 def running_low(request):
     if request.user.is_authenticated:
-        watch_list = Watching.objects.filter(Q(prod_un__is_inactive=False),
-                                             Q(user_id=request.user),
-                                             Q(low_warn=True)).select_related()
+
+        depts = []
+
+        for el in Association.objects.all():
+            if el.user ==request.user:
+                depts.append(el.dept)
+
+        for a in depts:
+            print(a.id)
+            list= Watching.objects.filter(Q(user_id=request.user),)
+
+            for el in list:
+                if el.dept.id == a.id:
+                    watch_list=Watching.objects.filter(Q(prod_un__is_inactive=False),\
+                                        Q(dept=a.id), Q(low_warn = True)\
+                                        ).order_by(-F('prod_un__init_amount'\
+                                        )/F('prod_un__curr_amount'))
         table_watch = Running_LowTable(watch_list)
         RequestConfig(request).configure(table_watch)
         return render(request, 'labbyims/running_low.html',
