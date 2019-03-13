@@ -349,6 +349,7 @@ def update_item(request):
         archived = request.POST.getlist("is_inactive")
         dept = request.POST.getlist("department")
         low_warn_form = form.cleaned_data["low_warn_form"]
+        house_id= form.cleaned_data["in_house_no"]
         print(loc)
         change_prod_unit = Product_Unit.objects.get(id=prod_units.id)
         changed = False
@@ -375,6 +376,9 @@ def update_item(request):
             if opened:
                 changed = True
                 change_prod_unit.open_date = opened
+            if house_id:
+                changed=True
+                change_prod_unit.in_house_no = house_id
             if loc:
                 l = Location.objects.get(name=loc)
                 if parent_product.ispoison_nonvol == l.ispoison_nonvol and parent_product.isreactive==l.isreactive and parent_product.issolid ==l.issolid and parent_product.isoxidliq == parent_product.isoxidliq and parent_product.isflammable == l.isflammable and parent_product.isbaseliq == l.isbaseliq and parent_product.isorgminacid ==l.isorgminacid and parent_product.isoxidacid ==l.isoxidacid and parent_product.ispois_vol ==l.ispois_vol:
