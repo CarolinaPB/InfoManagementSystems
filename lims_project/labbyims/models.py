@@ -55,8 +55,8 @@ class Location(models.Model):
             return True
         else:
             return False
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return self.name
 
 # class Department(models.Model):
 #     user = models.ManyToManyField(User, through="Watching")

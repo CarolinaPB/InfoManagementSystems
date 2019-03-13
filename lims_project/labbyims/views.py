@@ -7,7 +7,7 @@ from django.db.models import F, Q, FloatField
 from django.db.models.functions import Cast
 from django.views import View
 from django.contrib import messages
-from .forms import AdvancedSearch, Product_UnitForm, Product_Form, \
+from .forms import Product_UnitForm, Product_Form, \
     Location_Form, Room_Form, Reserve_Form, Update_item_Form, \
     Department_Form, Association_Form, Update_reservation_Form, \
     Update_Location_Form
@@ -29,24 +29,6 @@ from django.shortcuts import render_to_response
 
 
 def home(request):
-    if request.user.is_authenticated:
-        if request.method == 'POST':
-            form = AdvancedSearch(request.POST)
-            if form.is_valid():
-                search = form.cleaned_data["search"]
-                advanced_search = form.cleaned_data["advanced_search"]
-                form = AdvancedSearch()
-            else:
-                print(form.errors)
-
-            c = {'form': form, 'search': search,
-                 'advanced_search': advanced_search}
-
-            return render(request, "labbyims/search_advance.html", c)
-
-        else:
-            form = AdvancedSearch(initial=request.GET)
-
         current_date = timezone.now()
         warning = current_date + timedelta(days=27)
 
@@ -70,11 +52,8 @@ def home(request):
         table_low = FP_Running_LowTable(watch_list, prefix='3-')
         RequestConfig(request, paginate={'per_page': 3}).configure(table_low)
 
-        return render(request, 'labbyims/home_afterlogin.html', {'form': form,
-                                                                 'table_res': table_res, 'table_exp': table_exp,
+        return render(request, 'labbyims/home_afterlogin.html', {'table_res': table_res, 'table_exp': table_exp,
                                                                  'table_low': table_low},)
-    else:
-        return render(request, 'labbyims/no_login.html')
 
 
 def add_product(request):
