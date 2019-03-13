@@ -47,39 +47,35 @@ def home(request):
         else:
             form = AdvancedSearch(initial=request.GET)
 
-        current_date = timezone.now()
+        current_date = datetime.today()
         warning = current_date + timedelta(days=27)
 
         exp_filter = Product_Unit.objects.filter(Q(is_inactive=False), \
                     Q(exp_date__range = [current_date, warning ]) | \
                     Q(ret_date__range =[current_date, warning ]) ).order_by(\
                     'exp_date', 'ret_date')
-        print(exp_filter)
+
         table_exp = FP_Product_UnitTable(exp_filter, prefix="1-")
         RequestConfig(request, paginate={'per_page': 3}).configure(table_exp)
 
         res_list=Reserve.objects.filter(Q(user_id= request.user),\
                     Q(prod_un__is_inactive=False),Q(date_res__range = \
-                    [current_date, warning ])).order_by('date_res')
+                    [current_date, warning ]) ).order_by('date_res')
         table_res = FP_ReserveTable(res_list, prefix="2-")
         RequestConfig(request, paginate={'per_page': 3}).configure(table_res)
-        print("TEST")
+
         depts = []
         for el in Association.objects.all():
             if el.user ==request.user:
                 depts.append(el.dept)
-
         for a in depts:
-            print(a.id)
             list= Watching.objects.filter(Q(user_id=request.user),)
-
             for el in list:
                 if el.dept.id == a.id:
                     watch_list=Watching.objects.filter(Q(prod_un__is_inactive=False),\
                                         Q(dept=a.id), Q(low_warn = True)\
                                         ).order_by(-F('prod_un__init_amount'\
                                         )/F('prod_un__curr_amount'))
-
         table_low = FP_Running_LowTable(watch_list, prefix='3-')
         RequestConfig(request, paginate={'per_page': 3}).configure(table_low)
 
@@ -208,7 +204,15 @@ def locations(request):
 
 
 def my_inventory(request):
-    my_inv_list = Product_Unit.objects.filter(is_inactive=False)
+    depts = []
+    for el in Association.objects.all():
+        if el.user ==request.user:
+            depts.append(el.dept)
+
+    for a in depts:
+        my_inv_list = Product_Unit.objects.filter(Q(is_inactive=False),\
+                        Q(department=a.id))
+
     table_my_inv = Product_Unit_MyTable(my_inv_list)
     RequestConfig(request).configure(table_my_inv)
     return render(request, 'labbyims/my_inventory.html', {'table_my_inv': table_my_inv})
@@ -319,7 +323,7 @@ def add_reservation(request):
 
 
 def reservations(request):
-    current_date = timezone.now()
+    current_date = datetime.today()
     warning = current_date + timedelta(days=27)
     res_list = Reserve.objects.filter(Q(user_id=request.user),
                                       Q(date_res__range=[current_date, warning]),
@@ -341,7 +345,7 @@ def running_low(request):
     if request.user.is_authenticated:
 
         depts = []
-        
+
         for el in Association.objects.all():
             if el.user ==request.user:
                 depts.append(el.dept)

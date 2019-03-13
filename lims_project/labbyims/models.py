@@ -36,7 +36,6 @@ class Room(models.Model):
         return self.room_name
 
 class Location(models.Model):
-    # product = models.ManyToManyField(Product)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     temperature = models.DecimalField('Temperature', max_digits=10, decimal_places=4, default = 25)
@@ -46,7 +45,7 @@ class Location(models.Model):
     issolid = models.BooleanField('solid', default = False)
     isoxidliq = models.BooleanField('oxidizing liquid', default = False)
     isflammable = models.BooleanField('flammable', default = False)
-    isbaseliq = models.BooleanField('base liquid', default = False)
+    isbaseliq = models.BooleanField('basic liquid', default = False)
     isorgminacid = models.BooleanField('organic and mineral acid', default = False)
     isoxidacid = models.BooleanField('oxidizing acid', default = False)
     ispois_vol = models.BooleanField('poison - volatile', default = False)
@@ -56,13 +55,8 @@ class Location(models.Model):
         else:
             return False
     def __str__(self):
-    #     return self.name
+         return self.name
 
-# class Department(models.Model):
-#     user = models.ManyToManyField(User, through="Watching")
-#     name = models.CharField(max_length=255)
-#     def __str__(self):
-#         return self.name
 
 class Product_Unit(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -98,10 +92,10 @@ class Product_Unit(models.Model):
 class Reserve(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     prod_un = models.ForeignKey(Product_Unit, verbose_name='description', on_delete=models.CASCADE)
-    amount_res = models.DecimalField('amount to reserve', max_digits=10, decimal_places=4)
-    date_res = models.DateField('reservation date')
+    amount_res = models.DecimalField('Amount to Reserve', max_digits=10, decimal_places=4)
+    date_res = models.DateField('Reservation Date')
     is_complete = models.BooleanField(null=True)
-    res_name = models.CharField('Reservation name', max_length=255, unique=True, default="Reservation")
+    res_name = models.CharField('Reservation Name', max_length=255, unique=True, default="Reservation")
     def _str_(self):
         return self.prod_un
 
@@ -116,12 +110,6 @@ class Watching(models.Model):
     prod_un = models.ForeignKey(Product_Unit, on_delete=models.CASCADE)
     dept = models.ForeignKey(Department, on_delete=models.CASCADE)
     low_warn = models.BooleanField('Running Low Warning')
-    #prod_perc = models.DecimalField('Percent left', default = 100, max_digits=10, decimal_places=4)
-    def save(self, *args, **kwargs):
-        self.prod_perc = (self.prod_un.curr_amount/self.prod_un.init_amount)*100
-        super(Watching, self).save(*args, **kwargs)
-    # def __str__(self):
-    #     return self.low_warn
 
 class Association(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
