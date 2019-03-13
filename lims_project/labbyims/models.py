@@ -55,7 +55,7 @@ class Location(models.Model):
             return True
         else:
             return False
-    # def __str__(self):
+    def __str__(self):
     #     return self.name
 
 # class Department(models.Model):
