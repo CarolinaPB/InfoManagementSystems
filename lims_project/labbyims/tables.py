@@ -31,10 +31,10 @@ class FP_ReserveTable(tables.Table):
 
 
 class FP_Running_LowTable(tables.Table):
-    prod_res = tables.Column(accessor='prod_un.description')
+    prod_res = tables.Column(accessor='prod_un.description', verbose_name='Description')
     prod_perc = tables.Column(accessor='prod_un.perc_left',\
                 verbose_name = '% left', orderable=False)
-    perc_lhouse = tables.Column(accessor = 'prod_un.in_house_no')
+    perc_lhouse = tables.Column(accessor = 'prod_un.in_house_no', verbose_name='in house ID')
 
 
 class Running_LowTable(tables.Table):

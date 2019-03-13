@@ -37,6 +37,7 @@ def home(request):
                     Q(exp_date__range = [current_date, warning ]) | \
                     Q(ret_date__range =[current_date, warning ]) ).order_by(\
                     'exp_date', 'ret_date')
+        print(exp_filter)
         table_exp = FP_Product_UnitTable(exp_filter, prefix="1-")
         RequestConfig(request, paginate={'per_page': 3}).configure(table_exp)
 
@@ -45,11 +46,35 @@ def home(request):
                     [current_date, warning ])).order_by('date_res')
         table_res = FP_ReserveTable(res_list, prefix="2-")
         RequestConfig(request, paginate={'per_page': 3}).configure(table_res)
-        watch_list = Watching.objects.filter(Q(prod_un__is_inactive=False),
-                                             Q(user_id=request.user), \
-                                             #Q(prod_un__prod_perc__lte = 50),\
-                                             Q(low_warn=True)).select_related()
+        print("TEST")
+        depts = []   #Association.objects.get(user = request.user)
+        for el in Association.objects.all():
+            if el.user ==request.user:
+                depts.append(el.dept)
+        print(request.user)
+        print(depts)
+        #watch_list = []
+        for a in depts:
+            print(a.id)
+            list= Watching.objects.filter(\
+                            Q(user_id=request.user), \
+                            #Q(dept = a.id)\
+                            )
 
+            for el in list:
+                print("made it to el")
+                print(el.dept.id)
+                print(a.id)
+                if el.dept.id == a.id:
+                    print("it works")
+            #                .order_by(-F('prod_un__init_amount')/F('prod_un__curr_amount')))
+                    #watch_list.append(Product_Unit.objects.filter(department= a))
+                    print(Watching.objects.filter(Q(prod_un__is_inactive=False),\
+                                        Q(dept=a.id), Q(low_warn = True)))
+                    watch_list=Watching.objects.filter(Q(prod_un__is_inactive=False),\
+                                        Q(dept=a.id), Q(low_warn = True))
+        print("final watch list")
+        print(type(watch_list))
         table_low = FP_Running_LowTable(watch_list, prefix='3-')
         RequestConfig(request, paginate={'per_page': 3}).configure(table_low)
         return render(request, 'labbyims/home_afterlogin.html', {'table_res': table_res, 'table_exp': table_exp,
