@@ -64,7 +64,7 @@ class ReserveTable(tables.Table):
     prod_curr_amount = tables.Column(accessor='prod_un.curr_amount')
     house_no = tables.Column(accessor='prod_un.in_house_no')
     prod_loc = tables.Column(accessor='prod_un.location')
-    prod_room = tables.Column(accessor='prod_un.location.room', verbose_name='Room')
+    prod_room = tables.Column(accessor='prod_un.room', verbose_name='Room')
     class Meta:
         template_name = 'django_tables2/bootstrap.html'
 
