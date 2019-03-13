@@ -54,6 +54,7 @@ def home(request):
         print(request.user)
         print(depts)
         #watch_list = []
+        watch_list=""
         for a in depts:
             print(a.id)
             list= Watching.objects.filter(\
@@ -73,8 +74,7 @@ def home(request):
                                         Q(dept=a.id), Q(low_warn = True)))
                     watch_list=Watching.objects.filter(Q(prod_un__is_inactive=False),\
                                         Q(dept=a.id), Q(low_warn = True))
-        print("final watch list")
-        print(type(watch_list))
+
         table_low = FP_Running_LowTable(watch_list, prefix='3-')
         RequestConfig(request, paginate={'per_page': 3}).configure(table_low)
         return render(request, 'labbyims/home_afterlogin.html', {'table_res': table_res, 'table_exp': table_exp,
