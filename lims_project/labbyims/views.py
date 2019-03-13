@@ -533,28 +533,35 @@ def search_advance(request):
     if search is not None:
         if choice == 'location':
             location_list = Location.objects.all()
-            location_list = location_list.filter(name__contains=search)
+            location_list = location_list.filter(Q(name__icontains=search))
             table_se = LocationTable(location_list)
             RequestConfig(request).configure(table_se)
             return render(request, 'labbyims/search_location.html', {'table_se': table_se, }, )
 
         if choice is None:
             product_list = Product_Unit.objects.all()
-            product_list = product_list.filter(description__icontains=search)
+            product_list = product_list.filter(Q(description__icontains=search) | Q(in_house_no=search))
             table_se = Product_Unit_MyTable(product_list)
             RequestConfig(request).configure(table_se)
-            return render(request, 'labbyims/search_list.html', {'table_se': table_se, }, )
+            return render(request, 'labbyims/search_list.html', {'table_se': table_se,}, )
 
-        if choice == 'unit':
+        if choice=='unit':
             product_list = Product_Unit.objects.all()
             product_list = product_list.filter(description__icontains=search)
             table_se = Product_Unit_MyTable(product_list)
             RequestConfig(request).configure(table_se)
-            return render(request, 'labbyims/search_list.html', {'table_se': table_se, }, )
+            return render(request, 'labbyims/search_list.html', {'table_se': table_se,}, )
 
         if choice == 'product':
             product = Product.objects.all()
             product = product.filter(name__icontains=search)
+            table = Product_Table(product)
+            RequestConfig(request).configure(table)
+            return render(request, 'labbyims/search_product.html', {'table': table, }, )
+
+        if choice == 'CAS':
+            product = Product.objects.all()
+            product = product.filter(cas__icontains=search)
             table = Product_Table(product)
             RequestConfig(request).configure(table)
             return render(request, 'labbyims/search_product.html', {'table': table, }, )
