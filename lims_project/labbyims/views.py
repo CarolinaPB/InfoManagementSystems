@@ -29,6 +29,7 @@ from django.shortcuts import render_to_response
 
 
 def home(request):
+    if request.user.is_authenticated:
         current_date = timezone.now()
         warning = current_date + timedelta(days=27)
 
@@ -54,6 +55,8 @@ def home(request):
 
         return render(request, 'labbyims/home_afterlogin.html', {'table_res': table_res, 'table_exp': table_exp,
                                                                  'table_low': table_low},)
+    else:
+        return render(request, 'labbyims/no_login.html')
 
 
 def add_product(request):
