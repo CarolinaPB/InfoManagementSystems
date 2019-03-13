@@ -42,14 +42,16 @@ class Location(models.Model):
     temperature = models.DecimalField('Temperature', max_digits=10, decimal_places=4, default = 25)
     description = models.TextField(blank=True)
     ispoison_nonvol = models.BooleanField('poison - non-volatile', default = False)
+    ispois_vol = models.BooleanField('poison - volatile', default = False)
     isreactive = models.BooleanField('reactive', default = False)
     issolid = models.BooleanField('solid', default = False)
-    isoxidliq = models.BooleanField('oxidizing liquid', default = False)
-    isflammable = models.BooleanField('flammable', default = False)
     isbaseliq = models.BooleanField('base liquid', default = False)
     isorgminacid = models.BooleanField('organic and mineral acid', default = False)
+    isoxidliq = models.BooleanField('oxidizing liquid', default = False)
     isoxidacid = models.BooleanField('oxidizing acid', default = False)
-    ispois_vol = models.BooleanField('poison - volatile', default = False)
+    isorgminacid = models.BooleanField('organic and mineral acid', default = False)
+    isflammable = models.BooleanField('flammable', default = False)
+
     def is_valid(self, Product):
         if (self.ispois_vol == Product.ispoison_nonvol and self.ispoison_nonvol == Product.ispoison_nonvol and self.issolid == Product.issolid):
             return True

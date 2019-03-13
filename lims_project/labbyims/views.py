@@ -533,7 +533,7 @@ def search_advance(request):
 
         if choice=='unit':
             product_list = Product_Unit.objects.all()
-            product_list = product_list.filter(description__icontains=search)
+            product_list = product_list.filter(Q(description__icontains=search) | Q(in_house_no=search))
             table_se = Product_Unit_MyTable(product_list)
             RequestConfig(request).configure(table_se)
             return render(request, 'labbyims/search_list.html', {'table_se': table_se,}, )
