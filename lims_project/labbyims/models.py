@@ -60,12 +60,6 @@ class Location(models.Model):
     def __str__(self):
         return self.name
 
-# class Department(models.Model):
-#     user = models.ManyToManyField(User, through="Watching")
-#     name = models.CharField(max_length=255)
-#     def __str__(self):
-#         return self.name
-
 class Product_Unit(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     in_house_no = models.CharField('In House ID', max_length=255, blank = True )
@@ -119,11 +113,11 @@ class Watching(models.Model):
     dept = models.ForeignKey(Department, on_delete=models.CASCADE)
     low_warn = models.BooleanField('Running Low Warning')
     #prod_perc = models.DecimalField('Percent left', default = 100, max_digits=10, decimal_places=4)
-    def save(self, *args, **kwargs):
-        self.prod_perc = (self.prod_un.curr_amount/self.prod_un.init_amount)*100
-        super(Watching, self).save(*args, **kwargs)
-    # def __str__(self):
-    #     return self.low_warn
+    # def save(self, *args, **kwargs):
+    #     self.prod_perc = (self.prod_un.curr_amount/self.prod_un.init_amount)*100
+    #     super(Watching, self).save(*args, **kwargs)
+    # # def __str__(self):
+    # #     return self.low_warn
 
 class Association(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

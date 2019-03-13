@@ -11,7 +11,7 @@
             </div>
 
             <!-- <div id="center_search" class="col-md-4"> -->
-            <div id="center_search" >
+            <div id="center_search">
 
 
                 {% if messages %}
@@ -19,32 +19,34 @@
                 <ul class="messages alert-dismissable">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                     {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}> {{ message }} </li>
-                    {% endfor %}
+                    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}> {{ message }} </li>
+                        {% endfor %}
                 </ul>
                 {% endif %}
 
                 <div class="text-center img-responsive">
                     <img src="{% static 'labbyims/logo.png' %}" alt="Logo" width="300" height="auto">
-                    </div>
-
-
+                </div>
                 <br>
                 <form action="/search_advance/" method="get">
 
-                <div class="center_fields">
-                    <span><input type="text" name="search" class="searchfield textinput textInput" id="id_search"></span>
-                    <span><input type="submit" name="submit" value="Search" class="btn btn-light btn" id="submit-id-submit"></span>
-                </div>
-                <div class="center_select">
-                    <select name="advanced_search" class="select" id="id_advanced_search"> <option value="unit">Unit</option> <option value="location">Location</option> <option value="CAS">CAS</option><option value="product">Product</option>
-                    </select>
-                    <br><br><br><br><br><br><br>
-                </div>
+                    <div class="center_fields">
+                        <span><input type="text" name="search" class="searchfield textinput textInput" id="id_search"></span>
+                        <span><input type="submit" name="submit" value="Search" class="btn btn-light btn" id="submit-id-submit"></span>
+                    </div>
+                    <div class="center_select">
+                        <select name="advanced_search" class="select" id="id_advanced_search">
+                            <option value="unit">Unit</option>
+                            <option value="location">Location</option>
+                            <option value="CAS">CAS</option>
+                            <option value="product">Product</option>
+                        </select>
+                        <br><br><br><br><br><br><br>
+                    </div>
                 </form>
             </div>
 
-            </div>
+        </div>
 
     </div>
     <div class="second-column col-sm-4 col-lg-4" style="background-color:#f2f2f2">
@@ -54,34 +56,34 @@
 
             <div>
 
-              <style>
-                table{
-                  font-size: 12px;
-                  white-space: nowrap;
-                  width: 100%;
+                <style>
+                    table {
+                        font-size: 12px;
+                        white-space: nowrap;
+                        width: 100%;
                     }
-              </style>
+                </style>
 
 
-              <tr>
+                <tr>
 
-                <body>
-                  <table>
-                   <a href="{% url 'reservations' %}">My Reservations</a><br>
-                   {% render_table table_res %}
-                   <br><br>
-                   <a href="{% url 'my_inventory' %}">Expiration/re-test</a>
-                   {%  render_table table_exp %}
-                   <br><br>
-                   <a href="{% url 'running_low' %}">Running Low</a>
-                   {%  render_table table_low %}
-                 </table>
-                    <br>
-                </body>
+                    <body>
+                        <table>
+                            <a href="{% url 'reservations' %}">My Reservations</a><br>
+                            {% render_table table_res %}
+                            <br><br>
+                            <a href="{% url 'my_inventory' %}">Expiration/re-test</a>
+                            {%  render_table table_exp %}
+                            <br><br>
+                            <a href="{% url 'running_low' %}">Running Low</a>
+                            {%  render_table table_low %}
+                        </table>
+                        <br>
+                    </body>
 
-              </tr>
+                </tr>
 
             </div>
         </div>
     </div>
-  {% endblock %}
+    {% endblock %}

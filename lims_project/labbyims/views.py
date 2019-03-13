@@ -45,14 +45,13 @@ def home(request):
                     [current_date, warning ])).order_by('date_res')
         table_res = FP_ReserveTable(res_list, prefix="2-")
         RequestConfig(request, paginate={'per_page': 3}).configure(table_res)
-
         watch_list = Watching.objects.filter(Q(prod_un__is_inactive=False),
                                              Q(user_id=request.user), \
                                              #Q(prod_un__prod_perc__lte = 50),\
                                              Q(low_warn=True)).select_related()
+
         table_low = FP_Running_LowTable(watch_list, prefix='3-')
         RequestConfig(request, paginate={'per_page': 3}).configure(table_low)
-
         return render(request, 'labbyims/home_afterlogin.html', {'table_res': table_res, 'table_exp': table_exp,
                                                                  'table_low': table_low},)
     else:
