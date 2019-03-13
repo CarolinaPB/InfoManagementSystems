@@ -50,14 +50,16 @@ def home(request):
         current_date = timezone.now()
         warning = current_date + timedelta(days=27)
 
-        exp_filter = Product_Unit.objects.filter(Q(is_inactive=False),
-                                                 Q(exp_date__range=[current_date, warning])
-                                                 | Q(ret_date__range =[current_date, warning]) )
+        exp_filter = Product_Unit.objects.filter(Q(is_inactive=False), \
+                    Q(exp_date__range = [current_date, warning ]) | \
+                    Q(ret_date__range =[current_date, warning ]) ).order_by(\
+                    'exp_date', 'ret_date')
         table_exp = FP_Product_UnitTable(exp_filter, prefix="1-")
         RequestConfig(request, paginate={'per_page': 3}).configure(table_exp)
 
-        res_list = Reserve.objects.filter(Q(user_id=request.user),
-                                          Q(date_res__range=[current_date, warning])).select_related()
+        res_list=Reserve.objects.filter(Q(user_id= request.user),\
+                    Q(prod_un__is_inactive=False),Q(date_res__range = \
+                    [current_date, warning ])).order_by('date_res')
         table_res = FP_ReserveTable(res_list, prefix="2-")
         RequestConfig(request, paginate={'per_page': 3}).configure(table_res)
 
@@ -110,6 +112,11 @@ def add_item(request):
                 else:
                     pass
                 i += 1
+            temp = location.temperature
+            if temp < product.min_temp or temp > product.max_temp:
+                 return render(request, 'labbyims/add_item.html', {'form': form, 'text': \
+                 'WARNING: You can\'t store the product unit in the the selected location because of the required temperature. \
+                 Please choose a new one.'})
             number = int(request.POST.get('number', False))
             low_warn_form = form.cleaned_data['low_warn_form']
             dep_id_list = list(request.POST.getlist('department'))
@@ -254,8 +261,8 @@ def add_association(request):
             else:
                 print(form.errors)
         except IntegrityError:
-            messages.warning(request, 'You are already associated with this department!')
-            return render(request, "labbyims/add_association.html", {'form': form})
+            messages.warning(request, 'You are already associated!')
+            return render(request, "labbyims/assoc_error.html", {'form': form})
     else:
         form = Association_Form()
         depts = Department.objects.all()
