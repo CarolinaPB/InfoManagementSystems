@@ -47,20 +47,34 @@ def home(request):
         table_res = FP_ReserveTable(res_list, prefix="2-")
         RequestConfig(request, paginate={'per_page': 3}).configure(table_res)
 
+        # depts = []
+        # for el in Association.objects.all():
+        #     if el.user ==request.user:
+        #         depts.append(el.dept)
+        #
+        # watch_list=""
+        # for a in depts:
+        #     list= Watching.objects.filter(Q(user_id=request.user),)
+        #     for el in list:
+        #         if el.dept.id == a.id:
+        #             watch_list=Watching.objects.filter(Q(prod_un__is_inactive=False),\
+        #                                 Q(dept=a.id), Q(low_warn = True)\
+        #                                 ).order_by(-F('prod_un__init_amount'\
+        #                                 )/F('prod_un__curr_amount'))
+
         depts = []
+
         for el in Association.objects.all():
             if el.user ==request.user:
                 depts.append(el.dept)
-
-        watch_list=""
+        list=[]
         for a in depts:
-            list= Watching.objects.filter(Q(user_id=request.user),)
-            for el in list:
-                if el.dept.id == a.id:
-                    watch_list=Watching.objects.filter(Q(prod_un__is_inactive=False),\
-                                        Q(dept=a.id), Q(low_warn = True)\
-                                        ).order_by(-F('prod_un__init_amount'\
-                                        )/F('prod_un__curr_amount'))
+            print(a.id)
+            list.append(Watching.objects.filter(Q(user_id=request.user),Q(dept=a.id),Q(prod_un__is_inactive=False),Q(low_warn = True)).order_by(-F('prod_un__init_amount')/F('prod_un__curr_amount')))
+
+        watch_list=Product_Unit.objects.none()
+        for el in list:
+            watch_list |= el
         table_low = FP_Running_LowTable(watch_list, prefix='3-')
         RequestConfig(request, paginate={'per_page': 3}).configure(table_low)
         return render(request, 'labbyims/home_afterlogin.html', {'table_res': table_res, 'table_exp': table_exp,
@@ -113,6 +127,7 @@ def add_item(request):
             low_warn_form = form.cleaned_data['low_warn_form']
             dep_id_list = list(request.POST.getlist('department'))
             instance = form.save(commit=False)
+            messages.success(request, 'Unit added')
             if instance.used_amount > instance.init_amount:
                 messages.error(request,'WARNING: Used amount can\'t be higher than initial amount.')
                 return render(request, 'labbyims/add_item.html', {'form': form,})
@@ -133,7 +148,7 @@ def add_item(request):
                             w = Watching(user=request.user, prod_un=instance, dept=dep, low_warn=low_warn_form)
                             w.save()
                             j += 1
-                return redirect("/home/")
+                return render(request, 'labbyims/add_item.html',{'form': form,})
         else:
             print(form.errors)
 
@@ -159,7 +174,7 @@ def add_item_cas(request):
 def inventory(request):
     inv_list = Product_Unit.objects.filter(is_inactive=False)
     table = Product_UnitTable(inv_list)
-    RequestConfig(request).configure(table)
+    RequestConfig(request, paginate={'per_page': 10}).configure(table)
     return render(request, 'labbyims/inventory.html', {'table': table})
 
 
@@ -182,30 +197,28 @@ def add_location(request):
 
 def locations(request):
     table_1 = LocationTable(Location.objects.all())
-    RequestConfig(request).configure(table_1)
+    RequestConfig(request, paginate={'per_page': 10}).configure(table_1)
     return render(request, 'labbyims/locations.html', {'table_1': table_1})
 
 
 def my_inventory(request):
     depts = []
+
     for el in Association.objects.all():
         if el.user ==request.user:
             depts.append(el.dept)
-
-    print(depts)
-    my_inv_list=""
+    list=[]
     for a in depts:
-        print(a)
-        list= Watching.objects.filter(Q(user_id=request.user))
-        #print(list)
-        for el in list:
-            if el.dept.id == a.id:
-                my_inv_list=Watching.objects.filter(Q(prod_un__is_inactive=False),\
-                                    Q(dept=a.id))
-    print(my_inv_list)
-    table_my_inv = Product_Unit_MyTable(my_inv_list)
+        print(a.id)
+        list.append(Watching.objects.filter(Q(user_id=request.user),Q(dept=a.id),Q(prod_un__is_inactive=False),Q(low_warn = True)).order_by(-F('prod_un__init_amount')/F('prod_un__curr_amount')))
+
+    watch_list=Product_Unit.objects.none()
+    for el in list:
+        watch_list |= el
+    print(watch_list)
+    table_my_inv = Product_Unit_MyTable(watch_list)
     #table_my_inv = Product_Unit_MyTable(watch_list)
-    RequestConfig(request).configure(table_my_inv)
+    RequestConfig(request, paginate={'per_page': 10}).configure(table_my_inv)
     return render(request, 'labbyims/my_inventory.html', {'table_my_inv': table_my_inv})
 
 
@@ -320,7 +333,7 @@ def reservations(request):
                                       Q(date_res__range=[current_date, warning]),
                                       Q(prod_un__is_inactive=False), Q(is_complete=None)).select_related()
     table_res = ReserveTable(res_list)
-    RequestConfig(request).configure(table_res)
+    RequestConfig(request, paginate={'per_page': 10}).configure(table_res)
     return render(request, 'labbyims/reservations.html', {'table_res': table_res, }, )
 
 
@@ -340,19 +353,18 @@ def running_low(request):
         for el in Association.objects.all():
             if el.user ==request.user:
                 depts.append(el.dept)
-        watch_list=""
+        list=[]
         for a in depts:
             print(a.id)
-            list= Watching.objects.filter(Q(user_id=request.user),)
+            list.append(Watching.objects.filter(Q(user_id=request.user),Q(dept=a.id),Q(prod_un__is_inactive=False),Q(low_warn = True)).order_by(-F('prod_un__init_amount')/F('prod_un__curr_amount')))
 
-            for el in list:
-                if el.dept.id == a.id:
-                    watch_list=Watching.objects.filter(Q(prod_un__is_inactive=False),\
-                                        Q(dept=a.id), Q(low_warn = True)\
-                                        ).order_by(-F('prod_un__init_amount'\
-                                        )/F('prod_un__curr_amount'))
+        watch_list=Product_Unit.objects.none()
+        for el in list:
+            watch_list |= el
+
+
         table_watch = Running_LowTable(watch_list)
-        RequestConfig(request).configure(table_watch)
+        RequestConfig(request, paginate={'per_page': 10}).configure(table_watch)
         return render(request, 'labbyims/running_low.html',
                       {'table_watch': table_watch, },)
     else:
@@ -561,35 +573,35 @@ def search_advance(request):
             location_list = Location.objects.all()
             location_list = location_list.filter(Q(name__icontains=search))
             table_se = LocationTable(location_list)
-            RequestConfig(request).configure(table_se)
+            RequestConfig(request, paginate={'per_page': 10}).configure(table_se)
             return render(request, 'labbyims/search_location.html', {'table_se': table_se, }, )
 
         if choice is None:
             product_list = Product_Unit.objects.all()
             product_list = product_list.filter(Q(description__icontains=search) | Q(in_house_no=search))
             table_se = Product_Unit_MyTable(product_list)
-            RequestConfig(request).configure(table_se)
+            RequestConfig(request, paginate={'per_page': 10}).configure(table_se)
             return render(request, 'labbyims/search_list.html', {'table_se': table_se,}, )
 
         if choice=='unit':
             product_list = Product_Unit.objects.all()
             product_list = product_list.filter(Q(description__icontains=search) | Q(in_house_no=search))
             table_se = Product_Unit_MyTable(product_list)
-            RequestConfig(request).configure(table_se)
+            RequestConfig(request, paginate={'per_page': 10}).configure(table_se)
             return render(request, 'labbyims/search_list.html', {'table_se': table_se,}, )
 
         if choice == 'product':
             product = Product.objects.all()
             product = product.filter(name__icontains=search)
             table = Product_Table(product)
-            RequestConfig(request).configure(table)
+            RequestConfig(request, paginate={'per_page': 10}).configure(table)
             return render(request, 'labbyims/search_product.html', {'table': table, }, )
 
         if choice == 'CAS':
             product = Product.objects.all()
             product = product.filter(cas__icontains=search)
             table = Product_Table(product)
-            RequestConfig(request).configure(table)
+            RequestConfig(request, paginate={'per_page': 10}).configure(table)
             return render(request, 'labbyims/search_product.html', {'table': table, }, )
 
 

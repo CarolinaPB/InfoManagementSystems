@@ -29,13 +29,13 @@ class Product_UnitForm(forms.ModelForm):
 
     class Meta:
         UNIT_CHOICES = (
-            ('kg', 'kg'),
-            ('l', 'l'),
-            ('g', 'g'),
-            ('ml', 'ml'),
+            ('µg', 'µg'),
             ('mg', 'mg'),
+            ('g', 'g'),
+            ('kg', 'Kg'),
             ('µl', 'µl'),
-            ('µg', 'µg')
+            ('ml', 'ml'),
+            ('l', 'L')
         )
         model = Product_Unit
         exclude = ['reservation', 'is_inactive', 'curr_amount']
