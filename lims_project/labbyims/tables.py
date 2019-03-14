@@ -92,6 +92,26 @@ class Product_Unit_MyTable(tables.Table):
         template_name = 'django_tables2/bootstrap.html'
 
 
+class Product_Unit_ArchTable(tables.Table):
+    house_id = tables.Column(accessor='in_house_no', verbose_name='ID')
+    desc = tables.Column(accessor='description')
+    prod = tables.Column(accessor='product')
+    batch_no = tables.Column(accessor='batch', verbose_name='Batch #')
+    curr_am = tables.Column(accessor='curr_amount', verbose_name='Amount')
+    meas_u = tables.Column(accessor='m_unit')
+    Loc = tables.Column(accessor='location')
+    room = tables.Column(accessor='location.room')
+    exp = tables.Column(accessor='exp_date', verbose_name='Expires')
+    ret = tables.Column(accessor='ret_date', verbose_name='Retest')
+    open = tables.Column(accessor='open_date', verbose_name='Opened')
+    company = tables.Column(accessor='company')
+    cat_no = tables.Column(accessor='cat_num', verbose_name='Catalog #')
+    pur_perc = tables.Column(accessor='purity')
+    class Meta:
+        template_name = 'django_tables2/bootstrap.html'
+
+
+
 class LocationTable(tables.Table):
     room = tables.Column(accessor='room')
     name = tables.Column(accessor='name')
@@ -111,10 +131,10 @@ class LocationTable(tables.Table):
 
 
 class FP_Product_UnitTable(tables.Table):
-    house_id = tables.Column(accessor='in_house_no', verbose_name='ID')
-    desc = tables.Column(accessor='description')
-    exp = tables.Column(accessor='exp_date', verbose_name='Expiration')
-    ret = tables.Column(accessor='ret_date', verbose_name='Retest')
+    house_id = tables.Column(accessor='prod_un.in_house_no', verbose_name='ID')
+    desc = tables.Column(accessor='prod_un.description')
+    exp = tables.Column(accessor='prod_un.exp_date', verbose_name='Expiration')
+    ret = tables.Column(accessor='prod_un.ret_date', verbose_name='Retest')
 
 
 
