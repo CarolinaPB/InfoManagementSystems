@@ -41,27 +41,25 @@ def home(request):
             'exp_date', 'ret_date')
 
         depts = []
-
         for el in Association.objects.all():
             if el.user == request.user:
                 depts.append(el.dept)
         list = []
         for a in depts:
             print(a.id)
-            list.append(Watching.objects.filter(Q(user_id=request.user), Q(dept=a.id), Q(prod_un__is_inactive=False), Q(
-                low_warn=True)).order_by(-F('prod_un__init_amount') / F('prod_un__curr_amount')))
-
+            list.append(Watching.objects.filter(Q(user_id=request.user),\
+             Q(dept=a.id), Q(prod_un__is_inactive=False)).order_by(\
+             -F('prod_un__init_amount') / F('prod_un__curr_amount')))
         exp_ret_list = Product_Unit.objects.none()
         for el in list:
             exp_ret_list |= el
-        print(exp_ret_list)
-
 
         table_exp = FP_Product_UnitTable(exp_ret_list, prefix="1-")
         RequestConfig(request, paginate={'per_page': 3}).configure(table_exp)
 ########
         res_list = Reserve.objects.filter(Q(user_id=request.user),
-                                          Q(prod_un__is_inactive=False), Q(date_res__range=[current_date, warning])).order_by('date_res')
+                                          Q(prod_un__is_inactive=False), \
+                                          Q(date_res__range=[current_date, warning])).order_by('date_res')
         table_res = FP_ReserveTable(res_list, prefix="2-")
         RequestConfig(request, paginate={'per_page': 3}).configure(table_res)
 
@@ -218,8 +216,9 @@ def my_inventory(request):
     list = []
     for a in depts:
         print(a.id)
-        list.append(Watching.objects.filter(Q(user_id=request.user), Q(dept=a.id), Q(prod_un__is_inactive=False), Q(
-            low_warn=True)).order_by(-F('prod_un__init_amount') / F('prod_un__curr_amount')))
+        list.append(Watching.objects.filter(Q(user_id=request.user), \
+        Q(dept=a.id), Q(prod_un__is_inactive=False)).order_by(\
+        -F('prod_un__init_amount') / F('prod_un__curr_amount')))
 
     watch_list = Product_Unit.objects.none()
     for el in list:
