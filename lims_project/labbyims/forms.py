@@ -107,7 +107,7 @@ class Update_item_Form(forms.ModelForm):
 
     class Meta:
         model = Product_Unit
-        fields = ("prod_units", "used_amount", "open_date",
+        fields = ("prod_units", "in_house_no","used_amount", "open_date",
                   "ret_date", "exp_date", "location","department","low_warn_form" ,"is_inactive")
 
         widgets = {

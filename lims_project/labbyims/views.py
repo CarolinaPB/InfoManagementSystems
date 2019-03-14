@@ -37,22 +37,32 @@ def home(request):
                     Q(exp_date__range = [current_date, warning ]) | \
                     Q(ret_date__range =[current_date, warning ]) ).order_by(\
                     'exp_date', 'ret_date')
+
         table_exp = FP_Product_UnitTable(exp_filter, prefix="1-")
         RequestConfig(request, paginate={'per_page': 3}).configure(table_exp)
 
         res_list=Reserve.objects.filter(Q(user_id= request.user),\
                     Q(prod_un__is_inactive=False),Q(date_res__range = \
-                    [current_date, warning ])).order_by('date_res')
+                    [current_date, warning ]) ).order_by('date_res')
         table_res = FP_ReserveTable(res_list, prefix="2-")
         RequestConfig(request, paginate={'per_page': 3}).configure(table_res)
 
-        watch_list = Watching.objects.filter(Q(prod_un__is_inactive=False),
-                                             Q(user_id=request.user), \
-                                             #Q(prod_un__prod_perc__lte = 50),\
-                                             Q(low_warn=True)).select_related()
+        depts = []
+        for el in Association.objects.all():
+            if el.user ==request.user:
+                depts.append(el.dept)
+
+        watch_list=""
+        for a in depts:
+            list= Watching.objects.filter(Q(user_id=request.user),)
+            for el in list:
+                if el.dept.id == a.id:
+                    watch_list=Watching.objects.filter(Q(prod_un__is_inactive=False),\
+                                        Q(dept=a.id), Q(low_warn = True)\
+                                        ).order_by(-F('prod_un__init_amount'\
+                                        )/F('prod_un__curr_amount'))
         table_low = FP_Running_LowTable(watch_list, prefix='3-')
         RequestConfig(request, paginate={'per_page': 3}).configure(table_low)
-
         return render(request, 'labbyims/home_afterlogin.html', {'table_res': table_res, 'table_exp': table_exp,
                                                                  'table_low': table_low},)
     else:
@@ -177,7 +187,15 @@ def locations(request):
 
 
 def my_inventory(request):
-    my_inv_list = Product_Unit.objects.filter(is_inactive=False)
+    depts = []
+    for el in Association.objects.all():
+        if el.user ==request.user:
+            depts.append(el.dept)
+
+    for a in depts:
+        my_inv_list = Product_Unit.objects.filter(Q(is_inactive=False),\
+                        Q(department=a.id))
+
     table_my_inv = Product_Unit_MyTable(my_inv_list)
     RequestConfig(request).configure(table_my_inv)
     return render(request, 'labbyims/my_inventory.html', {'table_my_inv': table_my_inv})
@@ -288,7 +306,7 @@ def add_reservation(request):
 
 
 def reservations(request):
-    current_date = timezone.now()
+    current_date = datetime.today()
     warning = current_date + timedelta(days=27)
     res_list = Reserve.objects.filter(Q(user_id=request.user),
                                       Q(date_res__range=[current_date, warning]),
@@ -308,9 +326,23 @@ def tutorial(request):
 
 def running_low(request):
     if request.user.is_authenticated:
-        watch_list = Watching.objects.filter(Q(prod_un__is_inactive=False),
-                                             Q(user_id=request.user),
-                                             Q(low_warn=True)).select_related()
+
+        depts = []
+
+        for el in Association.objects.all():
+            if el.user ==request.user:
+                depts.append(el.dept)
+
+        for a in depts:
+            print(a.id)
+            list= Watching.objects.filter(Q(user_id=request.user),)
+
+            for el in list:
+                if el.dept.id == a.id:
+                    watch_list=Watching.objects.filter(Q(prod_un__is_inactive=False),\
+                                        Q(dept=a.id), Q(low_warn = True)\
+                                        ).order_by(-F('prod_un__init_amount'\
+                                        )/F('prod_un__curr_amount'))
         table_watch = Running_LowTable(watch_list)
         RequestConfig(request).configure(table_watch)
         return render(request, 'labbyims/running_low.html',
@@ -349,6 +381,7 @@ def update_item(request):
         archived = request.POST.getlist("is_inactive")
         dept = request.POST.getlist("department")
         low_warn_form = form.cleaned_data["low_warn_form"]
+        house_id= form.cleaned_data["in_house_no"]
         print(loc)
         change_prod_unit = Product_Unit.objects.get(id=prod_units.id)
         changed = False
@@ -375,6 +408,9 @@ def update_item(request):
             if opened:
                 changed = True
                 change_prod_unit.open_date = opened
+            if house_id:
+                changed=True
+                change_prod_unit.in_house_no = house_id
             if loc:
                 l = Location.objects.get(name=loc)
                 if parent_product.ispoison_nonvol == l.ispoison_nonvol and parent_product.isreactive==l.isreactive and parent_product.issolid ==l.issolid and parent_product.isoxidliq == parent_product.isoxidliq and parent_product.isflammable == l.isflammable and parent_product.isbaseliq == l.isbaseliq and parent_product.isorgminacid ==l.isorgminacid and parent_product.isoxidacid ==l.isoxidacid and parent_product.ispois_vol ==l.ispois_vol:
@@ -529,7 +565,7 @@ def search_advance(request):
 
         if choice=='unit':
             product_list = Product_Unit.objects.all()
-            product_list = product_list.filter(description__icontains=search)
+            product_list = product_list.filter(Q(description__icontains=search) | Q(in_house_no=search))
             table_se = Product_Unit_MyTable(product_list)
             RequestConfig(request).configure(table_se)
             return render(request, 'labbyims/search_list.html', {'table_se': table_se,}, )

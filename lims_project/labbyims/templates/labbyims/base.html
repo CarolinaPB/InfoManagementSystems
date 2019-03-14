@@ -48,7 +48,7 @@
                     <a class="nav-item nav-link" href="{% url 'update_item' %}">Update unit</a>
                     <li class="nav-item dropdown hidden-md-down">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <strong>User</strong>
+                            <strong>{{request.user.username}}</strong>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <a href="{% url 'reservations' %}" class="dropdown-item">My Reservations</a>
