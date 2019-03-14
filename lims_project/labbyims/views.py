@@ -192,11 +192,19 @@ def my_inventory(request):
         if el.user ==request.user:
             depts.append(el.dept)
 
+    print(depts)
+    my_inv_list=""
     for a in depts:
-        my_inv_list = Product_Unit.objects.filter(Q(is_inactive=False),\
-                        Q(department=a.id))
-
+        print(a)
+        list= Watching.objects.filter(Q(user_id=request.user))
+        #print(list)
+        for el in list:
+            if el.dept.id == a.id:
+                my_inv_list=Watching.objects.filter(Q(prod_un__is_inactive=False),\
+                                    Q(dept=a.id))
+    print(my_inv_list)
     table_my_inv = Product_Unit_MyTable(my_inv_list)
+    #table_my_inv = Product_Unit_MyTable(watch_list)
     RequestConfig(request).configure(table_my_inv)
     return render(request, 'labbyims/my_inventory.html', {'table_my_inv': table_my_inv})
 
@@ -332,7 +340,7 @@ def running_low(request):
         for el in Association.objects.all():
             if el.user ==request.user:
                 depts.append(el.dept)
-
+        watch_list=""
         for a in depts:
             print(a.id)
             list= Watching.objects.filter(Q(user_id=request.user),)
