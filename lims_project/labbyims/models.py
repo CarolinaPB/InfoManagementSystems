@@ -117,9 +117,9 @@ class Watching(models.Model):
     dept = models.ForeignKey(Department, on_delete=models.CASCADE)
     low_warn = models.BooleanField('Running Low Warning')
     #prod_perc = models.DecimalField('Percent left', default = 100, max_digits=10, decimal_places=4)
-    def save(self, *args, **kwargs):
-        self.prod_perc = (self.prod_un.curr_amount/self.prod_un.init_amount)*100
-        super(Watching, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     self.prod_perc = (self.prod_un.curr_amount/self.prod_un.init_amount)*100
+    #     super(Watching, self).save(*args, **kwargs)
     # def __str__(self):
     #     return self.low_warn
 

@@ -79,7 +79,6 @@ def add_item(request):
     if request.method == "POST" and 'Submit' in request.POST:
         form = Product_UnitForm(request.POST)
         if form.is_valid():
-
             product = form.cleaned_data['product']
             location = form.cleaned_data['location']
             constraints_list_product = [product.isreactive, product.issolid, product.isoxidliq, product.isflammable,
@@ -89,27 +88,27 @@ def add_item(request):
             i = 0
             for constraint in constraints_list_product:
                 if constraint is True and constraints_list_location[i] is not True:
-                    messages.error(request,'WARNING: Because of safety restrictions you can\'t store {} in the the selected location {}. Please choose a new one.'.format(product, location))
-                    return render(request, 'labbyims/add_item.html', {'form': form,})
+                    messages.error(request,'Because of safety restrictions you can\'t store {} in the \
+                    the selected location {}. Please choose a new one.'.format(product, location))
+                    return render(request, 'labbyims/add_item.html', {'form': form})
                 else:
                     pass
                 i += 1
             temp = location.temperature
             if temp < product.min_temp or temp > product.max_temp:
-                 return render(request, 'labbyims/add_item.html', {'form': form, 'text': \
-                 'WARNING: You can\'t store the product unit in the the selected location because of the required temperature. \
-                 Please choose a new one.'})
+                messages.error(request, 'You can\'t store {} in the the selected location {}\
+                because of the required temperature. Please choose a new one.' .format(product, location))
+                return render(request, 'labbyims/add_item.html', {'form': form})
             number = int(request.POST.get('number', False))
             low_warn_form = form.cleaned_data['low_warn_form']
             dep_id_list = list(request.POST.getlist('department'))
             instance = form.save(commit=False)
             if instance.used_amount > instance.init_amount:
-                messages.error(request,'WARNING: Used amount can\'t be higher than initial amount.')
+                messages.error(request,'Used amount can\'t be higher than initial amount.')
                 return render(request, 'labbyims/add_item.html', {'form': form,})
             elif instance.init_amount == 0:
-                messages.error(request, 'WARNING: Initial amount can\'t be set to 0.')
+                messages.error(request, 'Initial amount can\'t be set to 0.')
                 return render(request, 'labbyims/add_item.html', {'form': form,})
-
             else:
                 instance.curr_amount = instance.init_amount - instance.used_amount
                 for i in range(0, number):
@@ -123,7 +122,8 @@ def add_item(request):
                             w = Watching(user=request.user, prod_un=instance, dept=dep, low_warn=low_warn_form)
                             w.save()
                             j += 1
-                return redirect("/home/")
+                messages.success(request, 'Product unit(s) added!')
+                return render(request, 'labbyims/add_item.html', {'form': form})
         else:
             print(form.errors)
 
@@ -131,7 +131,8 @@ def add_item(request):
         cas_search = request.GET.get('Search', None)
         prod_set = Product.objects.filter(cas=cas_search)
         if not prod_set:
-            return render(request, 'labbyims/add_item_cas.html', {'text': "No product with this CAS number was found. Please try again."})
+            messages.error(request, 'No product with this CAS number was found. Please try again.')
+            return render(request, 'labbyims/add_item_cas.html')
         else:
             for prod in prod_set:
                 prod_name = prod.name
