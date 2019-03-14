@@ -1,0 +1,22 @@
+{% extends "labbyims/base.html" %}
+{% load render_table from django_tables2 %}
+
+{% block content %}
+
+<main>
+
+    <head>
+        <br><br><br><br><br>
+        <h1>General Inventory</h1>
+        <br>
+    </head>
+    <input type="button" class="btn btn-light" value="Go back" onClick="javascript:history.go(-1)" />
+    <br><br>
+    <body>
+        {% render_table table %}
+    </body>
+    <br><br>
+</main>
+
+
+{% endblock %}

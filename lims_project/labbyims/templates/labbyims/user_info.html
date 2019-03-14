@@ -1,0 +1,35 @@
+{% extends "labbyims/base.html" %}
+{% block content %}
+<br><br><br>
+<TITLE>My Profile</TITLE>
+<br><br>
+<h2>My Profile</h2>
+<br><br>
+<ul>
+  {% for User in filter.qs %}
+  <p><strong>Username:</strong> {{User.username}}
+  <br>
+  <p><strong>First Name:</strong> {{User.first_name}}
+  <br>
+  <p><strong>Last Name:</strong> {{User.last_name}}
+  <br>
+  <p><strong>Email:</strong> {{User.email}}
+  <br>
+  <p><strong>Last Login:</strong> {{User.last_login}}
+  <br>
+  <br>
+  <strong>Departments:</strong>
+  {% for d in dept %}
+  {{d}}
+  {% endfor d %} <br><br>
+    <a href="{% url 'add_association' %}"class="btn btn-light"> Add department association</a>
+  <br><br>
+  <p></p><a href="{% url 'password_change' %}" class="btn btn-light">Change password</a>
+
+  <br><br>
+  <input type="button" class="btn btn-light" value="Go back" onClick="javascript:history.go(-1)" />
+  <br>
+  {% endfor %}
+
+  <br>
+  {% endblock %}

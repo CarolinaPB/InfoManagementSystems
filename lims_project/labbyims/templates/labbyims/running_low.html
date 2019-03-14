@@ -1,0 +1,18 @@
+{% extends "labbyims/base.html" %}
+{% load render_table from django_tables2 %}
+
+{% block content %}
+
+        <br><br><br><br><br>
+        <h1>Running Low </h1>
+        <p>The following watched units are running low</p>
+        <input type="button" class="btn btn-light" value="Go back" onClick="javascript:history.go(-1)" />
+        <br><br>
+
+      <table>
+        {% render_table table_watch %}
+      </table>
+
+<br><br><br><br><br><br>
+
+{% endblock %}

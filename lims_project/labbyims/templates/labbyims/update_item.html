@@ -1,0 +1,34 @@
+{% extends "labbyims/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<br><br><br><br><br>
+
+<TITLE>Update Unit</TITLE>
+<!-- <div class="container" id="center_div"> -->
+<H1>Update Unit</H1>
+<br><br>
+{% if messages %}
+<ul class="messages alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}> {{ message }} </li>
+    {% endfor %}
+</ul>
+{% endif %}
+<form action="" method="POST">
+	{% csrf_token %}
+    {{ form|crispy}}
+    <br>
+
+    <input type="checkbox"name="delete_entry" id="delete_entry" onchange="cTrig('delete_entry')"/>
+    <label id="label_for_DELETE" for="delete_entry">DELETE entry from database?</label>
+    <p id="label_for_DELETE">This change will be permanent!
+    <br><br>
+    <input type="submit" class="btn btn-light" value="Submit" name="Submit">  <input class="btn btn-light" type="reset" value="Reset" name="Reset">
+    <input type="button" class="btn btn-light" value="Go back" onClick="javascript:history.go(-1)" />
+    <br><br><br>
+
+</form>
+
+<!-- </div> -->
+{% endblock content %}

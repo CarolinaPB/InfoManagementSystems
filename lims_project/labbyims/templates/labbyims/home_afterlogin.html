@@ -1,26 +1,85 @@
 {% extends "labbyims/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load render_table from django_tables2 %}
 {% block content %}
 
-<div class="container-fluid">
-    <br><br>
-    <div class="row">
-        <div class="column">
-            <br><br><br><br><br><br><br><br><br><br><br><br>
-            <form  class="form-inline my-2 my-lg-1">
-              <input
-                  class="form-control mr-sm-2"
-                  type="search"
-                  placeholder="Search"
-                  name='search'
-                  value="{{search_term}}">
-              <button class="btn my-2 my-sm-0" type="submit">Search</button>
-            </form>
+<div class="row">
+    <div class="first-column col-sm-8 col-lg-8">
+        <div class="row">
+            <div id="center_search">
+
+                {% if messages %}
+
+                <ul class="messages alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}> {{ message }} </li>
+                        {% endfor %}
+                </ul>
+                {% endif %}
+
+                <div class="text-center img-responsive">
+                    <img src="{% static 'labbyims/logo.png' %}" alt="Logo" width="300" height="auto">
+                </div>
+                <br>
+                <form action="/search_advance/" method="get">
+
+                    <div class="center_fields">
+                        <span><input type="text" name="search" class="searchfield textinput textInput" id="id_search"></span>
+                        <span><input type="submit" name="submit" value="Search" class="btn btn-light btn" id="submit-id-submit"></span>
+                    </div>
+                    <div class="center_select">
+                        <select name="advanced_search" class="select" id="id_advanced_search">
+                            <option value="unit">Unit</option>
+                            <option value="location">Location</option>
+                            <option value="CAS">CAS</option>
+                            <option value="product">Product</option>
+                        </select>
+                        <br><br><br><br><br><br><br>
+                    </div>
+                </form>
+            </div>
+
         </div>
-            <div class="column" style="background-color:#bbb;">
+
+    </div>
+    <div class="second-column col-sm-4 col-lg-4" style="background-color:#f2f2f2">
+        <div id="remove_padding" class="container-fluid">
+            <br><br><br><br><br>
             <h2>Reminders</h2>
-            <p>Some text..</p>
+
+            <div>
+
+                <style>
+                    table {
+                        font-size: 12px;
+                        white-space: nowrap;
+                        width: 100%;
+                    }
+                </style>
+
+
+                <tr>
+
+                    <body>
+                        <table>
+                            <a href="{% url 'reservations' %}">My Reservations</a><br>
+                            {% render_table table_res %}
+                            <br><br>
+                            <a href="{% url 'my_inventory' %}">Expiration/re-test</a>
+                            {%  render_table table_exp %}
+                            <br><br>
+                            <a href="{% url 'running_low' %}">Running Low</a>
+                            {%  render_table table_low %}
+                        </table>
+                        <br>
+                    </body>
+
+                </tr>
+
+            </div>
         </div>
     </div>
-
 </div>
 {% endblock %}

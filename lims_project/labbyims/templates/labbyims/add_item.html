@@ -1,0 +1,35 @@
+{% extends "labbyims/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<br><br><br><br><br>
+
+<TITLE>Add Unit</TITLE>
+<H1>Add Unit</H1>
+<br><br>
+{% if messages %}
+<ul class="messages alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}> {{ message }} </li>
+    {% endfor %}
+</ul>
+{% endif %}
+<P>Please fill out this form to add new units to the database:
+{{ text }}<br>
+
+
+<form action="" method=POST>
+    {% csrf_token %}
+    {{ form|crispy}}
+    <br><br>
+    <input type="submit" class="btn btn-light" value="Submit" name="Submit">  <input type="reset" class="btn btn-light" value="Reset" name="Reset">
+    <input type="button" class="btn btn-light" value="Go back" onClick="javascript:history.go(-1)" />
+    <br><br><br>
+
+</form>
+
+<br><br><br>
+
+
+
+{% endblock content %}

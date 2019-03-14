@@ -1,0 +1,27 @@
+{% extends "labbyims/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<br><br><br><br><br>
+
+<TITLE>Add Reservation</TITLE>
+<H1>Add Reservation</H1>
+<br><br>
+{% if messages %}
+<ul class="messages alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}> {{ message }} </li>
+    {% endfor %}
+</ul>
+{% endif %}
+<form method="POST", action="">
+    {% csrf_token %}
+    {{ form|crispy}}
+    <br>
+    <input type="submit" class="btn btn-light" value="Submit">  <input class="btn btn-light" type="reset" value="Reset">
+    <input type="button" class="btn btn-light" value="Go back" onClick="javascript:history.go(-1)" />
+</form>
+
+
+{% endblock %}

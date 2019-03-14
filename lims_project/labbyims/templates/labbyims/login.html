@@ -1,0 +1,13 @@
+{% extends "labbyims/base.html" %}
+
+{% block login %}
+  <br><br><br><br><br>
+  <h2>Login</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-light" class="btn btn-light">Login</button>
+  </form>
+  <br>
+  <a href="{% url 'password_reset' %}" class="btn btn-light">Password reset</a>
+{% endblock %}
