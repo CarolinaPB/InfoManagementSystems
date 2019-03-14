@@ -63,8 +63,10 @@ def home(request):
                                         )/F('prod_un__curr_amount'))
         table_low = FP_Running_LowTable(watch_list, prefix='3-')
         RequestConfig(request, paginate={'per_page': 3}).configure(table_low)
+        userprofile = User.objects.filter(id=request.user.id)
+        user_filter = UserFilter(request.GET, queryset=userprofile)
         return render(request, 'labbyims/home_afterlogin.html', {'table_res': table_res, 'table_exp': table_exp,
-                                                                 'table_low': table_low},)
+                                                                 'table_low': table_low,'filter':user_filter,})
     else:
         return render(request, 'labbyims/no_login.html')
 
