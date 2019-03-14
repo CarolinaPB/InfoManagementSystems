@@ -26,18 +26,18 @@ class Product_UnitTable(tables.Table):
 
 
 class FP_ReserveTable(tables.Table):
+    ih_id = tables.Column(accessor = 'prod_un.in_house_no', verbose_name = 'ID')
     res =  tables.Column(accessor= 'date_res', verbose_name = 'Date')
     desc = tables. Column (accessor = 'prod_un')
-    ih_id = tables.Column(accessor = 'prod_un.in_house_no', verbose_name = 'ID')
     amount_res = tables.Column(accessor = 'amount_res', verbose_name = 'Amount')
 
 
 
 class FP_Running_LowTable(tables.Table):
+    perc_lhouse = tables.Column(accessor = 'prod_un.in_house_no', verbose_name='ID')
     prod_res = tables.Column(accessor='prod_un.description', verbose_name='Description')
     prod_perc = tables.Column(accessor='prod_un.perc_left',\
                 verbose_name = '% Left', orderable=False)
-    perc_lhouse = tables.Column(accessor = 'prod_un.in_house_no', verbose_name='ID')
     exp = tables.Column(accessor = 'prod_un.exp_date', verbose_name = 'Expires')
 
 
