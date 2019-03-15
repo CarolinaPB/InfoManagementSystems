@@ -48,21 +48,6 @@ def home(request):
         table_res = FP_ReserveTable(res_list, prefix="2-")
         RequestConfig(request, paginate={'per_page': 3}).configure(table_res)
 
-        # depts = []
-        # for el in Association.objects.all():
-        #     if el.user ==request.user:
-        #         depts.append(el.dept)
-        #
-        # watch_list=""
-        # for a in depts:
-        #     list= Watching.objects.filter(Q(user_id=request.user),)
-        #     for el in list:
-        #         if el.dept.id == a.id:
-        #             watch_list=Watching.objects.filter(Q(prod_un__is_inactive=False),\
-        #                                 Q(dept=a.id), Q(low_warn = True)\
-        #                                 ).order_by(-F('prod_un__init_amount'\
-        #                                 )/F('prod_un__curr_amount'))
-
         depts = []
 
         for el in Association.objects.all():
