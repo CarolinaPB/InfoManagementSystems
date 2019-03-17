@@ -3,21 +3,16 @@
 
 {% block content %}
 
-<main>
-
-    <head>
         <br><br><br><br><br>
         <h1>Running Low </h1>
         <p>The following watched units are running low</p>
         <input type="button" class="btn btn-light" value="Go back" onClick="javascript:history.go(-1)" />
         <br><br>
-    </head>
-    <body>
+
       <table>
         {% render_table table_watch %}
       </table>
-    </body>
-</main>
 
+<br><br><br><br><br><br>
 
 {% endblock %}

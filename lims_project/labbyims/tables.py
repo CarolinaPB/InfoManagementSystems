@@ -26,18 +26,18 @@ class Product_UnitTable(tables.Table):
 
 
 class FP_ReserveTable(tables.Table):
+    ih_id = tables.Column(accessor = 'prod_un.in_house_no', verbose_name = 'ID')
     res =  tables.Column(accessor= 'date_res', verbose_name = 'Date')
     desc = tables. Column (accessor = 'prod_un')
-    ih_id = tables.Column(accessor = 'prod_un.in_house_no', verbose_name = 'ID')
     amount_res = tables.Column(accessor = 'amount_res', verbose_name = 'Amount')
 
 
 
 class FP_Running_LowTable(tables.Table):
+    perc_lhouse = tables.Column(accessor = 'prod_un.in_house_no', verbose_name='ID')
     prod_res = tables.Column(accessor='prod_un.description', verbose_name='Description')
     prod_perc = tables.Column(accessor='prod_un.perc_left',\
                 verbose_name = '% Left', orderable=False)
-    perc_lhouse = tables.Column(accessor = 'prod_un.in_house_no', verbose_name='ID')
     exp = tables.Column(accessor = 'prod_un.exp_date', verbose_name = 'Expires')
 
 
@@ -74,20 +74,20 @@ class ReserveTable(tables.Table):
 
 
 class Product_Unit_MyTable(tables.Table):
-    house_id = tables.Column(accessor='in_house_no', verbose_name='ID')
-    desc = tables.Column(accessor='description')
-    prod = tables.Column(accessor='product')
-    batch_no = tables.Column(accessor='batch', verbose_name='Batch #')
-    curr_am = tables.Column(accessor='curr_amount', verbose_name='Amount')
-    meas_u = tables.Column(accessor='m_unit')
-    Loc = tables.Column(accessor='location')
-    room = tables.Column(accessor='location.room')
-    exp = tables.Column(accessor='exp_date', verbose_name='Expires')
-    ret = tables.Column(accessor='ret_date', verbose_name='Retest')
-    open = tables.Column(accessor='open_date', verbose_name='Opened')
-    company = tables.Column(accessor='company')
-    cat_no = tables.Column(accessor='cat_num', verbose_name='Catalog #')
-    pur_perc = tables.Column(accessor='purity')
+    house_id = tables.Column(accessor='prod_un.in_house_no', verbose_name='ID')
+    desc = tables.Column(accessor='prod_un.description')
+    prod = tables.Column(accessor='prod_un.product')
+    batch_no = tables.Column(accessor='prod_un.batch', verbose_name='Batch #')
+    curr_am = tables.Column(accessor='prod_un.curr_amount', verbose_name='Amount')
+    meas_u = tables.Column(accessor='prod_un.m_unit')
+    Loc = tables.Column(accessor='prod_un.location')
+    room = tables.Column(accessor='prod_un.location.room')
+    exp = tables.Column(accessor='prod_un.exp_date', verbose_name='Expires')
+    ret = tables.Column(accessor='prod_un.ret_date', verbose_name='Retest')
+    open = tables.Column(accessor='prod_un.open_date', verbose_name='Opened')
+    company = tables.Column(accessor='prod_un.company')
+    cat_no = tables.Column(accessor='prod_un.cat_num', verbose_name='Catalog #')
+    pur_perc = tables.Column(accessor='prod_un.purity')
     class Meta:
         template_name = 'django_tables2/bootstrap.html'
 

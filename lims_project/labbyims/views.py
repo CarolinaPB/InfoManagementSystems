@@ -7,6 +7,16 @@ from django.db.models import F, Q, FloatField
 from django.db.models.functions import Cast
 from django.views import View
 from django.contrib import messages
+from django_tables2 import RequestConfig
+import datetime
+from datetime import datetime, timedelta
+from django.utils import timezone
+from decimal import Decimal
+from django.db import IntegrityError
+from django.shortcuts import render_to_response
+# LABBI imports
+from .filters import ProductFilter, LocationFilter, Prod_ResFilter, UserFilter,\
+    DeptFilter, ProductCASFilter
 from .forms import Product_UnitForm, Product_Form, \
     Location_Form, Room_Form, Reserve_Form, Update_item_Form, \
     Department_Form, Association_Form, Update_reservation_Form, \
@@ -17,15 +27,7 @@ from .tables import Product_UnitTable, Product_Table, LocationTable, \
     FP_Running_LowTable, Running_LowTable, User_DeptTable
 from .models import Product_Unit, Product, Location, Room, Reserve, User,\
     Watching, Department, Association
-from django_tables2 import RequestConfig
-import datetime
-from datetime import datetime, timedelta
-from django.utils import timezone
-from .filters import ProductFilter, LocationFilter, Prod_ResFilter, UserFilter,\
-    DeptFilter, ProductCASFilter
-from decimal import Decimal
-from django.db import IntegrityError
-from django.shortcuts import render_to_response
+
 
 
 def home(request):
@@ -33,34 +35,33 @@ def home(request):
         current_date = timezone.now()
         warning = current_date + timedelta(days=27)
 
-        exp_filter = Product_Unit.objects.filter(Q(is_inactive=False), \
-                    Q(exp_date__range = [current_date, warning ]) | \
-                    Q(ret_date__range =[current_date, warning ]) ).order_by(\
-                    'exp_date', 'ret_date')
+        exp_filter = Product_Unit.objects.filter(Q(is_inactive=False),
+                                                 Q(exp_date__range=[current_date, warning]) |
+                                                 Q(ret_date__range =[current_date, warning]) ).order_by(
+            'exp_date', 'ret_date')
 
         table_exp = FP_Product_UnitTable(exp_filter, prefix="1-")
         RequestConfig(request, paginate={'per_page': 3}).configure(table_exp)
 
-        res_list=Reserve.objects.filter(Q(user_id= request.user),\
-                    Q(prod_un__is_inactive=False),Q(date_res__range = \
-                    [current_date, warning ]) ).order_by('date_res')
+        res_list = Reserve.objects.filter(Q(user_id=request.user),
+                                          Q(prod_un__is_inactive=False), Q(date_res__range=[current_date, warning])).order_by('date_res')
         table_res = FP_ReserveTable(res_list, prefix="2-")
         RequestConfig(request, paginate={'per_page': 3}).configure(table_res)
 
         depts = []
-        for el in Association.objects.all():
-            if el.user ==request.user:
-                depts.append(el.dept)
 
-        watch_list=""
+        for el in Association.objects.all():
+            if el.user == request.user:
+                depts.append(el.dept)
+        list = []
         for a in depts:
-            list= Watching.objects.filter(Q(user_id=request.user),)
-            for el in list:
-                if el.dept.id == a.id:
-                    watch_list=Watching.objects.filter(Q(prod_un__is_inactive=False),\
-                                        Q(dept=a.id), Q(low_warn = True)\
-                                        ).order_by(-F('prod_un__init_amount'\
-                                        )/F('prod_un__curr_amount'))
+            print(a.id)
+            list.append(Watching.objects.filter(Q(user_id=request.user), Q(dept=a.id), Q(prod_un__is_inactive=False), Q(
+                low_warn=True)).order_by(-F('prod_un__init_amount') / F('prod_un__curr_amount')))
+
+        watch_list = Product_Unit.objects.none()
+        for el in list:
+            watch_list |= el
         table_low = FP_Running_LowTable(watch_list, prefix='3-')
         RequestConfig(request, paginate={'per_page': 3}).configure(table_low)
         return render(request, 'labbyims/home_afterlogin.html', {'table_res': table_res, 'table_exp': table_exp,
@@ -99,26 +100,30 @@ def add_item(request):
             i = 0
             for constraint in constraints_list_product:
                 if constraint is True and constraints_list_location[i] is not True:
-                    messages.error(request,'WARNING: Because of safety restrictions you can\'t store {} in the the selected location {}. Please choose a new one.'.format(product, location))
-                    return render(request, 'labbyims/add_item.html', {'form': form,})
+                    messages.error(request, 'WARNING: Because of safety restrictions you can\'t store {} in the the selected location {}. Please choose a new one.'.format(
+                        product, location))
+                    return render(request, 'labbyims/add_item.html', {'form': form, })
                 else:
                     pass
                 i += 1
             temp = location.temperature
             if temp < product.min_temp or temp > product.max_temp:
-                 return render(request, 'labbyims/add_item.html', {'form': form, 'text': \
-                 'WARNING: You can\'t store the product unit in the the selected location because of the required temperature. \
+                return render(request, 'labbyims/add_item.html', {'form': form, 'text':
+                                                                  'WARNING: You can\'t store the product unit in the the selected location because of the required temperature. \
                  Please choose a new one.'})
             number = int(request.POST.get('number', False))
             low_warn_form = form.cleaned_data['low_warn_form']
             dep_id_list = list(request.POST.getlist('department'))
             instance = form.save(commit=False)
+            messages.success(request, 'Unit added')
             if instance.used_amount > instance.init_amount:
-                messages.error(request,'WARNING: Used amount can\'t be higher than initial amount.')
-                return render(request, 'labbyims/add_item.html', {'form': form,})
+                messages.error(
+                    request, 'WARNING: Used amount can\'t be higher than initial amount.')
+                return render(request, 'labbyims/add_item.html', {'form': form, })
             elif instance.init_amount == 0:
-                messages.error(request, 'WARNING: Initial amount can\'t be set to 0.')
-                return render(request, 'labbyims/add_item.html', {'form': form,})
+                messages.error(
+                    request, 'WARNING: Initial amount can\'t be set to 0.')
+                return render(request, 'labbyims/add_item.html', {'form': form, })
 
             else:
                 instance.curr_amount = instance.init_amount - instance.used_amount
@@ -130,10 +135,11 @@ def add_item(request):
                         for j in range(0, len(dep_id_list)):
                             dep_id = dep_id_list[j]
                             dep = Department.objects.get(pk=dep_id)
-                            w = Watching(user=request.user, prod_un=instance, dept=dep, low_warn=low_warn_form)
+                            w = Watching(
+                                user=request.user, prod_un=instance, dept=dep, low_warn=low_warn_form)
                             w.save()
                             j += 1
-                return redirect("/home/")
+                return render(request, 'labbyims/add_item.html', {'form': form, })
         else:
             print(form.errors)
 
@@ -159,7 +165,7 @@ def add_item_cas(request):
 def inventory(request):
     inv_list = Product_Unit.objects.filter(is_inactive=False)
     table = Product_UnitTable(inv_list)
-    RequestConfig(request).configure(table)
+    RequestConfig(request, paginate={'per_page': 10}).configure(table)
     return render(request, 'labbyims/inventory.html', {'table': table})
 
 
@@ -182,22 +188,29 @@ def add_location(request):
 
 def locations(request):
     table_1 = LocationTable(Location.objects.all())
-    RequestConfig(request).configure(table_1)
+    RequestConfig(request, paginate={'per_page': 10}).configure(table_1)
     return render(request, 'labbyims/locations.html', {'table_1': table_1})
 
 
 def my_inventory(request):
     depts = []
+
     for el in Association.objects.all():
-        if el.user ==request.user:
+        if el.user == request.user:
             depts.append(el.dept)
-
+    list = []
     for a in depts:
-        my_inv_list = Product_Unit.objects.filter(Q(is_inactive=False),\
-                        Q(department=a.id))
+        print(a.id)
+        list.append(Watching.objects.filter(Q(user_id=request.user), Q(dept=a.id), Q(prod_un__is_inactive=False), Q(
+            low_warn=True)).order_by(-F('prod_un__init_amount') / F('prod_un__curr_amount')))
 
-    table_my_inv = Product_Unit_MyTable(my_inv_list)
-    RequestConfig(request).configure(table_my_inv)
+    watch_list = Product_Unit.objects.none()
+    for el in list:
+        watch_list |= el
+    print(watch_list)
+    table_my_inv = Product_Unit_MyTable(watch_list)
+    #table_my_inv = Product_Unit_MyTable(watch_list)
+    RequestConfig(request, paginate={'per_page': 10}).configure(table_my_inv)
     return render(request, 'labbyims/my_inventory.html', {'table_my_inv': table_my_inv})
 
 
@@ -287,19 +300,21 @@ def add_reservation(request):
             unit_to_compare = Product_Unit.objects.get(id=unit)
             print(unit_to_compare.curr_amount)
             if res_amount > unit_to_compare.curr_amount:
-                messages.error(request, "The amount you want to reserve can't be larger than the item's current amount")
+                messages.error(
+                    request, "The amount you want to reserve can't be larger than the item's current amount")
             else:
                 add_res.save()
                 messages.success(request, 'Reservation added!')
             return HttpResponseRedirect('.')
         else:
             print(form.errors)
-            form.fields['prod_un'].queryset = Product_Unit.objects.filter(is_inactive=False)
+            form.fields['prod_un'].queryset = Product_Unit.objects.filter(
+                is_inactive=False)
 
     else:
         form = Reserve_Form()
-        form.fields['prod_un'].queryset = Product_Unit.objects.filter(is_inactive=False)
-
+        form.fields['prod_un'].queryset = Product_Unit.objects.filter(
+            is_inactive=False)
 
     context = {'form': form}
     return render(request, 'labbyims/add_reservation.html', context)
@@ -309,10 +324,11 @@ def reservations(request):
     current_date = datetime.today()
     warning = current_date + timedelta(days=27)
     res_list = Reserve.objects.filter(Q(user_id=request.user),
-                                      Q(date_res__range=[current_date, warning]),
+                                      Q(date_res__range=[
+                                        current_date, warning]),
                                       Q(prod_un__is_inactive=False), Q(is_complete=None)).select_related()
     table_res = ReserveTable(res_list)
-    RequestConfig(request).configure(table_res)
+    RequestConfig(request, paginate={'per_page': 10}).configure(table_res)
     return render(request, 'labbyims/reservations.html', {'table_res': table_res, }, )
 
 
@@ -330,21 +346,21 @@ def running_low(request):
         depts = []
 
         for el in Association.objects.all():
-            if el.user ==request.user:
+            if el.user == request.user:
                 depts.append(el.dept)
-
+        list = []
         for a in depts:
             print(a.id)
-            list= Watching.objects.filter(Q(user_id=request.user),)
+            list.append(Watching.objects.filter(Q(user_id=request.user), Q(dept=a.id), Q(prod_un__is_inactive=False), Q(
+                low_warn=True)).order_by(-F('prod_un__init_amount') / F('prod_un__curr_amount')))
 
-            for el in list:
-                if el.dept.id == a.id:
-                    watch_list=Watching.objects.filter(Q(prod_un__is_inactive=False),\
-                                        Q(dept=a.id), Q(low_warn = True)\
-                                        ).order_by(-F('prod_un__init_amount'\
-                                        )/F('prod_un__curr_amount'))
+        watch_list = Product_Unit.objects.none()
+        for el in list:
+            watch_list |= el
+
         table_watch = Running_LowTable(watch_list)
-        RequestConfig(request).configure(table_watch)
+        RequestConfig(request, paginate={
+                      'per_page': 10}).configure(table_watch)
         return render(request, 'labbyims/running_low.html',
                       {'table_watch': table_watch, },)
     else:
@@ -381,7 +397,7 @@ def update_item(request):
         archived = request.POST.getlist("is_inactive")
         dept = request.POST.getlist("department")
         low_warn_form = form.cleaned_data["low_warn_form"]
-        house_id= form.cleaned_data["in_house_no"]
+        house_id = form.cleaned_data["in_house_no"]
         print(loc)
         change_prod_unit = Product_Unit.objects.get(id=prod_units.id)
         changed = False
@@ -409,15 +425,16 @@ def update_item(request):
                 changed = True
                 change_prod_unit.open_date = opened
             if house_id:
-                changed=True
+                changed = True
                 change_prod_unit.in_house_no = house_id
             if loc:
                 l = Location.objects.get(name=loc)
-                if parent_product.ispoison_nonvol == l.ispoison_nonvol and parent_product.isreactive==l.isreactive and parent_product.issolid ==l.issolid and parent_product.isoxidliq == parent_product.isoxidliq and parent_product.isflammable == l.isflammable and parent_product.isbaseliq == l.isbaseliq and parent_product.isorgminacid ==l.isorgminacid and parent_product.isoxidacid ==l.isoxidacid and parent_product.ispois_vol ==l.ispois_vol:
+                if parent_product.ispoison_nonvol == l.ispoison_nonvol and parent_product.isreactive == l.isreactive and parent_product.issolid == l.issolid and parent_product.isoxidliq == parent_product.isoxidliq and parent_product.isflammable == l.isflammable and parent_product.isbaseliq == l.isbaseliq and parent_product.isorgminacid == l.isorgminacid and parent_product.isoxidacid == l.isoxidacid and parent_product.ispois_vol == l.ispois_vol:
                     changed = True
                     change_prod_unit.location = loc
                 else:
-                    messages.error(request,"The location {} is incompatible with {}".format(loc, prod_units))
+                    messages.error(
+                        request, "The location {} is incompatible with {}".format(loc, prod_units))
 
             if expi_date:
                 changed = True
@@ -426,55 +443,62 @@ def update_item(request):
                 changed = True
                 change_prod_unit.is_inactive = True
                 change_prod_unit.save()
-            changed_dept_list=[]
+            changed_dept_list = []
             if changed:
-                fields_changed=True
+                fields_changed = True
             else:
-                fields_changed=False
+                fields_changed = False
             if dept:
-                changed=True
+                changed = True
                 for d in dept:
                     # if there is no watching with this user, prod_un and dept:
                     if not Watching.objects.filter(Q(user=request.user), Q(prod_un=change_prod_unit), Q(dept=Department.objects.get(pk=d))):
                         print("will create a new one")
-                        w = Watching(user=request.user, prod_un=change_prod_unit, dept=Department.objects.get(pk=d),low_warn=low_warn_form)
+                        w = Watching(user=request.user, prod_un=change_prod_unit,
+                                     dept=Department.objects.get(pk=d), low_warn=low_warn_form)
                         w.save()
                         changed_dept_list.append(True)
-                        messages.success(request, 'Association with department {} added!'.format(w.dept))
+                        messages.success(
+                            request, 'Association with department {} added!'.format(w.dept))
                     else:
                         if low_warn_form is False:
                             low_w = None
                         else:
                             low_w = True
-                        w = Watching.objects.get(user=request.user, prod_un=change_prod_unit, dept=Department.objects.get(pk=d))
+                        w = Watching.objects.get(
+                            user=request.user, prod_un=change_prod_unit, dept=Department.objects.get(pk=d))
 
                         if low_warn_form:
-                            warning =""
+                            warning = ""
                         else:
-                            warning="not"
-                        if w.dept.id ==int(d):
+                            warning = "not"
+                        if w.dept.id == int(d):
                             print("same dept")
-                            if w.low_warn==low_w:
+                            if w.low_warn == low_w:
                                 same_dept = True
                                 changed_dept_list.append(False)
-                                messages.error(request, 'Couldn''t associate with department: the association with department {} already exists'.format(w.dept))
+                                messages.error(
+                                    request, 'Couldn''t associate with department: the association with department {} already exists'.format(w.dept))
                             else:
                                 print("different warning")
                                 w.low_warn = low_warn_form
                                 w.save()
                                 changed_dept_list.append(True)
-                                messages.success(request, 'You will {} get a warning when this unit is running low!'.format(warning))
+                                messages.success(
+                                    request, 'You will {} get a warning when this unit is running low!'.format(warning))
                         else:
                             w.low_warn = low_w
                             w.save()
                             changed_dept_list.append(True)
-                            messages.success(request, 'You will {} get a warning when this unit is running low!'.format(warning))
+                            messages.success(
+                                request, 'You will {} get a warning when this unit is running low!'.format(warning))
             elif low_warn_form:
-                messages.error(request, 'Error: to get a running low warning you need to choose a department!')
+                messages.error(
+                    request, 'Error: to get a running low warning you need to choose a department!')
 
             if changed:
                 if changed_dept_list:
-                    if sum(changed_dept_list)>0:
+                    if sum(changed_dept_list) > 0:
                         change_prod_unit.save()
                         messages.success(request, 'Unit updated!')
                         return HttpResponseRedirect('.')
@@ -553,35 +577,40 @@ def search_advance(request):
             location_list = Location.objects.all()
             location_list = location_list.filter(Q(name__icontains=search))
             table_se = LocationTable(location_list)
-            RequestConfig(request).configure(table_se)
+            RequestConfig(request, paginate={
+                          'per_page': 10}).configure(table_se)
             return render(request, 'labbyims/search_location.html', {'table_se': table_se, }, )
 
         if choice is None:
             product_list = Product_Unit.objects.all()
-            product_list = product_list.filter(Q(description__icontains=search) | Q(in_house_no=search))
+            product_list = product_list.filter(
+                Q(description__icontains=search) | Q(in_house_no=search))
             table_se = Product_Unit_MyTable(product_list)
-            RequestConfig(request).configure(table_se)
-            return render(request, 'labbyims/search_list.html', {'table_se': table_se,}, )
+            RequestConfig(request, paginate={
+                          'per_page': 10}).configure(table_se)
+            return render(request, 'labbyims/search_list.html', {'table_se': table_se, }, )
 
-        if choice=='unit':
+        if choice == 'unit':
             product_list = Product_Unit.objects.all()
-            product_list = product_list.filter(Q(description__icontains=search) | Q(in_house_no=search))
+            product_list = product_list.filter(
+                Q(description__icontains=search) | Q(in_house_no=search))
             table_se = Product_Unit_MyTable(product_list)
-            RequestConfig(request).configure(table_se)
-            return render(request, 'labbyims/search_list.html', {'table_se': table_se,}, )
+            RequestConfig(request, paginate={
+                          'per_page': 10}).configure(table_se)
+            return render(request, 'labbyims/search_list.html', {'table_se': table_se, }, )
 
         if choice == 'product':
             product = Product.objects.all()
             product = product.filter(name__icontains=search)
             table = Product_Table(product)
-            RequestConfig(request).configure(table)
+            RequestConfig(request, paginate={'per_page': 10}).configure(table)
             return render(request, 'labbyims/search_product.html', {'table': table, }, )
 
         if choice == 'CAS':
             product = Product.objects.all()
             product = product.filter(cas__icontains=search)
             table = Product_Table(product)
-            RequestConfig(request).configure(table)
+            RequestConfig(request, paginate={'per_page': 10}).configure(table)
             return render(request, 'labbyims/search_product.html', {'table': table, }, )
 
 
