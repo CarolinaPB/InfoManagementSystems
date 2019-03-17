@@ -11,7 +11,7 @@
         <br><br><br><br>
 
         <h2>The front page</h2>
-        <img src="{% static 'labbyims/front_page.jpg' %}" alt="Front page" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/front_page.png' %}" alt="Front page" height: auto; style="width:1080px;">
         <br><br>
         <p>Above is the front page.  The numbered parts are as follows:</p>
         <br>
@@ -27,7 +27,7 @@
         <br><br><br><br>
 
         <h2>The add product page</h2>
-        <img src="{% static 'labbyims/add_product.jpg' %}" alt="Add product" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/add_product.png' %}" alt="Add product" height: auto; style="width:1080px;">
         <br><br>
         <p>
             On this page, you can add new products to the database.  A product must have a CAS number and a (descriptive) name.  You must also define the temperature range in which it should be kept and any constraints it might have, such as it being flammable, to ensure it is only stored in a compatible location.<br>
@@ -36,7 +36,7 @@
         <br><br><br><br>
 
         <h2>The unit CAS page</h2>
-        <img src="{% static 'labbyims/add_item_cas.jpg' %}" alt="Add item cas" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/add_item_cas.png' %}" alt="Add item cas" height: auto; style="width:1080px;">
         <br><br>
         <p>
             When the add unit button is clicked, it redirects you to this page.  Here you must enter the CAS number of a product in the database.  It will then take you to the add product unit where you can add a unit of that product to the database.
@@ -44,9 +44,9 @@
         <br><br><br><br>
 
         <h2>The add product unit page</h2>
-        <img src="{% static 'labbyims/add_item_1.jpg' %}" alt="Add item 1" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/add_item_1.png' %}" alt="Add item 1" height: auto; style="width:1080px;">
         <br> <br>
-        <img src="{% static 'labbyims/add_item_2.jpg' %}" alt="Add item 2" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/add_item_2.png' %}" alt="Add item 2" height: auto; style="width:1080px;">
         <br><br>
         <p>
             Once the CAS number has been chosen, you get to the add product unit page.  On this page you can add a new container of a particular chemical.  You can change the product this unit is a part of, in case you chose the wrong CAS number.  In order to create a new unit, you must input a description (we recommend something descriptive), a delivery date, a company that produced it, an initial amount as well as the measurement unit and finally a location.<br>
@@ -55,7 +55,7 @@
         <br><br><br><br>
 
         <h2>The add product unit page</h2>
-        <img src="{% static 'labbyims/update_unit.jpg' %}" alt="Update unit" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/update_unit.png' %}" alt="Update unit" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             If a product unit has been moved, it has been opened or some amount used, you can use the update product unit page to update the information for that unit.  It is also possible to delete a unit from the database completely, though this is not advisable unless absolutely necessary.  A unit can also be forcibly archived here, this normally only happens if it's current quantity drops to zero.  The unit then disappears from the normal inventory
@@ -64,7 +64,7 @@
         <br><br><br><br>
 
         <h2>The reservations page</h2>
-        <img src="{% static 'labbyims/reservations.jpg' %}" alt="Reservations" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/reservations.png' %}" alt="Reservations" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             On the reservations page, you can see any reservations you have made and what day the reservation is made for.  You can also access the pages to add new resrvations and update existing ones.
@@ -72,7 +72,7 @@
         <br><br><br><br>
 
         <h2>The add reservations page</h2>
-        <img src="{% static 'labbyims/add_reservations.jpg' %}" alt="Add reservations" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/add_reservations.png' %}" alt="Add reservations" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             Here, you can add new reservations on chemicals you will need to use.  You will need to choose a specific product unit to reserve, the amount you need and when you intend to use it.  You will also need to name the reservation.
@@ -80,7 +80,7 @@
         <br><br><br><br>
 
         <h2>The update reservations page</h2>
-        <img src="{% static 'labbyims/update_reservations.jpg' %}" alt="Update reservations" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/update_reservations.png' %}" alt="Update reservations" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             On this page, you can update an existing reservation with the amount used.  It defaults to the reserved amount so if you used only that there is no need input a value for the amount.
@@ -88,7 +88,7 @@
         <br><br><br><br>
 
         <h2>The my inventory page</h2>
-        <img src="{% static 'labbyims/my_inventory.jpg' %}" alt="My inventory" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/my_inventory.png' %}" alt="My inventory" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             This page shows the inventory you are watching and does not include any product units that are not associated with a department you are associated with.  It also has a link to the update unit page.
@@ -96,7 +96,7 @@
         <br><br><br><br>
 
         <h2>The running low page</h2>
-        <img src="{% static 'labbyims/running_low.jpg' %}" alt="Running low" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/running_low.png' %}" alt="Running low" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             Here, you can see an overview of all product units for which the current amount is running low.  A product unit show up here once the current amount drops below 50% of the initial amount.
@@ -104,7 +104,7 @@
         <br><br><br><br>
 
         <h2>The running low page</h2>
-        <img src="{% static 'labbyims/general_inventory.jpg' %}" alt="General inventory" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/general_inventory.png' %}" alt="General inventory" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             This page shows an overview of all active product units in the database.
@@ -112,7 +112,7 @@
         <br><br><br><br>
 
         <h2>The running low page</h2>
-        <img src="{% static 'labbyims/locations.jpg' %}" alt="Locations" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/locations.png' %}" alt="Locations" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             On this page, you can see an overview of the locations currently available in the database.  The page also includes links to pages for adding rooms and locations as well as for updating information on existing locations.
@@ -120,7 +120,7 @@
         <br><br><br><br>
 
         <h2>The add room page</h2>
-        <img src="{% static 'labbyims/add_room.jpg' %}" alt="Add room" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/add_room.png' %}" alt="Add room" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             On this page, you can add new rooms to the database.  Each location must be associated with a room, as a given room might have several different types of locations, such as different refrigerators.  A room must have a name and can optionally have a building name in case several buildings are being used.
@@ -128,7 +128,7 @@
         <br><br><br><br>
 
         <h2>The add location page</h2>
-        <img src="{% static 'labbyims/add_location.jpg' %}" alt="Add location" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/add_location.png' %}" alt="Add location" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             Here, you can add new locations to the database.  Each location must be associated with a room and have a name.  Optionally a description can be added.  You then need to specify constraints which a product unit stored there can fulfill.
@@ -136,7 +136,7 @@
         <br><br><br><br>
 
         <h2>The update location page</h2>
-        <img src="{% static 'labbyims/update_location.jpg' %}" alt="Update location" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/update_location.png' %}" alt="Update location" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             This page allows you to update information on a location.  You can either change the room or the description.
@@ -144,7 +144,7 @@
         <br><br><br><br>
 
         <h2>The archive page</h2>
-        <img src="{% static 'labbyims/archive.jpg' %}" alt="Archive" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/archive.jpg' %}" alt="Archive" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             Here, you can see an overview of all product units that have been archived.  This automatically happens when a unit's current amount drops to zero but can also be done manually.
@@ -152,7 +152,7 @@
         <br><br><br><br>
 
         <h2>The add department page</h2>
-        <img src="{% static 'labbyims/add_department.jpg' %}" alt="Add department" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/add_department.png' %}" alt="Add department" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             This page allows you to add new departments to the database.  Departments simply need to have a unique name.  Departments are associated with users and product units.  Each user associated with a given departments is also watching any product unit associated with that department, giving the reminders if a unit is running low and showing it in their inventory.
@@ -160,7 +160,7 @@
         <br><br><br><br>
 
         <h2>The my profile page</h2>
-        <img src="{% static 'labbyims/my_profile.jpg' %}" alt="My profile" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/my_profile.png' %}" alt="My profile" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             On this page, you can find information about the current user.  There is also a link to the department association page which allows you to associate with a department.
@@ -168,7 +168,7 @@
         <br><br><br><br>
 
         <h2>The add association page</h2>
-        <img src="{% static 'labbyims/add_association.jpg' %}" alt="Association" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/add_association.png' %}" alt="Association" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             Here, you can associate the current user with new departments.  This allows you to watch product units which the department is associated with.
@@ -180,7 +180,7 @@
 {% endblock %}
 {% block login %}
 <div class="container">
-    <br><br><br><br>
+    <br><br><br><br><br>
     <div class="container-fluid" align="justify">
 
         <h1>Labbi tutorial</h1>
@@ -189,7 +189,7 @@
         <br><br><br><br>
 
         <h2>The front page</h2>
-        <img src="{% static 'labbyims/front_page.jpg' %}" alt="Front page" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/front_page.png' %}" alt="Front page" height: auto; style="width:1080px;">
         <br><br>
         <p>Above is the front page.  The numbered parts are as follows:</p>
         <br>
@@ -205,7 +205,7 @@
         <br><br><br><br>
 
         <h2>The add product page</h2>
-        <img src="{% static 'labbyims/add_product.jpg' %}" alt="Add product" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/add_product.png' %}" alt="Add product" height: auto; style="width:1080px;">
         <br><br>
         <p>
             On this page, you can add new products to the database.  A product must have a CAS number and a (descriptive) name.  You must also define the temperature range in which it should be kept and any constraints it might have, such as it being flammable, to ensure it is only stored in a compatible location.<br>
@@ -214,7 +214,7 @@
         <br><br><br><br>
 
         <h2>The unit CAS page</h2>
-        <img src="{% static 'labbyims/add_item_cas.jpg' %}" alt="Add item cas" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/add_item_cas.png' %}" alt="Add item cas" height: auto; style="width:1080px;">
         <br><br>
         <p>
             When the add unit button is clicked, it redirects you to this page.  Here you must enter the CAS number of a product in the database.  It will then take you to the add product unit where you can add a unit of that product to the database.
@@ -222,9 +222,9 @@
         <br><br><br><br>
 
         <h2>The add product unit page</h2>
-        <img src="{% static 'labbyims/add_item_1.jpg' %}" alt="Add item 1" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/add_item_1.png' %}" alt="Add item 1" height: auto; style="width:1080px;">
         <br> <br>
-        <img src="{% static 'labbyims/add_item_2.jpg' %}" alt="Add item 2" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/add_item_2.png' %}" alt="Add item 2" height: auto; style="width:1080px;">
         <br><br>
         <p>
             Once the CAS number has been chosen, you get to the add product unit page.  On this page you can add a new container of a particular chemical.  You can change the product this unit is a part of, in case you chose the wrong CAS number.  In order to create a new unit, you must input a description (we recommend something descriptive), a delivery date, a company that produced it, an initial amount as well as the measurement unit and finally a location.<br>
@@ -233,7 +233,7 @@
         <br><br><br><br>
 
         <h2>The add product unit page</h2>
-        <img src="{% static 'labbyims/update_unit.jpg' %}" alt="Update unit" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/update_unit.png' %}" alt="Update unit" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             If a product unit has been moved, it has been opened or some amount used, you can use the update product unit page to update the information for that unit.  It is also possible to delete a unit from the database completely, though this is not advisable unless absolutely necessary.  A unit can also be forcibly archived here, this normally only happens if it's current quantity drops to zero.  The unit then disappears from the normal inventory
@@ -242,7 +242,7 @@
         <br><br><br><br>
 
         <h2>The reservations page</h2>
-        <img src="{% static 'labbyims/reservations.jpg' %}" alt="Reservations" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/reservations.png' %}" alt="Reservations" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             On the reservations page, you can see any reservations you have made and what day the reservation is made for.  You can also access the pages to add new resrvations and update existing ones.
@@ -250,7 +250,7 @@
         <br><br><br><br>
 
         <h2>The add reservations page</h2>
-        <img src="{% static 'labbyims/add_reservations.jpg' %}" alt="Add reservations" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/add_reservations.png' %}" alt="Add reservations" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             Here, you can add new reservations on chemicals you will need to use.  You will need to choose a specific product unit to reserve, the amount you need and when you intend to use it.  You will also need to name the reservation.
@@ -258,7 +258,7 @@
         <br><br><br><br>
 
         <h2>The update reservations page</h2>
-        <img src="{% static 'labbyims/update_reservations.jpg' %}" alt="Update reservations" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/update_reservations.png' %}" alt="Update reservations" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             On this page, you can update an existing reservation with the amount used.  It defaults to the reserved amount so if you used only that there is no need input a value for the amount.
@@ -266,7 +266,7 @@
         <br><br><br><br>
 
         <h2>The my inventory page</h2>
-        <img src="{% static 'labbyims/my_inventory.jpg' %}" alt="My inventory" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/my_inventory.png' %}" alt="My inventory" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             This page shows the inventory you are watching and does not include any product units that are not associated with a department you are associated with.  It also has a link to the update unit page.
@@ -274,7 +274,7 @@
         <br><br><br><br>
 
         <h2>The running low page</h2>
-        <img src="{% static 'labbyims/running_low.jpg' %}" alt="Running low" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/running_low.png' %}" alt="Running low" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             Here, you can see an overview of all product units for which the current amount is running low.  A product unit show up here once the current amount drops below 50% of the initial amount.
@@ -282,7 +282,7 @@
         <br><br><br><br>
 
         <h2>The running low page</h2>
-        <img src="{% static 'labbyims/general_inventory.jpg' %}" alt="General inventory" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/general_inventory.png' %}" alt="General inventory" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             This page shows an overview of all active product units in the database.
@@ -290,7 +290,7 @@
         <br><br><br><br>
 
         <h2>The running low page</h2>
-        <img src="{% static 'labbyims/locations.jpg' %}" alt="Locations" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/locations.png' %}" alt="Locations" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             On this page, you can see an overview of the locations currently available in the database.  The page also includes links to pages for adding rooms and locations as well as for updating information on existing locations.
@@ -298,7 +298,7 @@
         <br><br><br><br>
 
         <h2>The add room page</h2>
-        <img src="{% static 'labbyims/add_room.jpg' %}" alt="Add room" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/add_room.png' %}" alt="Add room" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             On this page, you can add new rooms to the database.  Each location must be associated with a room, as a given room might have several different types of locations, such as different refrigerators.  A room must have a name and can optionally have a building name in case several buildings are being used.
@@ -306,7 +306,7 @@
         <br><br><br><br>
 
         <h2>The add location page</h2>
-        <img src="{% static 'labbyims/add_location.jpg' %}" alt="Add location" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/add_location.png' %}" alt="Add location" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             Here, you can add new locations to the database.  Each location must be associated with a room and have a name.  Optionally a description can be added.  You then need to specify constraints which a product unit stored there can fulfill.
@@ -314,7 +314,7 @@
         <br><br><br><br>
 
         <h2>The update location page</h2>
-        <img src="{% static 'labbyims/update_location.jpg' %}" alt="Update location" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/update_location.png' %}" alt="Update location" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             This page allows you to update information on a location.  You can either change the room or the description.
@@ -322,7 +322,7 @@
         <br><br><br><br>
 
         <h2>The archive page</h2>
-        <img src="{% static 'labbyims/archive.jpg' %}" alt="Archive" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/archive.jpg' %}" alt="Archive" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             Here, you can see an overview of all product units that have been archived.  This automatically happens when a unit's current amount drops to zero but can also be done manually.
@@ -330,7 +330,7 @@
         <br><br><br><br>
 
         <h2>The add department page</h2>
-        <img src="{% static 'labbyims/add_department.jpg' %}" alt="Add department" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/add_department.png' %}" alt="Add department" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             This page allows you to add new departments to the database.  Departments simply need to have a unique name.  Departments are associated with users and product units.  Each user associated with a given departments is also watching any product unit associated with that department, giving the reminders if a unit is running low and showing it in their inventory.
@@ -338,7 +338,7 @@
         <br><br><br><br>
 
         <h2>The my profile page</h2>
-        <img src="{% static 'labbyims/my_profile.jpg' %}" alt="My profile" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/my_profile.png' %}" alt="My profile" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             On this page, you can find information about the current user.  There is also a link to the department association page which allows you to associate with a department.
@@ -346,7 +346,7 @@
         <br><br><br><br>
 
         <h2>The add association page</h2>
-        <img src="{% static 'labbyims/add_association.jpg' %}" alt="Association" style="width:1400px;height:720px;">
+        <img src="{% static 'labbyims/add_association.png' %}" alt="Association" height: auto; style="width:1080px;">
         <br> <br>
         <p>
             Here, you can associate the current user with new departments.  This allows you to watch product units which the department is associated with.
@@ -354,4 +354,5 @@
         <br><br><br><br><br><br><br><br><br><br><br><br>
     </div>
 </div>
+
 {% endblock %}
