@@ -58,7 +58,7 @@ def home(request):
         RequestConfig(request, paginate={'per_page': 3}).configure(table_exp)
 ########
         res_list = Reserve.objects.filter(Q(user_id=request.user),
-                                          Q(prod_un__is_inactive=False), \
+                                          Q(prod_un__is_inactive=False), Q(is_complete=None), \
                                           Q(date_res__range=[current_date, warning])).order_by('date_res')
         table_res = FP_ReserveTable(res_list, prefix="2-")
         RequestConfig(request, paginate={'per_page': 3}).configure(table_res)
@@ -601,7 +601,7 @@ def search_advance(request):
             product_list = Product_Unit.objects.all()
             product_list = product_list.filter(
                 Q(description__icontains=search) | Q(in_house_no=search))
-            table_se = Product_Unit_MyTable(product_list)
+            table_se = Product_UnitTable(product_list)
             RequestConfig(request, paginate={
                           'per_page': 10}).configure(table_se)
             return render(request, 'labbyims/search_list.html', {'table_se': table_se, }, )
@@ -610,7 +610,7 @@ def search_advance(request):
             product_list = Product_Unit.objects.all()
             product_list = product_list.filter(
                 Q(description__icontains=search) | Q(in_house_no=search))
-            table_se = Product_Unit_MyTable(product_list)
+            table_se = Product_UnitTable(product_list)
             RequestConfig(request, paginate={
                           'per_page': 10}).configure(table_se)
             return render(request, 'labbyims/search_list.html', {'table_se': table_se, }, )
