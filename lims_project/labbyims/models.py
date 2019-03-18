@@ -15,8 +15,8 @@ class Department(models.Model):
 class Product(models.Model):
     cas = models.CharField('CAS number', max_length=12, unique=True)
     name = models.CharField(max_length=255)
-    min_temp = models.DecimalField('Maximum Temperature', max_digits=6, decimal_places=3, default = 25)
-    max_temp = models.DecimalField('Minimum Temperature', max_digits=6, decimal_places=3, default = 25)
+    min_temp = models.DecimalField('Minimum Temperature', max_digits=6, decimal_places=3, default = 25)
+    max_temp = models.DecimalField('Maximum Temperature', max_digits=6, decimal_places=3, default = 25)
     ispoison_nonvol = models.BooleanField('poison - non-volatile')
     isreactive = models.BooleanField('reactive')
     issolid = models.BooleanField('solid')
