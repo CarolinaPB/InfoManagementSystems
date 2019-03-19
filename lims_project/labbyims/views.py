@@ -130,7 +130,6 @@ def add_item(request):
             low_warn_form = form.cleaned_data['low_warn_form']
             dep_id_list = list(request.POST.getlist('department'))
             instance = form.save(commit=False)
-            messages.success(request, 'Unit added')
             if instance.used_amount > instance.init_amount:
                 messages.error(
                     request, 'WARNING: Used amount can\'t be higher than initial amount.')
@@ -154,6 +153,8 @@ def add_item(request):
                                 user=request.user, prod_un=instance, dept=dep, low_warn=low_warn_form)
                             w.save()
                             j += 1
+                messages.success(request, 'Unit(s) added!')
+                form = Product_UnitForm()
                 return render(request, 'labbyims/add_item.html', {'form': form, })
         else:
             print(form.errors)
