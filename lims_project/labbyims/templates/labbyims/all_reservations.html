@@ -2,8 +2,9 @@
 {% load render_table from django_tables2 %}
 {% block content %}
 <br><br><br><br><br>
-<TITLE>My Reservations</TITLE>
-<H1>My Reservations</H1>
+<TITLE>All Reservations</TITLE>
+<H1>All Reservations</H1>
+<H5>Made for the next 60 days</H5>
 <br>
 <a href="{% url 'add_reservation' %}"class="btn btn-light">Add reservation</a>
 <a href="{% url 'update_reservation' %}"class="btn btn-light">Update reservation</a>

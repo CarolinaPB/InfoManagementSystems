@@ -349,6 +349,16 @@ def reservations(request):
     return render(request, 'labbyims/reservations.html', {'table_res': table_res, }, )
 
 
+def all_reservations(request):
+    current_date = datetime.today()
+    warning = current_date + timedelta(days=60)
+    res_list = Reserve.objects.filter(Q(date_res__range=[
+                                        current_date, warning]),
+                                      Q(prod_un__is_inactive=False), Q(is_complete=None)).select_related()
+    table_res = ReserveTable(res_list)
+    RequestConfig(request, paginate={'per_page': 10}).configure(table_res)
+    return render(request, 'labbyims/all_reservations.html', {'table_res': table_res, }, )
+
 def about(request):
     return render(request, 'labbyims/about.html')
 
