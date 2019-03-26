@@ -5,10 +5,10 @@ from .models import Product_Unit, Location, Reserve, Watching, Product, \
 from django_tables2.utils import A
 
 class Product_UnitTable(tables.Table):
+    house_id = tables.Column(accessor='in_house_no', verbose_name='ID')
     desc = tables.Column(accessor='description')
     prod = tables.Column(accessor='product')
     cas_no = tables.Column(accessor = 'product.cas', verbose_name='CAS')
-    house_id = tables.Column(accessor='in_house_no', verbose_name='ID')
     curr_am = tables.Column(accessor='curr_amount', verbose_name='Amount')
     meas_u = tables.Column(accessor='m_unit')
     pur_perc = tables.Column(accessor='purity')
@@ -42,6 +42,7 @@ class FP_Running_LowTable(tables.Table):
 
 
 class Running_LowTable(tables.Table):
+        perc_left = tables.Column(accessor = 'prod_un.in_house_no', verbose_name = 'ID')
         prod_res = tables.Column(accessor='prod_un.description')
         prod_perc = tables.Column(accessor='prod_un.perc_left', \
                     verbose_name = '% Left', orderable=False)
@@ -51,7 +52,6 @@ class Running_LowTable(tables.Table):
         room = tables.Column(accessor = 'prod_un.location.room')
         date_exp = tables.Column(accessor = 'prod_un.exp_date', verbose_name = 'Expires')
         date_ret = tables.Column(accessor = 'prod_un.ret_date', verbose_name = 'Retest')
-        perc_left = tables.Column(accessor = 'prod_un.in_house_no', verbose_name = 'ID')
         comp = tables.Column(accessor = 'prod_un.company')
         cat_no = tables.Column(accessor = 'prod_un.cat_num', verbose_name = 'Catalog #')
         batch = tables.Column(accessor = 'prod_un.batch', verbose_name = 'Batch #')
