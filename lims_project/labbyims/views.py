@@ -24,7 +24,7 @@ from .forms import Product_UnitForm, Product_Form, \
 from .tables import Product_UnitTable, Product_Table, LocationTable, \
     Product_Unit_ExpTable, FP_Product_UnitTable, \
     Product_Unit_MyTable, FP_ReserveTable, ReserveTable, \
-    FP_Running_LowTable, Running_LowTable, User_DeptTable, Product_Unit_ArchTable
+    FP_Running_LowTable, Running_LowTable, Product_Unit_ArchTable
 from .models import Product_Unit, Product, Location, Room, Reserve, User,\
     Watching, Department, Association
 
@@ -56,7 +56,7 @@ def home(request):
 
         table_exp = FP_Product_UnitTable(exp_ret_list, prefix="1-")
         RequestConfig(request, paginate={'per_page': 3}).configure(table_exp)
-########
+
         res_list = Reserve.objects.filter(Q(user_id=request.user),
                                           Q(prod_un__is_inactive=False), Q(is_complete=None), \
                                           Q(date_res__range=[current_date, warning])).order_by('date_res')

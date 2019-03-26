@@ -151,10 +151,3 @@ class Product_Table(tables.Table):
         model = Product
         fields = ('name', 'cas', 'min_temp', 'max_temp')
         template_name = 'django_tables2/bootstrap.html'
-
-
-class User_DeptTable(tables.Table):
-    class Meta:
-        model = Association
-        exclude = ('id', 'user')
-        template_name = 'django_tables2/bootstrap-responsive.html'

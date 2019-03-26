@@ -140,4 +140,3 @@ class Update_Location_Form(forms.ModelForm):
     class Meta:
         model = Location
         fields=["loc", "room", "description"]
-        #fields=["loc", "room", "description", "ispoison_nonvol", "isreactive", "issolid", "isoxidliq", "isflammable", "isbaseliq", "isorgminacid", "isoxidacid", "ispois_vol"]
