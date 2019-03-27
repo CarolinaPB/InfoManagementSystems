@@ -21,8 +21,8 @@ In order to be able to run Labbi on you local computer, you will need to follow 
    
    Within MySQL, create a user and database.  Here are example commands for each<sup>[1](#myfootnote1)</sup>: 
    ```
-   CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';  
-   GRANT ALL PRIVILEGES ON *.* TO 'user'@'localhost' WITH GRANT OPTION;
+   CREATE USER 'USER'@'localhost' IDENTIFIED BY 'PASSWORD';  
+   GRANT ALL PRIVILEGES ON *.* TO 'USER'@'localhost' WITH GRANT OPTION;
    ```
    Then exit MySQL.
 7. Open the terminal and navigate to the folder where you downloaded the repository.  Go into the lims_project folder which contains the manage.py file.  From here, run the following commands:
@@ -32,6 +32,15 @@ In order to be able to run Labbi on you local computer, you will need to follow 
    python3 manage.py createsuperuser
    ```
    The first two commands will migrate the database structure defined in the Django code to the MySQL server.  The third command will create an admin account for the Labbi.
+8. Create a file called database_config.py in the InfoManagementSystems/lims_project/labbyims folder and include the following code:
+   ```
+   database_name="YOUR_DB_NAME"
+   database_user="USER"
+   database_password="PASSWORD"
+   
+   email = "YOUR_EMAIL
+   email_password="YOUR_PASSWORD"
+   ```
 6. Finally, in order to start the server, run the followin command in the same directory: 
    ```
    python3 manage.py runserver
@@ -40,6 +49,6 @@ In order to be able to run Labbi on you local computer, you will need to follow 
 
 <a name="myfootnote1">[1]</a>: If the code above does not work, try this one instead:
   ```
-  create user user@localhost identified by 'password';
-  GRANT ALL PRIVILEGES ON *.* TO user@localhost WITH GRANT OPTION;
+  create user USER@localhost identified by 'PASSWORD';
+  GRANT ALL PRIVILEGES ON *.* TO USER@localhost WITH GRANT OPTION;
   ```
