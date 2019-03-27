@@ -46,7 +46,6 @@ def home(request):
                 depts.append(el.dept)
         list = []
         for a in depts:
-            print(a.id)
             list.append(Watching.objects.filter(Q(user_id=request.user),\
              Q(dept=a.id), Q(prod_un__is_inactive=False)).order_by(\
              -F('prod_un__init_amount') / F('prod_un__curr_amount')))
@@ -70,7 +69,6 @@ def home(request):
                 depts.append(el.dept)
         list = []
         for a in depts:
-            print(a.id)
             list.append(Watching.objects.filter(Q(user_id=request.user), Q(dept=a.id), Q(prod_un__is_inactive=False), Q(
                 low_warn=True)).order_by(-F('prod_un__init_amount') / F('prod_un__curr_amount')))
 
@@ -216,7 +214,6 @@ def my_inventory(request):
             depts.append(el.dept)
     list = []
     for a in depts:
-        print(a.id)
         list.append(Watching.objects.filter(Q(user_id=request.user), \
         Q(dept=a.id), Q(prod_un__is_inactive=False)).order_by(\
         -F('prod_un__init_amount') / F('prod_un__curr_amount')))
@@ -224,7 +221,6 @@ def my_inventory(request):
     watch_list = Product_Unit.objects.none()
     for el in list:
         watch_list |= el
-    print(watch_list)
     table_my_inv = Product_Unit_MyTable(watch_list)
     #table_my_inv = Product_Unit_MyTable(watch_list)
     RequestConfig(request, paginate={'per_page': 10}).configure(table_my_inv)
@@ -297,7 +293,6 @@ def add_association(request):
         form = Association_Form()
         depts = Department.objects.all()
         depts_user = depts.filter(~Q(user=request.user))
-        print(depts_user)
         form.fields['dept'].queryset = depts_user
     context = {'form': form}
     return render(request, 'labbyims/add_association.html', context)
@@ -312,14 +307,16 @@ def add_reservation(request):
             add_res.user = request.user
             res_amount = form.cleaned_data["amount_res"]
             res = int(res_amount)
-            print(res)
             unit = request.POST.get("prod_un")
             unit_to_compare = Product_Unit.objects.get(id=unit)
-            print(unit_to_compare.curr_amount)
             if res_amount > unit_to_compare.curr_amount:
                 messages.error(
                     request, "The amount you want to reserve can't be larger than the item's current amount")
+            elif res_amount == unit_to_compare.curr_amount:
+                messages.error(request, "This unit is too low to reserve")
             else:
+                unit_to_compare.curr_amount = unit_to_compare.curr_amount-res_amount
+                unit_to_compare.save()
                 add_res.save()
                 messages.success(request, 'Reservation added!')
             return HttpResponseRedirect('.')
@@ -377,7 +374,6 @@ def running_low(request):
                 depts.append(el.dept)
         list = []
         for a in depts:
-            print(a.id)
             list.append(Watching.objects.filter(Q(user_id=request.user), Q(dept=a.id), Q(prod_un__is_inactive=False), Q(
                 low_warn=True)).order_by(-F('prod_un__init_amount') / F('prod_un__curr_amount')))
 
@@ -425,12 +421,10 @@ def update_item(request):
         dept = request.POST.getlist("department")
         low_warn_form = form.cleaned_data["low_warn_form"]
         house_id = form.cleaned_data["in_house_no"]
-        print(loc)
         change_prod_unit = Product_Unit.objects.get(id=prod_units.id)
         changed = False
         parent_product = change_prod_unit.product
-        print("parent")
-        print(parent_product.isreactive)
+
         if delete:
             change_prod_unit.delete()
         else:
@@ -480,7 +474,6 @@ def update_item(request):
                 for d in dept:
                     # if there is no watching with this user, prod_un and dept:
                     if not Watching.objects.filter(Q(user=request.user), Q(prod_un=change_prod_unit), Q(dept=Department.objects.get(pk=d))):
-                        print("will create a new one")
                         w = Watching(user=request.user, prod_un=change_prod_unit,
                                      dept=Department.objects.get(pk=d), low_warn=low_warn_form)
                         w.save()
@@ -500,14 +493,12 @@ def update_item(request):
                         else:
                             warning = "not"
                         if w.dept.id == int(d):
-                            print("same dept")
                             if w.low_warn == low_w:
                                 same_dept = True
                                 changed_dept_list.append(False)
                                 messages.error(
                                     request, 'Couldn''t associate with department: the association with department {} already exists'.format(w.dept))
                             else:
-                                print("different warning")
                                 w.low_warn = low_warn_form
                                 w.save()
                                 changed_dept_list.append(True)
@@ -558,27 +549,29 @@ def update_reservation(request):
         form = Update_reservation_Form(request.POST)
         name = request.POST.get("res")
         amount = request.POST.get("amount_res")
-        print(amount)
 
         try:
             change_res = Reserve.objects.get(res_name=name)
-            print(change_res.prod_un.id)
             if change_res:
                 change_res.is_complete = True
                 change_res.save()
                 if amount:
-                    change_curr_amount = Product_Unit.objects.get(
-                        id=change_res.prod_un.id)
-                    change_curr_amount.curr_amount = change_curr_amount.curr_amount - \
-                        int(amount)
-                    change_curr_amount.save()
+                    if amount == change_res.amount_res:
+                        pass
+                    elif amount != change_res.amount_res:
+                        change_curr_amount = Product_Unit.objects.get(id=change_res.prod_un.id)
+                        if amount > change_res.amount_res:
+                            am = amount-change_res.amount_res
+                            change_curr_amount.curr_amount = change_curr_amount.curr_amount-am
+                        elif amount < change_res.amount_res:
+                            am = change_res.amount_res - amount
+                            change_curr_amount.curr_amount = change_curr_amount.curr_amount+am
                     messages.success(request, 'Reservation updated!')
                     return HttpResponseRedirect('.')
                 else:
                     change_curr_amount = Product_Unit.objects.get(
                         id=change_res.prod_un.id)
-                    change_curr_amount.curr_amount = change_curr_amount.curr_amount - change_res.amount_res
-                    change_curr_amount.save()
+
                     messages.success(request, 'Reservation updated!')
                     return HttpResponseRedirect('.')
         except Exception as e:

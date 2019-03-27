@@ -60,13 +60,13 @@ class Running_LowTable(tables.Table):
 
 
 class ReserveTable(tables.Table):
+    house_no = tables.Column(accessor='prod_un.in_house_no', verbose_name = 'ID')
     res_name = tables.Column(accessor = 'res_name')
     prod_res = tables.Column(accessor='prod_un.description')
     date = tables.Column(accessor = 'date_res')
     meas_u = tables.Column(accessor = 'prod_un.m_unit')
     res_amount = tables.Column(accessor = 'amount_res', verbose_name = 'Reserved Amount')
     prod_curr_amount = tables.Column(accessor='prod_un.curr_amount')
-    house_no = tables.Column(accessor='prod_un.in_house_no', verbose_name = 'ID')
     prod_loc = tables.Column(accessor='prod_un.location')
     prod_room = tables.Column(accessor='prod_un.location.room', verbose_name='Room')
     class Meta:

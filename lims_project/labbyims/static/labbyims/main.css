@@ -186,9 +186,9 @@ input[type=search] {
   color: black;
 }
 /* ONLY FOR DEMONSTRATION */
-#remove_padding .pagination a {
+/* #remove_padding .pagination a {
   color: #f2f2f2;
-}
+} */
 a {
   color: black;
 }
