@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 from django.contrib.messages import constants as messages
+from .database_config import database_name, database_user, database_password
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -88,9 +89,9 @@ WSGI_APPLICATION = 'lims_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'labbyims',
-        'USER': 'labby_dev',
-        'PASSWORD': 'arcahokasi',
+        'NAME': database_name,
+        'USER': database_user,
+        'PASSWORD': database_password,
         'HOST': '',
         'PORT': '',
     }
