@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 from django.contrib.messages import constants as messages
-from .database_config import database_name, database_user, database_password
+from .database_config import database_name, database_user, database_password, email, email_password
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -155,8 +155,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-EMAIL_HOST_USER = 'labbyims@gmail.com'
-EMAIL_HOST_PASSWORD = 'arcahokasi'
+EMAIL_HOST_USER = email
+EMAIL_HOST_PASSWORD = email_password
 
 
 # Defining which model should be used for the user table
