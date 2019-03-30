@@ -45,6 +45,7 @@ In order to be able to run Labbi on you local computer, you will need to follow 
    ```
    python3 manage.py runserver
    ```
+   The website can then be accessed at localhost:8000
 
 
 <a name="myfootnote1">[1]</a>: If the code above does not work, try this one instead:
